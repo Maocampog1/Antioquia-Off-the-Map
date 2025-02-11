@@ -17,11 +17,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-# The `urlpatterns` list routes URLs to views.
-from destination import views as destination_views
+from django.conf.urls.static import static
+from django.conf import settings
+
+# Import the views
+from destination.views import municipality_list, municipality_detail
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', destination_views.home, name='home'),
+    path('municipalities/', municipality_list, name='municipality_list'),
+    path('municipalities/<int:municipality_id>/', municipality_detail, name='municipality_detail'),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
