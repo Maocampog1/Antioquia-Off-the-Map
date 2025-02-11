@@ -17,6 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+# The `urlpatterns` list routes URLs to views.
+from destination import views as destination_views
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', destination_views.home, name='home'),
 ]
