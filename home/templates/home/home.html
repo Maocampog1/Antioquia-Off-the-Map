@@ -1,0 +1,65 @@
+
+<header class="header">
+    <nav>
+        <div class="container">
+            <h1>Antioquia Off the Map</h1>
+            <ul>
+                <li><a href="{% url 'home' %}">Inicio</a></li>
+                <li><a href="{% url 'municipality_name_list'%}">Municipios</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+
+    .header{
+        display: flex;
+        width: 100vw;
+        height: 12vh;
+        flex-flow: row nowrap;
+        justify-content: flex-end;
+        align-items: center;
+        background-color: green;
+
+        
+
+    }
+    nav{
+        width: 96%;
+        color: #fff;
+    }
+    .container{
+        display: flex;
+        width: 100%;
+        /* background-color: lightblue; */
+    }
+    .container h1{
+        font-size: 26px;
+    }
+    .container ul{
+        display: flex;
+        width: 20%;
+        justify-content: space-evenly;
+        /* background-color: aqua; */
+        list-style: none;
+        position: absolute;
+        left: 400px;
+        font-size: 20px;
+        top: 30px;
+
+    }
+    .container ul li a{
+        color: #fff;
+        text-decoration: none;
+        &:hover{
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    }
+
+</style>   
