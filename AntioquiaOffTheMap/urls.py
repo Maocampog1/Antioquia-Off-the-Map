@@ -22,11 +22,11 @@ from django.conf import settings
 
 # Import the views
 from destination.views import municipality_list, municipality_detail, municipality_detail_by_name, municipality_name_list
-from home.views import home
+from landing.views import landing
 
 
 urlpatterns = [
-    path('', home, name='home'),
+    path('', landing, name='landing'),
     path('municipalities/names', municipality_name_list, name='municipality_name_list'),
     path('admin/', admin.site.urls),
     path('municipalities/', municipality_list, name='municipality_list'), #En esta ruta se listan todas las municipalidades 

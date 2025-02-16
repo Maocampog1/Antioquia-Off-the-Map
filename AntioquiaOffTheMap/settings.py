@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'destination',
     'home',
+    'landing',
 ]
 
 MIDDLEWARE = [
