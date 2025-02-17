@@ -21,13 +21,18 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 # Import the views
-from destination.views import municipality_list, municipality_detail
+from destination.views import municipality_list, municipality_detail, municipality_detail_by_name, municipality_name_list
+from landing.views import landing
 
 
 urlpatterns = [
+    path('', landing, name='landing'),
+    path('municipalities/names', municipality_name_list, name='municipality_name_list'),
     path('admin/', admin.site.urls),
-    path('municipalities/', municipality_list, name='municipality_list'),
-    path('municipalities/<int:municipality_id>/', municipality_detail, name='municipality_detail'),
+    path('municipalities/', municipality_list, name='municipality_list'), #En esta ruta se listan todas las municipalidades 
+    path('municipalities/<int:municipality_id>/', municipality_detail, name='municipality_detail'), # con este se lista la municipalidad que coincida con el id
+    path('municipalities/<str:municipality_name>/', municipality_detail_by_name, name='municipality_detail_by_name'),
 ]
+
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
