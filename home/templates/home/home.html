@@ -1,4 +1,3 @@
-
 <header class="header">
     <nav>
         <div class="container">
@@ -6,61 +5,145 @@
             <ul>
                 <li><a href="{% url 'landing' %}">Inicio</a></li>
                 <li><a href="{% url 'municipality_name_list'%}">Municipios</a></li>
-
             </ul>
+            <div class="search-container">
+                <input type="text" id="search-bar" placeholder="Buscar municipio..." autocomplete="off">
+                <div id="results"></div>
+            </div>
         </div>
     </nav>
 </header>
 
 <style>
-    *{
+    * {
         margin: 0;
         padding: 0;
+        box-sizing: border-box;
     }
 
-    .header{
+    .header {
         display: flex;
         width: 100vw;
         height: 12vh;
-        flex-flow: row nowrap;
         justify-content: flex-end;
         align-items: center;
         background-color: green;
-
-        
-
     }
-    nav{
+
+    nav {
         width: 96%;
         color: #fff;
     }
-    .container{
+
+    .container {
         display: flex;
+        align-items: center;
         width: 100%;
-        /* background-color: lightblue; */
+        position: relative;
     }
-    .container h1{
+
+    .container h1 {
         font-size: 26px;
     }
-    .container ul{
+
+    .container ul {
         display: flex;
         width: 20%;
         justify-content: space-evenly;
-        /* background-color: aqua; */
         list-style: none;
         position: absolute;
         left: 400px;
         font-size: 20px;
         top: 30px;
-
     }
-    .container ul li a{
+
+    .container ul li a {
         color: #fff;
         text-decoration: none;
-        &:hover{
-            cursor: pointer;
-            text-decoration: underline;
-        }
     }
 
-</style>   
+    .container ul li a:hover {
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    /* Estilos para la barra de búsqueda */
+    .search-container {
+        position: absolute;
+        right: 20px;
+        top: 25px;
+    }
+
+    #search-bar {
+        width: 200px;
+        padding: 5px;
+        border-radius: 5px;
+        border: none;
+        outline: none;
+        color: #000;
+    }
+
+    #search-bar:focus {
+    color: #333;
+    }
+
+    #results {
+        position: absolute;
+        top: 30px;
+        width: 100%;
+        background: white;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        display: none;
+        color: #000;
+    }
+
+    #results div {
+        padding: 10px;
+        cursor: pointer;
+        border-bottom: 1px solid #ddd;
+    }
+
+    #results div:hover {
+        background-color: #f1f1f1;
+    }
+</style>
+
+<script>
+document.getElementById("search-bar").addEventListener("input", function () {
+    let query = this.value;
+    if (query.length > 0) {
+        fetch(`/search/?q=${query}`)
+            .then(response => response.json())
+            .then(data => {
+                let resultsDiv = document.getElementById("results");
+                resultsDiv.innerHTML = "";
+                resultsDiv.style.display = "block";
+
+                if (data.length === 0) {
+                    resultsDiv.innerHTML = "<div>No hay resultados</div>";
+                    return;
+                }
+
+                data.forEach(municipality => {
+                    let item = document.createElement("div");
+                    item.textContent = municipality.name;
+                    item.onclick = function () {
+                        window.location.href = `/municipalities/${municipality.id}/`;
+                    };
+                    resultsDiv.appendChild(item);
+                });
+            });
+    } else {
+        document.getElementById("results").style.display = "none";
+    }
+});
+
+// Ocultar resultados si se hace clic fuera de la barra de búsqueda
+document.addEventListener("click", function (e) {
+    if (!document.getElementById("search-bar").contains(e.target) &&
+        !document.getElementById("results").contains(e.target)) {
+        document.getElementById("results").style.display = "none";
+    }
+});
+</script>
