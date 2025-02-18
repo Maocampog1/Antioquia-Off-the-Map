@@ -1,10 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventos en {{ municipality.name }}</title>
 </head>
 <body>
-
+    <h1>Calendario de Eventos - {{ municipality.name }}</h1>
+    <ul>
+        {% for event in events %}
+            <li>
+                <strong>{{ event.date }}</strong> - <b>{{ event.name }}</b> ({{ event.event_type }})<br>
+                <i>Ubicación:</i> {{ event.location }}<br>
+                <i>Descripción:</i> {{ event.description|default:"Sin descripción" }}
+            </li>
+        {% empty %}
+            <li>No hay eventos programados.</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'municipality_detail' municipality.id %}">Volver a la descripción</a>
 </body>
 </html>
