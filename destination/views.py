@@ -20,7 +20,7 @@ def municipality_detail_by_name(request, municipality_name):
     municipality = get_object_or_404(Municipality, name=municipality_name)
     return render(request, 'municipality_detail.html', {'municipality': municipality})
 
-# Vista para la búsqueda de municipios en tiempo real
+# View fot the municipality search in real time
 def search_municipalities(request):
     query = request.GET.get("q", "").strip()
     if query:
@@ -31,5 +31,5 @@ def search_municipalities(request):
 
 def event_calendar(request, municipality_id):
     municipality = get_object_or_404(Municipality, id=municipality_id)
-    events = municipality.events.all().order_by("date")  # Obtener eventos ordenados por fecha
-    return render(request, "destination/event_calendar.html", {"municipality": municipality, "events": events})
+    events = municipality.events.all().order_by("date")  # Obtain events ordered by date
+    return render(request, "municipality_events.html", {"municipality": municipality, "events": events})
