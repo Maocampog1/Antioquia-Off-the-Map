@@ -4,4 +4,5 @@
 <img src="{{ municipality.image.url }}" alt="{{ municipality.name }}" style="width: 300px;">
 <p>{{ municipality.description }}</p>
 <p>Category: {{ municipality.category }}</p>
+<a href="{% url 'municipality_events' municipality.id %}" class="btn btn-primary">Ver Eventos</a>
 <!-- <a href="{% url 'municipality_list' %}">Back to list</a> -->
