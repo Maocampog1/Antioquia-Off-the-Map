@@ -1,4 +1,4 @@
-{% include 'home/home.html'%}
+{% include 'home.html'%}
 {% for municipality in municipalities %}
     <h2><a href="{% url 'municipality_detail' municipality.id %}">{{ municipality.name }}</a></h2>
     <p>{{ municipality.description}}</p>

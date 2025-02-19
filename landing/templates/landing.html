@@ -1,0 +1,17 @@
+{% load static tailwind_tags%}
+<!DOCTYPE html>
+<html lang="en" class="bg-white">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    {% tailwind_css %}
+</head>
+<body >
+
+    {% include 'home.html' %} <!--Imports the home component (navbar) -->
+
+    <h1 class= "text-4xl text-black">Esta es la landing</h1>
+
+</body>
+</html>

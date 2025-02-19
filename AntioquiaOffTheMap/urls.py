@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 
 from django.conf.urls.static import static
 from django.conf import settings
@@ -32,6 +32,7 @@ urlpatterns = [
     path('municipalities/', municipality_list, name='municipality_list'), #En esta ruta se listan todas las municipalidades 
     path('municipalities/<int:municipality_id>/', municipality_detail, name='municipality_detail'), # con este se lista la municipalidad que coincida con el id
     path('municipalities/<str:municipality_name>/', municipality_detail_by_name, name='municipality_detail_by_name'),
+    path("__reload__/", include("django_browser_reload.urls")),
 ]
 
 
