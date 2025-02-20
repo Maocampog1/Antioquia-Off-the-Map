@@ -33,13 +33,17 @@ source venv/bin/activate
 
 ```
 pip install -r requirements.txt
+npm install
 ```
 
-**4. Run the development server**
+**4. Run the development server (in different terminals)**
+
+```
+python manage.py tailwind start
+```
 
 ```
 python manage.py runserver
-
 ```
 
 The app will be available at http://127.0.0.1:8000/.
