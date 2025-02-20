@@ -1,5 +1,3 @@
-{% include 'home.html'%}
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,21 +6,49 @@
     <title>Eventos</title>
 </head>
 <body>
-    <h1>Eventos en {{ municipality.name }}</h1>
-    
-    {% if events %}
-        <ul>
-            {% for event in events %}
-                <li>
-                    <strong>{{ event.name }}</strong> - {{ event.date }} <br>
-                    {{ event.description }}
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No hay eventos programados en este municipio.</p>
-    {% endif %}
+    {% include 'home.html'%}
 
-    <a href="{% url 'municipality_detail' municipality.id %}">Volver al municipio</a>
+    {% block content %}
+    <div class="max-w-6xl mx-auto px-6 py-10">
+
+        <!-- Hero Section with Municipality Name -->
+        <div class="hero h-64 rounded-lg shadow-lg overflow-hidden" style="background-image: url('{{ municipality.image.url }}');">
+            <div class="hero-overlay bg-opacity-70"></div>
+            <div class="hero-content text-center text-white">
+                <h1 class="text-4xl font-bold">Eventos en {{ municipality.name }}</h1>
+            </div>
+        </div>
+
+        <!-- Events Section -->
+        <div class="mt-10">
+            {% if events %}
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+                    {% for event in events %}
+                    <div class="card bg-white shadow-lg rounded-lg overflow-hidden">
+                        <div class="card-body">
+                            <h2 class="card-title text-xl font-bold">{{ event.name }}</h2>
+                            <p class="text-gray-600 text-sm"><strong>Fecha:</strong> {{ event.date }}</p>
+                            <p class="text-gray-700 mt-2">{{ event.description }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <!-- No Events Message -->
+                <div class="flex flex-col items-center text-center mt-10">
+                    <img src="" alt="No Events" class="w-64">
+                    <p class="text-gray-500 text-lg mt-4">No se encontraron eventos para este municipio.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Back Button -->
+        <div class="mt-8 text-center">
+            <a href="{% url 'municipality_detail' municipality.id %}" class="btn btn-outline btn-primary">Volver al municipio</a>
+        </div>
+
+    </div>
+    {% endblock %}
+
 </body>
 </html>

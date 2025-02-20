@@ -1,8 +1,18 @@
-{% include 'home.html'%}
-{% for municipality in municipalities %}
-    <h2><a href="{% url 'municipality_detail' municipality_id= municipality.id %}">{{ municipality.name }}</a></h2>
-    <p>{{ municipality.description}}</p>
-    <p>{{municipality.category}}</p>
-    <p>{{municipality.location}}</p>
-    <img src="{{ municipality.image.url}}" alt="{{ municipality.name }} image">
-{% endfor %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{municipality.name}}</title>
+</head>
+<body>
+    {% include 'home.html'%}
+    {% for municipality in municipalities %}
+        <h2><a href="{% url 'municipality_detail' municipality_id= municipality.id %}">{{ municipality.name }}</a></h2>
+        <p>{{ municipality.description}}</p>
+        <p>{{municipality.category}}</p>
+        <p>{{municipality.location}}</p>
+        <img src="{{ municipality.image.url}}" alt="{{ municipality.name }} image">
+    {% endfor %}
+</body>
+</html>
