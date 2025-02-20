@@ -7,11 +7,15 @@
     <title>Home</title>
     {% tailwind_css %}
 </head>
-<body >
+<body>
+    <!-- Include home component -->
+    {% include 'home.html' %}
 
-    {% include 'home.html' %} <!--Imports the home component (navbar) -->
-
-    <h1 class= "text-4xl text-black">Esta es la landing</h1>
+    <div>
+        <img src="{% static 'photo.svg' %}" alt="main_photo" class="p-3 mx-auto">
+        <h1 class="text-black ">ANTIOQUIA OFF THE MAP</h1>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita totam a voluptas perferendis ea est consectetur accusantium magnam, suscipit in similique molestias illum! Voluptates fuga voluptate recusandae? Inventore, corrupti? Dolores.</p>
+    </div>
 
 </body>
 </html>

@@ -1,149 +1,82 @@
-<header class="header">
-    <nav>
-        <div class="container">
-            <h1>Antioquia Off the Map</h1>
-            <ul>
-                <li><a href="{% url 'landing' %}">Inicio</a></li>
-                <li><a href="{% url 'municipality_name_list'%}">Municipios</a></li>
+{% load static tailwind_tags %}
+
+<!DOCTYPE html>
+<html lang="en" class="bg-white text-black
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    {% tailwind_css%}
+</head>
+<body>
+    <header class="header sticky top-0 bg-white shadow-md flex items-center justify-between px-8 py-02">
+        <!-- logo -->
+        <h1 class="w-3/12">
+            <a href="{% url 'landing' %}">
+                <img src="{% static 'logoo.jpeg' %}" alt="logo" class="w-20">
+            </a>
+        </h1>
+    
+        <!-- navigation -->
+        <nav class="nav font-semibold text-lg">
+            <ul class="flex items-center">
+                <li class="p-4 border-b-2 border-green-500 border-opacity-0 hover:border-opacity-100 hover:text-green-500 duration-200 cursor-pointer active">
+                  <a href="{% url 'landing' %}">Inicio</a>
+                </li>
+                <li class="p-4 border-b-2 border-green-500 border-opacity-0 hover:border-opacity-100 hover:text-green-500 duration-200 cursor-pointer">
+                  <a href="{% url 'municipality_name_list'%}">Municipios</a>
+                </li>
             </ul>
-            <div class="search-container">
+        </nav>
+    
+        <!-- buttons --->
+        <div class="w-3/12 flex justify-end">
+            <div class="search-container" >
                 <input type="text" id="search-bar" placeholder="Buscar municipio..." autocomplete="off">
                 <div id="results"></div>
             </div>
         </div>
-    </nav>
-</header>
-
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    .header {
-        display: flex;
-        width: 100vw;
-        height: 12vh;
-        justify-content: flex-end;
-        align-items: center;
-        background-color: green;
-    }
-
-    nav {
-        width: 96%;
-        color: #fff;
-    }
-
-    .container {
-        display: flex;
-        align-items: center;
-        width: 100%;
-        position: relative;
-    }
-
-    .container h1 {
-        font-size: 26px;
-    }
-
-    .container ul {
-        display: flex;
-        width: 20%;
-        justify-content: space-evenly;
-        list-style: none;
-        position: absolute;
-        left: 400px;
-        font-size: 20px;
-        top: 30px;
-    }
-
-    .container ul li a {
-        color: #fff;
-        text-decoration: none;
-    }
-
-    .container ul li a:hover {
-        cursor: pointer;
-        text-decoration: underline;
-    }
-
-    /* Estilos para la barra de búsqueda */
-    .search-container {
-        position: absolute;
-        right: 20px;
-        top: 25px;
-    }
-
-    #search-bar {
-        width: 200px;
-        padding: 5px;
-        border-radius: 5px;
-        border: none;
-        outline: none;
-        color: #000;
-    }
-
-    #search-bar:focus {
-    color: #333;
-    }
-
-    #results {
-        position: absolute;
-        top: 30px;
-        width: 100%;
-        background: white;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-        border-radius: 5px;
-        display: none;
-        color: #000;
-    }
-
-    #results div {
-        padding: 10px;
-        cursor: pointer;
-        border-bottom: 1px solid #ddd;
-    }
-
-    #results div:hover {
-        background-color: #f1f1f1;
-    }
-</style>
-
-<script>
-document.getElementById("search-bar").addEventListener("input", function () {
-    let query = this.value;
-    if (query.length > 0) {
-        fetch(`/search/?q=${query}`)
-            .then(response => response.json())
-            .then(data => {
-                let resultsDiv = document.getElementById("results");
-                resultsDiv.innerHTML = "";
-                resultsDiv.style.display = "block";
-
-                if (data.length === 0) {
-                    resultsDiv.innerHTML = "<div>No hay resultados</div>";
-                    return;
-                }
-
-                data.forEach(municipality => {
-                    let item = document.createElement("div");
-                    item.textContent = municipality.name;
-                    item.onclick = function () {
-                        window.location.href = `/municipalities/${municipality.id}/`;
-                    };
-                    resultsDiv.appendChild(item);
+    </header>
+    
+    <script>
+    document.getElementById("search-bar").addEventListener("input", function () {
+        let query = this.value;
+        if (query.length > 0) {
+            fetch(`/search/?q=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    let resultsDiv = document.getElementById("results");
+                    resultsDiv.innerHTML = "";
+                    resultsDiv.style.display = "block";
+    
+                    if (data.length === 0) {
+                        resultsDiv.innerHTML = "<div>No hay resultados</div>";
+                        return;
+                    }
+    
+                    data.forEach(municipality => {
+                        let item = document.createElement("div");
+                        item.textContent = municipality.name;
+                        item.onclick = function () {
+                            window.location.href = `/municipalities/${municipality.id}/`;
+                        };
+                        resultsDiv.appendChild(item);
+                    });
                 });
-            });
-    } else {
-        document.getElementById("results").style.display = "none";
-    }
-});
+        } else {
+            document.getElementById("results").style.display = "none";
+        }
+    });
+    
+    // Ocultar resultados si se hace clic fuera de la barra de búsqueda
+    document.addEventListener("click", function (e) {
+        if (!document.getElementById("search-bar").contains(e.target) &&
+            !document.getElementById("results").contains(e.target)) {
+            document.getElementById("results").style.display = "none";
+        }
+    });
+    </script>
+    
+</body>
+</html>
 
-// Ocultar resultados si se hace clic fuera de la barra de búsqueda
-document.addEventListener("click", function (e) {
-    if (!document.getElementById("search-bar").contains(e.target) &&
-        !document.getElementById("results").contains(e.target)) {
-        document.getElementById("results").style.display = "none";
-    }
-});
-</script>
