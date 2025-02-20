@@ -1,18 +1,39 @@
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{ municipality.name }}</title>
+    </head>
 <body>
     {% include 'home.html'%}
+    <div class="max-w-5xl mx-auto px-6 py-5">
+        <!-- Hero Section -->
+        <div class="hero h-96 rounded-lg shadow-lg overflow-hidden" style="background-image: url('{{ municipality.image.url }}');">
+            <div class="hero-overlay bg-opacity-60"></div>
+            <div class="hero-content text-center text-white">
+                <div>
+                    <h1 class="text-4xl font-bold">{{ municipality.name }}</h1>
+                    <p class="mt-2 text-lg">{{ municipality.location }}</p>
+                </div>
+            </div>
+        </div>
 
-    <h1>{{ municipality.name }}</h1>
-    <img src="{{ municipality.image.url }}" alt="{{ municipality.name }}" style="width: 300px;">
-    <p>{{ municipality.description }}</p>
-    <p>Category: {{ municipality.category }}</p>
-    <a href="{% url 'municipality_events' municipality.id %}" class="btn btn-primary">Ver Eventos</a>
-<!-- <a href="{% url 'municipality_list' %}">Back to list</a> -->
+        <!-- Municipality Details -->
+        <div class="card bg-white shadow-lg rounded-lg mt-8 p-6">
+            <div class="card-body">
+                <h2 class="card-title text-3xl font-bold">{{ municipality.name }}</h2>
+                <span class="badge badge-primary text-sm">{{ municipality.category }}</span>
+                <p class="text-gray-700 mt-2">{{ municipality.description }}</p>
+
+                <!-- Buttons -->
+                <div class="mt-6 flex space-x-4 justify-center">
+                    <a href="{% url 'municipality_events' municipality.id %}" class="btn btn-primary">View Events</a>
+                    <a href="{% url 'municipality_name_list' %}" class="btn btn-outline">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

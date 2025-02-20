@@ -1,19 +1,19 @@
 {% load static tailwind_tags %}
 
 <!DOCTYPE html>
-<html lang="en" class="bg-white text-black
+<html lang="en" class="bg-white">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
     {% tailwind_css%}
 </head>
-<body>
-    <header class="header sticky top-0 bg-white shadow-md flex items-center justify-between px-8 py-02">
+<body class="text-black">
+    <header class="header sticky top-0 bg-white shadow-md flex items-center justify-between px-8 py-02 text-gray-85 z-50">
         <!-- logo -->
         <h1 class="w-3/12">
             <a href="{% url 'landing' %}">
-                <img src="{% static 'logoo.jpeg' %}" alt="logo" class="w-20">
+                <img src="{% static 'logo2.jpeg' %}" alt="logo" class="w-20">
             </a>
         </h1>
     
