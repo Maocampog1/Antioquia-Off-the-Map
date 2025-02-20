@@ -33,6 +33,7 @@ source venv/bin/activate
 
 ```
 pip install -r requirements.txt
+cd theme/static_src/
 npm install
 ```
 
