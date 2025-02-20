@@ -1,0 +1,21 @@
+{% load static tailwind_tags%}
+<!DOCTYPE html>
+<html lang="en" class="bg-white">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    {% tailwind_css %}
+</head>
+<body>
+    <!-- Include home component -->
+    {% include 'home.html' %}
+
+    <div>
+        <img src="{% static 'photo.svg' %}" alt="main_photo" class="p-3 mx-auto">
+        <h1 class="text-black ">ANTIOQUIA OFF THE MAP</h1>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita totam a voluptas perferendis ea est consectetur accusantium magnam, suscipit in similique molestias illum! Voluptates fuga voluptate recusandae? Inventore, corrupti? Dolores.</p>
+    </div>
+
+</body>
+</html>
