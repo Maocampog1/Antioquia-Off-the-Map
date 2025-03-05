@@ -37,12 +37,13 @@ cd theme/static_src/
 npm install
 ```
 
-**4. Run the development server (in different terminals)**
+**4. Run the development server**
 
 ```
 python manage.py tailwind start
 ```
 
+**Open a new terminal**
 ```
 python manage.py runserver
 ```
