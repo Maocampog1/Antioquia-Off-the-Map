@@ -35,6 +35,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 cd theme/static_src/
 npm install
+cd ../..
 ```
 
 **4. Run the development server**
@@ -45,6 +46,7 @@ python manage.py tailwind start
 
 **Open a new terminal**
 ```
+env\Scripts\activate
 python manage.py runserver
 ```
 
