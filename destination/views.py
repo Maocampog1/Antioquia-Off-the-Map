@@ -4,10 +4,6 @@ from django.http import JsonResponse
 
 
 # Create your views here.
-def municipality_list(request):
-    municipalities = Municipality.objects.all()
-    return render(request, 'municipality_list.html', {'municipalities': municipalities})
-
 def municipality_name_list(request):
     municipalities = Municipality.objects.all()
     return render(request, 'municipalities_name_list.html', {'municipalities': municipalities})
@@ -27,7 +23,6 @@ def search_municipalities(request):
         municipalities = Municipality.objects.filter(name__icontains=query).values("id", "name")
         return JsonResponse(list(municipalities), safe=False)
     return JsonResponse([], safe=False)
-
 
 def event_calendar(request, municipality_id):
     municipality = get_object_or_404(Municipality, id=municipality_id)
