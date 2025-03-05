@@ -20,13 +20,10 @@ from django.urls import include, path
 from django.conf.urls.static import static
 from django.conf import settings
 # Import the views
-from destination.views import municipality_list, municipality_detail, municipality_detail_by_name, municipality_name_list, event_calendar
-from landing.views import landing
-from home.views import search_municipalities
-
+from destination.views import municipality_list, municipality_detail, municipality_detail_by_name, municipality_name_list, event_calendar, home, search_municipalities
 
 urlpatterns = [
-    path('', landing, name='landing'),
+    path('', home, name='home'),
     path('municipalities/names', municipality_name_list, name='municipality_name_list'),
     path('admin/', admin.site.urls),
     path('municipalities/', municipality_list, name='municipality_list'), #En esta ruta se listan todas las municipalidades

@@ -33,3 +33,14 @@ def event_calendar(request, municipality_id):
     municipality = get_object_or_404(Municipality, id=municipality_id)
     events = municipality.events.all().order_by("date")  # Obtain events ordered by date
     return render(request, "municipality_events.html", {"municipality": municipality, "events": events})
+
+def home(request):
+    municipalities = Municipality.objects.all()
+    return render(request, 'home.html', {'municipalities': municipalities})
+
+def search_municipalities(request):
+    query = request.GET.get("q", "").strip()
+    if query:
+        municipalities = Municipality.objects.filter(name__icontains=query).values("id", "name")
+        return JsonResponse(list(municipalities), safe=False)
+    return JsonResponse([], safe=False)

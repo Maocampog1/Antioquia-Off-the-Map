@@ -1,15 +1,85 @@
 {% load static tailwind_tags %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="bg-white">
 	<head>
-    <title>Django Tailwind</title>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
 		{% tailwind_css %}
 	</head>
 
-	<body>
+	<body class="text-black">
+		<header class="header sticky top-0 bg-white shadow-md flex items-center justify-between px-8 py-02 text-gray-85 z-50">
+			<!-- logo -->
+			<h1 class="w-3/12">
+				<a href="{% url 'home' %}">
+					<img src="{% static 'logo2.jpeg' %}" alt="logo" class="w-20">
+				</a>
+			</h1>
+		
+			<!-- navigation -->
+			<nav class="nav font-semibold text-lg">
+				<ul class="flex items-center">
+					<li class="p-4 border-b-2 border-green-500 border-opacity-0 hover:border-opacity-100 hover:text-green-500 duration-200 cursor-pointer active">
+					  <a href="{% url 'home' %}">Inicio</a>
+					</li>
+					<li class="p-4 border-b-2 border-green-500 border-opacity-0 hover:border-opacity-100 hover:text-green-500 duration-200 cursor-pointer">
+					  <a href="{% url 'municipality_name_list'%}">Municipios</a>
+					</li>
+				</ul>
+			</nav>
+		
+			<!-- buttons --->
+			<div class="w-3/12 flex justify-end">
+				<div class="search-container" >
+					<input type="text" id="search-bar" placeholder="Buscar municipio..." autocomplete="off">
+					<div id="results"></div>
+				</div>
+			</div>
+		</header>
+		
+		<script>
+		document.getElementById("search-bar").addEventListener("input", function () {
+			let query = this.value;
+			if (query.length > 0) {
+				fetch(`/search/?q=${query}`)
+					.then(response => response.json())
+					.then(data => {
+						let resultsDiv = document.getElementById("results");
+						resultsDiv.innerHTML = "";
+						resultsDiv.style.display = "block";
+		
+						if (data.length === 0) {
+							resultsDiv.innerHTML = "<div>No hay resultados</div>";
+							return;
+						}
+		
+						data.forEach(municipality => {
+							let item = document.createElement("div");
+							item.textContent = municipality.name;
+							item.onclick = function () {
+								window.location.href = `/municipalities/${municipality.id}/`;
+							};
+							resultsDiv.appendChild(item);
+						});
+					});
+			} else {
+				document.getElementById("results").style.display = "none";
+			}
+		});
+		
+		// Ocultar resultados si se hace clic fuera de la barra de búsqueda
+		document.addEventListener("click", function (e) {
+			if (!document.getElementById("search-bar").contains(e.target) &&
+				!document.getElementById("results").contains(e.target)) {
+				document.getElementById("results").style.display = "none";
+			}
+		});
+		</script>
 
+		<div class="container">
+			{% block content %}
+			{% endblock %}
+		</div>
 	</body>
 </html>

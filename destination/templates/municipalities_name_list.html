@@ -1,41 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Municipios</title>
-</head>
-<body>
-    {% include 'home.html'%}
-    <div class="max-w-7xl mx-auto px-6 py-10">
-        <!-- Page Title -->
-        <h1 class="text-4xl font-bold text-center text-gray-800 mb-8">Explora los municipios</h1>
+{% extends 'base.html'%}
 
-        <!-- Municipality Cards Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {% for municipality in municipalities %}
-            <div class="bg-white rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105">
-                <!-- Image -->
-                <img src="{{ municipality.image.url }}" alt="{{ municipality.name }}" class="w-full h-56 object-cover">
-                
-                <!-- Content -->
-                <div class="p-4">
-                    <h2 class="text-xl font-bold text-gray-800 text-center">{{ municipality.name }}</h2>
-                </div>
+{% block content %}
 
-                <!-- View More Button -->
-                <div class="p-4">
-                    <a href="{% url 'municipality_detail' municipality.id %}" 
-                    class="block text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded">
-                        Ver más
-                    </a>
-                </div>
+<title>Municipios</title>
+
+<div class="max-w-7xl mx-auto px-6 py-10">
+    <!-- Page Title -->
+    <h1 class="text-4xl font-bold text-center text-gray-800 mb-8">Explora los municipios</h1>
+
+    <!-- Municipality Cards Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for municipality in municipalities %}
+        <div class="bg-white rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105">
+            <!-- Image -->
+            <img src="{{ municipality.image.url }}" alt="{{ municipality.name }}" class="w-full h-56 object-cover">
+            
+            <!-- Content -->
+            <div class="p-4">
+                <h2 class="text-xl font-bold text-gray-800 text-center">{{ municipality.name }}</h2>
             </div>
-            {% empty %}
-            <p class="text-center text-gray-600">No municipalities found.</p>
-            {% endfor %}
-        </div>
-    </div>
 
-</body>
-</html>
+            <!-- View More Button -->
+            <div class="p-4">
+                <a href="{% url 'municipality_detail' municipality.id %}" 
+                class="block text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded">
+                    Ver más
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center text-gray-600">No municipalities found.</p>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
