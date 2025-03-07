@@ -8,5 +8,4 @@ urlpatterns = [
     path("search/", views.search_municipalities, name="search_municipalities"),
     path('municipalities/<int:municipality_id>/events/', views.event_calendar, name='municipality_events'),
     path('', views.home, name='home'),
-    path("__reload__/", include("django_browser_reload.urls")),
 ]
