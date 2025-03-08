@@ -39,3 +39,17 @@ def search_municipalities(request):
         municipalities = Municipality.objects.filter(name__icontains=query).values("id", "name")
         return JsonResponse(list(municipalities), safe=False)
     return JsonResponse([], safe=False)
+
+def municipality_detail(request, municipality_id):
+    municipality = get_object_or_404(Municipality, id=municipality_id)
+    accommodations = municipality.accommodations.all()
+    restaurants = municipality.restaurants.all()
+    activities = municipality.activities.all()  # <-- Ahora también enviamos las actividades
+    
+    return render(request, 'municipality_detail.html', {
+        'municipality': municipality,
+        'accommodations': accommodations,
+        'restaurants': restaurants,
+        'activities': activities  # <-- Se envían al template
+    })
+

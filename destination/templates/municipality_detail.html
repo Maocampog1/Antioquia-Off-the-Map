@@ -15,20 +15,137 @@
         </div>
     </div>
 
-    <!-- Municipality Details -->
-    <div class="card bg-white shadow-lg rounded-lg mt-8 p-6">
-        <div class="card-body">
-            <h2 class="card-title text-3xl font-bold">{{ municipality.name }}</h2>
-            <span class="badge badge-primary text-sm">{{ municipality.category }}</span>
-            <p class="text-gray-700 mt-2">{{ municipality.description }}</p>
+       <!-- Municipality Details -->
+        <div class="card bg-white shadow-lg rounded-lg mt-8 p-6">
+            <div class="card-body">
+                <h2 class="card-title text-3xl font-bold">{{ municipality.name }}</h2>
 
-            <!-- Buttons -->
-            <div class="mt-6 flex space-x-4 justify-center">
-                <a href="{% url 'municipality_events' municipality.id %}" class="btn btn-primary">View Events</a>
-                <a href="{% url 'municipality_name_list' %}" class="btn btn-outline">Back to List</a>
+                <!-- Categorías -->
+                <h2 class="font-semibold text-gray-700">Categorías:</h2>
+                <div class="flex flex-wrap gap-3 mt-2">
+                    {% if municipality.categories.all %}
+                        {% for cat in municipality.categories.all %}
+                            <span class="inline-block rounded-full bg-blue-100 text-blue-800 px-4 py-2 text-sm font-semibold border border-blue-300 shadow-md">
+                                {{ cat.name }}
+                            </span>
+                        {% endfor %}
+                    {% else %}
+                        <span class="text-gray-500">No hay categorías asignadas</span>
+                    {% endif %}
+                </div>
+
+                <!-- Descripción -->
+                <p class="text-gray-700 mt-4">{{ municipality.description }}</p>
+
+                <!-- Botones -->
+                <div class="mt-6 flex space-x-4 justify-center">
+                    <a href="{% url 'municipality_events' municipality.id %}" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700">Ver Eventos</a>
+                    <a href="{% url 'municipality_name_list' %}" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg shadow-md hover:bg-gray-300">Volver a la Lista</a>
+                </div>
             </div>
         </div>
-    </div>
+        
+        <!-- Restaurants Section -->
+        <div class="card bg-yellow-100 shadow-lg rounded-lg mt-8 p-6">
+            <div class="card-body">
+                <h2 class="card-title text-3xl font-bold text-yellow-800">¿Dónde Comer en {{ municipality.name }}?</h2>
+
+                {% if restaurants %}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
+                        {% for restaurant in restaurants %}
+                            <div class="card bg-white shadow-md rounded-lg p-4 border border-yellow-300">
+                                <div class="card-body">
+                                    <h3 class="text-xl font-semibold text-yellow-700">{{ restaurant.name }}</h3>
+                                    <p class="mt-1 text-gray-700">
+                                        <span class="font-semibold">Tipo de comida:</span> {{ restaurant.cuisine_type }}
+                                    </p>
+                                    <p class="mt-1 text-gray-600">
+                                        <span class="font-semibold">Precio:</span> {{ restaurant.price_range }}
+                                    </p>
+                                    <p class="mt-1 text-gray-600">
+                                        <span class="font-semibold">Contacto:</span> {{ restaurant.contact_info|default:"No disponible" }}
+                                    </p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-center text-lg text-yellow-700 mt-4">No hay restaurantes registrados en este municipio.</p>
+                {% endif %}
+            </div>
+        </div>
+
+
+       <!-- Activities Section -->
+        <div class="card bg-blue-100 shadow-lg rounded-lg mt-8 p-6">
+            <div class="card-body">
+                <h2 class="card-title text-3xl font-bold text-blue-800">Actividades Imperdibles en {{ municipality.name }}</h2>
+
+                {% if activities %}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
+                        {% for activity in activities %}
+                            <div class="card bg-white shadow-md rounded-lg p-4 border border-blue-300">
+                                {% if activity.image %}
+                                    <img src="{{ activity.image.url }}" alt="{{ activity.name }}" class="w-full h-48 object-cover rounded-md">
+                                {% endif %}
+                                <div class="card-body mt-4">
+                                    <h3 class="text-xl font-semibold text-blue-700">{{ activity.name }}</h3>
+                                    
+                                    <!-- Descripción oculta dentro de un <details> -->
+                                    <details class="mt-2">
+                                        <summary class="text-blue-600 cursor-pointer font-medium">Más info</summary>
+                                        <p class="mt-2 text-gray-600">{{ activity.description }}</p>
+                                    </details>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-center text-lg text-blue-700 mt-4">No hay actividades registradas en este municipio.</p>
+                {% endif %}
+            </div>
+        </div>
+
+
+
+
+        <!-- Accommodations Section -->
+        <div class="card bg-green-100 shadow-lg rounded-lg mt-8 p-6">
+            <div class="card-body">
+                <h2 class="card-title text-3xl font-bold text-green-800">Alojamientos en {{ municipality.name }}</h2>
+
+                {% if accommodations %}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
+                        {% for accommodation in accommodations %}
+                            <div class="card bg-white shadow-md rounded-lg p-4 border border-green-300">
+                                <div class="card-body">
+                                    <h3 class="text-xl font-semibold text-green-700">{{ accommodation.name }}</h3>
+                                    <span class="badge badge-success text-sm">
+                                        {{ accommodation.get_accommodation_type_display }}
+                                    </span>
+
+                                    <p class="mt-2 text-gray-600">
+                                        <span class="font-semibold">Dirección:</span> 
+                                        {{ accommodation.address|default:"No disponible" }}
+                                    </p>
+
+                                    {% if accommodation.website %}
+                                        <a href="{{ accommodation.website }}" target="_blank"
+                                            class="mt-2 inline-block text-green-600 font-medium underline hover:no-underline hover:text-green-800 transition">
+                                            Visitar sitio web
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-center text-lg text-green-700 mt-4">No hay alojamientos registrados en este municipio.</p>
+                {% endif %}
+            </div>
+        </div>
+
+   
 </div>
 
 {% endblock %}
