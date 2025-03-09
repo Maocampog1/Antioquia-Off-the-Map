@@ -30,7 +30,7 @@
     </nav>
 
     <!-- Barra de búsqueda con filtros -->
-    <div class="w-3/12 flex justify-end relative">
+    <div class="w-3/12 flex justify-end relative mt-32"> <!-- Se aumentó el margen -->
         <div class="search-container relative">
             <input type="text" id="search-bar" placeholder="Buscar municipio..." autocomplete="off" class="border p-2 rounded-lg w-full">
             <button onclick="toggleFilters()" class="absolute right-2 top-2">☰</button>
@@ -38,7 +38,7 @@
         </div>
 
         <!-- Filtros desplegables -->
-        <div id="filtersContainer" class="absolute right-0 mt-12 w-64 bg-white shadow-lg rounded-lg p-4 hidden">
+        <div id="filtersContainer" class="absolute right-0 top-16 mt-8 w-64 bg-white shadow-lg rounded-lg p-4 hidden z-50"> 
             <h3 class="text-gray-700 font-semibold">¿Qué buscas?</h3>
             {% for category in categories %}
                 <label class="block text-sm">
@@ -58,7 +58,7 @@
             <div id="locationsContainer" class="hidden mt-2 border border-gray-300 rounded-lg p-2 text-sm text-gray-600">
                 {% for location in locations %}
                     <label class="block">
-                        <input type="radio" name="location" value="{{ location.value }}">
+                        <input type="radio" name="location" value="{{ location }}">
                         {{ location }}
                     </label>
                 {% empty %}
@@ -66,7 +66,11 @@
                 {% endfor %}
             </div>
 
-            <button type="submit" class="bg-green-500 text-white mt-3 px-4 py-2 rounded-lg w-full">Aplicar filtros</button>
+            <!-- Botón de búsqueda -->
+            <button onclick="applyFilters()" 
+        class="bg-green-600 hover:bg-green-700 text-green font-semibold px-4 py-2 rounded-lg w-full mt-2 shadow-md">
+    			Buscar
+			</button>
         </div>
     </div>
 </header>
@@ -81,40 +85,46 @@
 <script>
     // Mostrar resultados de búsqueda en vivo
     document.getElementById("search-bar").addEventListener("input", function () {
-        let query = this.value;
+        let query = this.value.trim();
+        let resultsDiv = document.getElementById("results");
+
         if (query.length > 0) {
-            fetch(`/search/?q=${query}`)
-                .then(response => response.json())
-                .then(data => {
-                    let resultsDiv = document.getElementById("results");
-                    resultsDiv.innerHTML = "";
-                    resultsDiv.classList.remove("hidden");
+            fetch(`/search/?q=${query}`, {
+                headers: { "X-Requested-With": "XMLHttpRequest" } // ✅ Esto indica que es una petición AJAX
+            })
+            .then(response => response.json())
+            .then(data => {
+                resultsDiv.innerHTML = "";
+                resultsDiv.classList.remove("hidden");
 
-                    if (data.length === 0) {
-                        resultsDiv.innerHTML = "<div class='p-2'>No hay resultados</div>";
-                        return;
-                    }
+                if (data.length === 0) {
+                    resultsDiv.innerHTML = "<div class='p-2'>No hay resultados</div>";
+                    return;
+                }
 
-                    data.forEach(municipality => {
-                        let item = document.createElement("div");
-                        item.classList.add("p-2", "hover:bg-gray-100", "cursor-pointer");
-                        item.textContent = municipality.name;
-                        item.onclick = function () {
-                            window.location.href = `/municipalities/${municipality.id}/`;
-                        };
-                        resultsDiv.appendChild(item);
-                    });
+                data.forEach(municipality => {
+                    let item = document.createElement("div");
+                    item.classList.add("p-2", "hover:bg-gray-100", "cursor-pointer");
+                    item.textContent = municipality.name;
+                    item.onclick = function () {
+                        window.location.href = `/municipalities/${municipality.id}/`;
+                    };
+                    resultsDiv.appendChild(item);
                 });
+            })
+            .catch(error => console.error("Error en la búsqueda:", error));
         } else {
-            document.getElementById("results").classList.add("hidden");
+            resultsDiv.classList.add("hidden");
         }
     });
 
     // Ocultar resultados si se hace clic fuera de la barra de búsqueda
     document.addEventListener("click", function (e) {
-        if (!document.getElementById("search-bar").contains(e.target) &&
-            !document.getElementById("results").contains(e.target)) {
-            document.getElementById("results").classList.add("hidden");
+        let searchBar = document.getElementById("search-bar");
+        let resultsDiv = document.getElementById("results");
+
+        if (!searchBar.contains(e.target) && !resultsDiv.contains(e.target)) {
+            resultsDiv.classList.add("hidden");
         }
     });
 
@@ -129,6 +139,19 @@
         let locationsContainer = document.getElementById("locationsContainer");
         locationsContainer.classList.toggle("hidden");
     }
+
+    // Aplicar filtros con el botón de búsqueda
+    function applyFilters() {
+    let query = document.getElementById("search-bar").value;
+    let selectedLocation = document.querySelector('input[name="location"]:checked')?.value || "";
+    let selectedCategories = [...document.querySelectorAll('input[name="category"]:checked')].map(el => el.value);
+
+    // Construir la URL para redirigir
+    let url = `/search/?q=${encodeURIComponent(query)}&location=${encodeURIComponent(selectedLocation)}&categories=${encodeURIComponent(selectedCategories.join(","))}`;
+
+    // Redirigir a la URL
+    window.location.href = url;
+}
 </script>
 
 </body>

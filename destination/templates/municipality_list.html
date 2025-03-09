@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Municipios encontrados</h2>
+  {% if municipalities %}
+    <ul>
+      {% for municipality in municipalities %}
+        <li>
+          <a href="{% url 'municipality_detail' municipality.id %}">{{ municipality.name }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No se encontraron municipios con estos filtros.</p>
+  {% endif %}
+{% endblock %} 
