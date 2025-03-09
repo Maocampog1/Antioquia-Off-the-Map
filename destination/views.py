@@ -1,4 +1,4 @@
-from .models import Municipality, Event
+from .models import Municipality, Event, Category
 from django.shortcuts import get_object_or_404, render
 from django.http import JsonResponse
 
@@ -19,10 +19,26 @@ def municipality_detail_by_name(request, municipality_name):
 # View fot the municipality search in real time
 def search_municipalities(request):
     query = request.GET.get("q", "").strip()
+    selected_location = request.GET.get("location", "").strip()
+    selected_categories = request.GET.getlist("categories") # Lista de categorías seleccionadas
+
+    # Filtrar municipios según el nombre
+    municipalities = Municipality.objects.all()
+    
     if query:
-        municipalities = Municipality.objects.filter(name__icontains=query).values("id", "name")
-        return JsonResponse(list(municipalities), safe=False)
-    return JsonResponse([], safe=False)
+        municipalities = municipalities.filter(name__icontains=query)
+
+    # Filtrar por ubicación si se selecciona una
+    if selected_location:
+        municipalities = municipalities.filter(location=selected_location)
+
+    # Filtrar por categorías si se seleccionan (asumiendo que Municipality tiene relación ManyToMany con Category)
+    if selected_categories:
+        municipalities = municipalities.filter(categories__id__in=selected_categories).distinct()
+
+    # Retornar los municipios en formato JSON
+    data = list(municipalities.values("id", "name"))
+    return JsonResponse(data, safe=False)
 
 def event_calendar(request, municipality_id):
     municipality = get_object_or_404(Municipality, id=municipality_id)
@@ -31,14 +47,22 @@ def event_calendar(request, municipality_id):
 
 def home(request):
     municipalities = Municipality.objects.all()
-    return render(request, 'home.html', {'municipalities': municipalities})
+    categories = Category.objects.all()
+    locations = Municipality.objects.values_list('location', flat=True).distinct()
+    return render(request, 'home.html', {
+        'municipalities': municipalities,
+        'categories': categories,
+        'locations': locations
+    })
 
-def search_municipalities(request):
-    query = request.GET.get("q", "").strip()
-    if query:
-        municipalities = Municipality.objects.filter(name__icontains=query).values("id", "name")
-        return JsonResponse(list(municipalities), safe=False)
-    return JsonResponse([], safe=False)
+def base(request):
+    municipalities = Municipality.objects.all()
+    categories = Category.objects.all()
+    locations = Municipality.objects.values_list('location', flat=True).distinct()
+    return render(request, 'base.html', {
+        'municipalities': municipalities,
+        'categories': categories,
+        'locations': locations})
 
 def municipality_detail(request, municipality_id):
     municipality = get_object_or_404(Municipality, id=municipality_id)
