@@ -1,0 +1,241 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscador de experiencias en Antioquia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+    <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
+        <h1 class="text-2xl font-bold text-center text-green-800">Buscador de experiencias en Antioquia</h1>
+
+        <!-- Selección de municipio -->
+        <div class="mt-4">
+            <label for="municipio" class="block font-semibold text-green-800">Selecciona un municipio:</label>
+            <select id="municipio" class="w-full p-2 border rounded-lg mt-2">
+                <option value="">-- Selecciona --</option>
+                {% for municipio in municipios %}
+                    <option value="{{ municipio.name }}">{{ municipio.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Selección de categorías -->
+        <div class="mt-4">
+            <label class="block font-semibold text-green-800">Selecciona una o más categorías:</label>
+            <div class="flex flex-wrap gap-2 mt-2">
+                {% for categoria in categorias %}
+                <label class="flex items-center bg-green-100 text-green-800 px-4 py-2 rounded-lg cursor-pointer">
+                    <input type="checkbox" value="{{ categoria.value }}" class="categoria-checkbox">
+                    <span class="ml-2">{{ categoria.label }} ({{ categoria.count }})</span>
+                </label>
+                {% endfor %}
+
+                <button id="searchButton">Buscar</button>
+            </div>
+        </div>
+
+        <!-- Resultados -->
+        <div id="experience-results" class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <p class="text-gray-600 text-center col-span-full">No hay resultados</p>
+        </div>
+    </div>
+
+    <script>
+
+const fetchExperiences1 = async () => {
+    let municipality1 = document.getElementById("municipio").value;
+    let categories = Array.from(document.querySelectorAll(".categoria-checkbox:checked"))
+        .map(el => el.value);
+
+    if (!municipality1) {
+        document.getElementById("experience-results").innerHTML = 
+            "<div class='text-gray-600 col-span-full text-center'>Selecciona un municipio</div>";
+        return;
+    }
+
+    // ✅ Correct way to format query parameters
+    let queryString = new URLSearchParams({
+        municipality1: municipality1,
+        categories: categories.join(",") // Converts array to comma-separated string
+    }).toString();
+
+    console.log("Query String:", queryString); // Debugging
+
+    try {
+        let response = await fetch(`/experience-search/?${queryString}`);
+        let data = await response.json(); // ✅ Wait for JSON response
+
+        let resultsDiv = document.getElementById("experience-results");
+        resultsDiv.innerHTML = "";
+
+        // ✅ Check if all categories are empty
+        if (
+            data.accommodations.length === 0 &&
+            data.activities.length === 0 &&
+            data.restaurants.length === 0
+        ) {
+            resultsDiv.innerHTML = "<div class='text-gray-600 col-span-full text-center'>No hay resultados</div>";
+            return;
+        }
+
+        // ✅ Append results for each category
+        function appendResults(title, items) {
+            if (title == "Alojamientos"){
+                if (items.length > 0) {
+                    let categoryHeader = document.createElement("h2");
+                    categoryHeader.className = "text-xl font-bold text-green-800 mt-4";
+                    categoryHeader.textContent = title;            
+                    resultsDiv.appendChild(categoryHeader);
+
+                    items.forEach(exp => {
+                        let card = document.createElement("div");
+                        card.className = "bg-white border border-gray-300 rounded-lg shadow-lg p-4 transition hover:shadow-xl mt-2";
+
+                        card.innerHTML = `
+                        <h3 class="text-lg font-bold text-green-800">${exp.name}</h3>
+                        <p class="text-sm text-gray-600">${exp.accommodation_type}</p>
+                        <a href="${exp.website}" target="_blank">
+                            <button class="mt-2 bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
+                                Ver más
+                            </button>
+                        </a>`;
+
+                        resultsDiv.appendChild(card);
+                    });
+                }
+            }
+            if (title == "Actividades"){
+                if (items.length > 0) {
+                    let categoryHeader = document.createElement("h2");
+                    categoryHeader.className = "text-xl font-bold text-green-800 mt-4";
+                    categoryHeader.textContent = title;            
+                    resultsDiv.appendChild(categoryHeader);
+
+                    items.forEach(exp => {
+                        let card = document.createElement("div");
+                        card.className = "bg-white border border-gray-300 rounded-lg shadow-lg p-4 transition hover:shadow-xl mt-2";
+
+                        card.innerHTML = `
+                            <h3 class="text-lg font-bold text-green-800">${exp.name}</h3>
+                            <p class="text-sm text-gray-600">${exp.description}</p>                        
+                        `;
+
+                        resultsDiv.appendChild(card);
+                    });
+                }
+            } 
+            if (title == "Restaurantes"){
+                if (items.length > 0) {
+                    let categoryHeader = document.createElement("h2");
+                    categoryHeader.className = "text-xl font-bold text-green-800 mt-4";
+                    categoryHeader.textContent = title;            
+                    resultsDiv.appendChild(categoryHeader);
+
+                    items.forEach(exp => {
+                        let card = document.createElement("div");
+                        card.className = "bg-white border border-gray-300 rounded-lg shadow-lg p-4 transition hover:shadow-xl mt-2";
+
+                        card.innerHTML = `
+                            <h3 class="text-lg font-bold text-green-800">${exp.name}</h3>                        
+                            <p class="text-sm text-gray-600">${exp.location}</p>
+                            <p class="text-sm text-gray-600">${exp.cuisine_type}</p>
+                            
+                        `;
+
+                        resultsDiv.appendChild(card);
+                    });
+                }
+            }   
+        }
+
+        appendResults("Alojamientos", data.accommodations);
+        appendResults("Actividades", data.activities);
+        appendResults("Restaurantes", data.restaurants);
+
+    } catch (error) {
+        console.error("Error fetching experiences:", error);
+        document.getElementById("experience-results").innerHTML = 
+            "<div class='text-red-600 col-span-full text-center'>Error al obtener experiencias</div>";
+    }
+};
+
+// ✅ Attach event listener to the search button
+document.addEventListener("DOMContentLoaded", function () {
+    const searchButton = document.getElementById('searchButton');
+    searchButton.addEventListener('click', fetchExperiences1);
+});
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            
+
+            function fetchExperiences() {
+
+                // console.log("llamado")
+
+                let municipio = document.getElementById("municipio").value;
+                let categorias = Array.from(document.querySelectorAll(".categoria-checkbox:checked"))
+                    .map(el => el.value);
+                // console.log(categorias)
+
+                if (!municipio) {
+                    document.getElementById("experience-results").innerHTML = "<div class='text-gray-600 col-span-full text-center'>Selecciona un municipio</div>";
+                    return;
+                }
+
+                let queryString = new URLSearchParams({ 
+                municipios: municipio, 
+                categorias: categorias.join(",") 
+                }).toString();
+                console.log(queryString)
+
+                
+
+                // fetch(`/search-experiences/?${queryString}`)                
+                //     .then(response => response.json())
+                //     .then(data => {
+                //         let resultsDiv = document.getElementById("experience-results");
+                //         resultsDiv.innerHTML = "";
+
+                        
+
+                //         if (data.length === 0) {
+                //             resultsDiv.innerHTML = "<div class='text-gray-600 col-span-full text-center'>No hay resultados</div>";
+                //             return;
+                //         }
+
+                //         data.forEach(exp => {
+                //             let card = document.createElement("div");
+                //             card.className = "bg-white border border-gray-300 rounded-lg shadow-lg p-4 transition hover:shadow-xl";
+
+                //             card.innerHTML = `
+                //                 <h3 class="text-lg font-bold text-green-800">${exp.name}</h3>
+                //                 <p class="text-sm text-gray-600">${exp.municipality__name}</p>
+                //                 <button class="mt-2 bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600" 
+                //                         onclick="window.location.href='/experiences/${exp.id}/'">Ver más</button>
+                //             `;
+
+                //             resultsDiv.appendChild(card);
+                //         });
+                //     });
+
+            }
+
+            // document.getElementById("municipio").addEventListener("change", fetchExperiences);
+            
+            // document.querySelectorAll(".categoria-checkbox").forEach(checkbox => {
+            //     checkbox.addEventListener("change", fetchExperiences);
+            // });
+            
+
+            
+        });
+    </script>
+</body>
+</html>
+{% endblock %}

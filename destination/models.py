@@ -60,12 +60,13 @@ class Restaurant(models.Model):
     cuisine_type = models.CharField(max_length=255)
     contact_info = models.CharField(max_length=255)
     municipality = models.ForeignKey(Municipality, on_delete=models.CASCADE, related_name='restaurants')
-    
+
 class Activity(models.Model):
     municipality = models.ForeignKey(Municipality, on_delete=models.CASCADE, related_name='activities')
     name = models.CharField(max_length=255)
     description = models.TextField()
     image = models.ImageField(upload_to='activities/', null=True, blank=True)
 
+  
     def __str__(self):
         return f"{self.name} - {self.municipality.name}"
