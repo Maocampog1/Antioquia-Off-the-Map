@@ -17,7 +17,7 @@
         </a>
     </h1>
 
-    <!-- Navegación -->
+    <!-- Navigation -->
     <nav class="nav font-semibold text-lg">
         <ul class="flex items-center">
             <li class="p-4 border-b-2 border-green-500 border-opacity-0 hover:border-opacity-100 hover:text-green-500 duration-200 cursor-pointer active">
@@ -29,15 +29,15 @@
         </ul>
     </nav>
 
-    <!-- Barra de búsqueda con filtros -->
-    <div class="w-3/12 flex justify-end relative mt-32"> <!-- Se aumentó el margen -->
+    <!-- Search bar with filters -->
+    <div class="w-3/12 flex justify-end relative mt-32"> <!-- Increased margin -->
         <div class="search-container relative">
             <input type="text" id="search-bar" placeholder="Buscar municipio..." autocomplete="off" class="border p-2 rounded-lg w-full">
             <button onclick="toggleFilters()" class="absolute right-2 top-2">☰</button>
             <div id="results" class="absolute bg-white shadow-md rounded-lg mt-2 w-full hidden"></div>
         </div>
 
-        <!-- Filtros desplegables -->
+        <!-- Dropdown filters -->
         <div id="filtersContainer" class="absolute right-0 top-16 mt-8 w-64 bg-white shadow-lg rounded-lg p-4 hidden z-50"> 
             <h3 class="text-gray-700 font-semibold">¿Qué buscas?</h3>
             {% for category in categories %}
@@ -47,7 +47,7 @@
                 </label>
             {% endfor %}
 
-            <!-- Ubicaciones -->
+            <!-- Locations -->
             <h3 class="mt-3 text-gray-700 font-semibold">¿En qué ubicación?</h3>
             <button type="button" onclick="toggleLocations()"
                     class="w-full border border-gray-300 p-2 rounded-lg flex justify-between items-center">
@@ -66,16 +66,16 @@
                 {% endfor %}
             </div>
 
-            <!-- Botón de búsqueda -->
+            <!-- Search button -->
             <button onclick="applyFilters()" 
         class="bg-green-600 hover:bg-green-700 text-green font-semibold px-4 py-2 rounded-lg w-full mt-2 shadow-md">
-    			Buscar
-			</button>
+                Buscar
+            </button>
         </div>
     </div>
 </header>
 
-<!-- Contenido dinámico -->
+<!-- Dynamic content -->
 <div>
     {% block content %}
     {% endblock %}
@@ -83,14 +83,14 @@
 
 <!-- JavaScript -->
 <script>
-    // Mostrar resultados de búsqueda en vivo
+    // Show live search results
     document.getElementById("search-bar").addEventListener("input", function () {
         let query = this.value.trim();
         let resultsDiv = document.getElementById("results");
 
         if (query.length > 0) {
             fetch(`/search/?q=${query}`, {
-                headers: { "X-Requested-With": "XMLHttpRequest" } // ✅ Esto indica que es una petición AJAX
+                headers: { "X-Requested-With": "XMLHttpRequest" } // ✅ This indicates that it is an AJAX request
             })
             .then(response => response.json())
             .then(data => {
@@ -118,7 +118,7 @@
         }
     });
 
-    // Ocultar resultados si se hace clic fuera de la barra de búsqueda
+    // Hide results if clicking outside the search bar
     document.addEventListener("click", function (e) {
         let searchBar = document.getElementById("search-bar");
         let resultsDiv = document.getElementById("results");
@@ -128,28 +128,28 @@
         }
     });
 
-    // Mostrar / Ocultar filtros
+    // Show / Hide filters
     function toggleFilters() {
         let filtersContainer = document.getElementById("filtersContainer");
         filtersContainer.classList.toggle("hidden");
     }
 
-    // Mostrar / Ocultar ubicaciones dentro de los filtros
+    // Show / Hide locations within filters
     function toggleLocations() {
         let locationsContainer = document.getElementById("locationsContainer");
         locationsContainer.classList.toggle("hidden");
     }
 
-    // Aplicar filtros con el botón de búsqueda
+    // Apply filters with the search button
     function applyFilters() {
     let query = document.getElementById("search-bar").value;
     let selectedLocation = document.querySelector('input[name="location"]:checked')?.value || "";
     let selectedCategories = [...document.querySelectorAll('input[name="category"]:checked')].map(el => el.value);
 
-    // Construir la URL para redirigir
+    // Build the URL to redirect
     let url = `/search/?q=${encodeURIComponent(query)}&location=${encodeURIComponent(selectedLocation)}&categories=${encodeURIComponent(selectedCategories.join(","))}`;
 
-    // Redirigir a la URL
+    // Redirect to the URL
     window.location.href = url;
 }
 </script>
