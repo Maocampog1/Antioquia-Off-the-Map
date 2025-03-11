@@ -46,7 +46,7 @@ python manage.py tailwind start
 
 **Open a new terminal**
 ```
-env\Scripts\activate
+# Activate the virtual environment as explained above
 python manage.py runserver
 ```
 
