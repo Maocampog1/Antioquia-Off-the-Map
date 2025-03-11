@@ -102,4 +102,5 @@ def search_experiences(request):
 
     return JsonResponse(results) 
     
-
+def maps(request):
+    return render(request, 'maps.html')
