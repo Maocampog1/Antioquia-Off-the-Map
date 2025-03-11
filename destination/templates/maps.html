@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mapa con Routes API</title>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiiEYgN22LfADsfaWZah1sCjhH1HLFaO0&callback=inicializarMapa" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiiEYgN22LfADsfaWZah1sCjhH1HLFaO0&libraries=geometry&callback=inicializarMapa" async defer></script>
     <style>
         #map {
             height: 500px;
@@ -13,15 +13,21 @@
     </style>
 </head>
 <body>
-    <h1>Ruta con Routes API Avanzada</h1>
+    <h1>Selecciona Origen y Destino</h1>
+    <button onclick="obtenerRuta()">Obtener Ruta</button>
     <div id="map"></div>
+
     <script>
         let map;
         let directionsRenderer;
+        let origenMarker = null;
+        let destinoMarker = null;
+        let origen = null;
+        let destino = null;
 
         function inicializarMapa() {
             map = new google.maps.Map(document.getElementById("map"), {
-                center: { lat: 4.6097, lng: -74.0817 }, // Bogotá, Colombia
+                center: { lat: 4.6097, lng: -74.0817 },
                 zoom: 12
             });
 
@@ -32,42 +38,47 @@
                 map: map
             });
 
-            obtenerRuta();
+            map.addListener("click", (event) => agregarMarcador(event.latLng));
+        }
+
+        function agregarMarcador(ubicacion) {
+            if (!origen) {
+                origen = ubicacion;
+                origenMarker = new google.maps.Marker({
+                    position: ubicacion,
+                    map: map,
+                    label: "A"
+                });
+            } else if (!destino) {
+                destino = ubicacion;
+                destinoMarker = new google.maps.Marker({
+                    position: ubicacion,
+                    map: map,
+                    label: "B"
+                });
+            } else {
+                alert("Ya seleccionaste origen y destino. Presiona 'Obtener Ruta'.");
+            }
         }
 
         async function obtenerRuta() {
-            const apiKey = "AIzaSyDiiEYgN22LfADsfaWZah1sCjhH1HLFaO0";
-            const url = `https://routes.googleapis.com/directions/v2:computeRoutes`;
+            if (!origen || !destino) {
+                alert("Selecciona origen y destino en el mapa.");
+                return;
+            }
 
-            const requestBody = {
-                origin: { location: { latLng: { latitude: 4.6097, longitude: -74.0817 } } }, // Bogotá
-                destination: { location: { latLng: { latitude: 6.2442, longitude: -75.5812 } } }, // Medellín
-                travelMode: "DRIVE",
-                computeAlternativeRoutes: false,
-                routingPreference: "TRAFFIC_AWARE",
-                languageCode: "es-ES"
-            };
+            const origenCoords = `${origen.lat()},${origen.lng()}`;
+            const destinoCoords = `${destino.lat()},${destino.lng()}`;
 
             try {
-                const response = await fetch(url, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-Goog-Api-Key": apiKey,
-                        "X-Goog-FieldMask": "routes.polyline"
-                    },
-                    body: JSON.stringify(requestBody)
-                });
-
+                const response = await fetch(`/obtener_ruta/?origen=${origenCoords}&destino=${destinoCoords}`);
                 const data = await response.json();
-                console.log("Ruta recibida:", data);
 
-                if (data.routes && data.routes.length > 0) {
-                    mostrarRuta(data.routes[0].polyline.encodedPolyline);
+                if (data.polyline) {
+                    mostrarRuta(data.polyline);
                 } else {
-                    console.error("No se encontró una ruta válida.");
+                    console.error("Error en la API:", data.error);
                 }
-
             } catch (error) {
                 console.error("Error al obtener la ruta:", error);
             }
@@ -78,6 +89,5 @@
             directionsRenderer.setPath(decodedPath);
         }
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiiEYgN22LfADsfaWZah1sCjhH1HLFaO0&libraries=geometry"></script>
 </body>
 </html>

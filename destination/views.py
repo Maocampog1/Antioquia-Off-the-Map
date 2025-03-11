@@ -2,6 +2,9 @@ from .models import Municipality, Event
 from django.shortcuts import get_object_or_404, render
 from django.http import JsonResponse
 from .models import Activity, Event, Restaurant, Accommodation
+from django.conf import settings
+import json
+import requests
 
 # Create your views here.
 def municipality_name_list(request):
@@ -101,6 +104,36 @@ def search_experiences(request):
         )
 
     return JsonResponse(results) 
+
+
+GOOGLE_API_KEY = "AIzaSyDiiEYgN22LfADsfaWZah1sCjhH1HLFaO0"
+
+def obtener_ruta(request):
+    origen = request.GET.get("origen", "4.6097,-74.0817")
+    destino = request.GET.get("destino", "6.2442,-75.5812")
+
+    url = "https://routes.googleapis.com/directions/v2:computeRoutes"
+    headers = {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": GOOGLE_API_KEY,
+        "X-Goog-FieldMask": "routes.polyline"
+    }
+
+    body = {
+        "origin": {"location": {"latLng": {"latitude": float(origen.split(",")[0]), "longitude": float(origen.split(",")[1])}}},
+        "destination": {"location": {"latLng": {"latitude": float(destino.split(",")[0]), "longitude": float(destino.split(",")[1])}}},
+        "travelMode": "DRIVE",
+        "routingPreference": "TRAFFIC_AWARE",
+        "languageCode": "es-ES"
+    }
+
+    response = requests.post(url, headers=headers, data=json.dumps(body))
+    data = response.json()
+
+    if "routes" in data and len(data["routes"]) > 0:
+        return JsonResponse({"polyline": data["routes"][0]["polyline"]["encodedPolyline"]})
+    else:
+        return JsonResponse({"error": "No se encontró una ruta válida"}, status=400)
     
 def maps(request):
     return render(request, 'maps.html')
