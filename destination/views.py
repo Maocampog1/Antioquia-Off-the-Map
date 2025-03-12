@@ -172,5 +172,3 @@ def search_experiences(request):
         )
 
     return JsonResponse(results) 
-    
-
