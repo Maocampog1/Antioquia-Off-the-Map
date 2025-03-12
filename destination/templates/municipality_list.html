@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2 class="mb-8 text-center text-2xl font-bold">Municipios encontrados</h2>
+  {% if municipalities %}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+      {% for municipality in municipalities %}
+        <div class="relative flex flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
+          <div class="relative overflow-hidden rounded-t-xl bg-white bg-clip-border text-gray-700">
+            <img src="{{ municipality.image.url }}" alt="{{ municipality.name }}" class="h-64 w-full object-cover" />
+          </div>
+          <div class="p-6 flex flex-col justify-between">
+            <div>
+              <h6 class="mb-2 block font-sans text-sm font-semibold uppercase tracking-wide text-pink-500 antialiased">
+                Municipio
+              </h6>
+              <h4 class="mb-2 block font-sans text-2xl font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased">
+                <a href="{% url 'municipality_detail' municipality.id %}" class="hover:text-pink-500 transition-colors">{{ municipality.name }}</a>
+              </h4>
+              <p class="mb-4 block font-sans text-base font-normal leading-relaxed text-gray-700 antialiased">
+                Información adicional sobre el municipio...
+              </p>
+            </div>
+            <a class="inline-block" href="{% url 'municipality_detail' municipality.id %}">
+              <button class="flex items-center gap-2 rounded-lg py-1 px-100 text-center text-sm font-bold uppercase text-pink-500 border border-pink-500 transition-all hover:bg-pink-500 hover:text-white active:bg-pink-700" type="button">
+                Ver más
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true" class="h-4 w-4">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"></path>
+                </svg>
+              </button>
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-center text-gray-500">No municipalities found with these filters.</p>
+  {% endif %}
+{% endblock %}
