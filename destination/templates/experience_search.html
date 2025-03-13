@@ -31,7 +31,7 @@
                 {% for categoria in categorias %}
                 <label class="flex items-center bg-green-100 text-green-800 px-4 py-2 rounded-lg cursor-pointer">
                     <input type="checkbox" value="{{ categoria.value }}" class="categoria-checkbox">
-                    <span class="ml-2">{{ categoria.label }} ({{ categoria.count }})</span>
+                    <span class="ml-2">{{ categoria.label }}</span>
                 </label>
                 {% endfor %}
 

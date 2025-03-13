@@ -122,9 +122,9 @@ def experience_search_page(request):
     municipios = Municipality.objects.all()
     
     categorias = [
-        {"value": "restaurants", "label": "Dónde comer", "count": Restaurant.objects.count()},
-        {"value": "accommodations", "label": "Dónde dormir", "count": Accommodation.objects.count()},
-        {"value": "activities", "label": "Qué hacer", "count": Activity.objects.count()},
+        {"value": "restaurants", "label": "Dónde comer"},
+        {"value": "accommodations", "label": "Dónde dormir"},
+        {"value": "activities", "label": "Qué hacer"},
     ]
 
     return render(request, 'experience_search.html', {
@@ -146,7 +146,7 @@ def experience_search_page(request):
 #     return JsonResponse(experiencias_data, safe=False)
 
 def search_experiences(request):
-    municipality = request.GET.get("municipality1")  # ✅ Fixed case issue
+    municipality = request.GET.get("municipality1") 
     categories = request.GET.get("categories", "").split(",")
 
     # Create an empty dictionary to store results
