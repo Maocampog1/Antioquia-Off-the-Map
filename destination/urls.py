@@ -14,5 +14,6 @@ urlpatterns = [
     path('experience-search/', search_experiences, name='experience-search'),
     path('obtener_ruta/', obtener_ruta, name='obtener_ruta'),
     path('maps/', maps, name='maps'),
+    path('maps2/', views.maps2, name='maps2'),
     
 ]

@@ -137,3 +137,6 @@ def obtener_ruta(request):
     
 def maps(request):
     return render(request, 'maps.html')
+
+def maps2(request):
+    return render(request, 'maps2.html')
