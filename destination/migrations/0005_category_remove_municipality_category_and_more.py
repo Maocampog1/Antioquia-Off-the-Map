@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='municipality',
             name='location',
-            field=models.CharField(choices=[('valle_aburra', 'Valle de Aburrá'), ('oriente', 'Oriente Antioqueño'), ('suroeste', 'Suroeste Antioqueño'), ('occidente', 'Occidente Antioqueño'), ('nordeste', 'Nordeste Antioqueño'), ('norte', 'Norte Antioqueño'), ('magdalena_medio', 'Magdalena Medio Antioqueño'), ('bajo_cauca', 'Bajo Cauca Antioqueño'), ('uraba', 'Urabá Antioqueño')], max_length=50),
+            field=models.CharField(choices=[('Valle de Aburrá', 'Valle de Aburrá'), ('Oriente Antioqueño', 'Oriente Antioqueño'), ('Suroeste Antioqueño', 'Suroeste Antioqueño'), ('Occidente Antioqueño', 'Occidente Antioqueño'), ('Nordeste Antioqueño', 'Nordeste Antioqueño'), ('Norte Antioqueño', 'Norte Antioqueño'), ('Magdalena Medio Antioqueño', 'Magdalena Medio Antioqueño'), ('Bajo Cauca Antioqueño', 'Bajo Cauca Antioqueño'), ('Urabá Antioqueño', 'Urabá Antioqueño')], max_length=50),
         ),
         migrations.AddField(
             model_name='municipality',

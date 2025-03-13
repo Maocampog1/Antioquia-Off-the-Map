@@ -9,21 +9,21 @@ class Category(models.Model):
 
 class Municipality(models.Model):
     LOCATION_CHOICES = [
-        ('valle_aburra', 'Valle de Aburrá'),
-        ('oriente', 'Oriente Antioqueño'),
-        ('suroeste', 'Suroeste Antioqueño'),
-        ('occidente', 'Occidente Antioqueño'),
-        ('nordeste', 'Nordeste Antioqueño'),
-        ('norte', 'Norte Antioqueño'),
-        ('magdalena_medio', 'Magdalena Medio Antioqueño'),
-        ('bajo_cauca', 'Bajo Cauca Antioqueño'),
-        ('uraba', 'Urabá Antioqueño'),
+        ('Valle de Aburrá', 'Valle de Aburrá'),
+        ('Oriente Antioqueño', 'Oriente Antioqueño'),
+        ('Suroeste Antioqueño', 'Suroeste Antioqueño'),
+        ('Occidente Antioqueño', 'Occidente Antioqueño'),
+        ('Nordeste Antioqueño', 'Nordeste Antioqueño'),
+        ('Norte Antioqueño', 'Norte Antioqueño'),
+        ('Magdalena Medio Antioqueño', 'Magdalena Medio Antioqueño'),
+        ('Bajo Cauca Antioqueño', 'Bajo Cauca Antioqueño'),
+        ('Urabá Antioqueño', 'Urabá Antioqueño'),
     ]
 
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField()
-    categories = models.ManyToManyField(Category, related_name="municipalities")  # Ahora es un ManyToMany
-    location = models.CharField(max_length=50, choices=LOCATION_CHOICES)  # Ahora es un campo de elección
+    categories = models.ManyToManyField(Category, related_name="municipalities")  
+    location = models.CharField(max_length=50, choices=LOCATION_CHOICES)  
     image = models.ImageField(upload_to='destination/municipalities/', null=True, blank=True)
 
     def __str__(self):
@@ -45,7 +45,7 @@ class Accommodation(models.Model):
         ('hotel', 'Hotel'),
         ('hostel', 'Hostal'),
         ('rural', 'Alojamiento Rural'),
-    ]
+    ]       
 
     name = models.CharField(max_length=255)
     accommodation_type = models.CharField(max_length=10, choices=ACCOMMODATION_TYPES)
