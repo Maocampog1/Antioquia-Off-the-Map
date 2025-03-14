@@ -86,14 +86,14 @@
 
 <!-- JavaScript -->
 <script>
-    // Show live search results
+
     document.getElementById("search-bar").addEventListener("input", function () {
         let query = this.value.trim();
         let resultsDiv = document.getElementById("results");
 
         if (query.length > 0) {
             fetch(`/search/?q=${query}`, {
-                headers: { "X-Requested-With": "XMLHttpRequest" } // ✅ This indicates that it is an AJAX request
+                headers: { "X-Requested-With": "XMLHttpRequest" } 
             })
             .then(response => response.json())
             .then(data => {
@@ -152,7 +152,7 @@
     // Build the URL to redirect
     let url = `/search/?q=${encodeURIComponent(query)}&location=${encodeURIComponent(selectedLocation)}&categories=${encodeURIComponent(selectedCategories.join(","))}`;
 
-    // Redirect to the URL
+   
     window.location.href = url;
 }
 </script>

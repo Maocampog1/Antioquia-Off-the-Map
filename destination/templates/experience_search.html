@@ -13,7 +13,7 @@
     <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
         <h1 class="text-2xl font-bold text-center text-green-800">Buscador de experiencias en Antioquia</h1>
 
-        <!-- Selección de municipio -->
+        <!-- Municipality selection -->  
         <div class="mt-4">
             <label for="municipio" class="block font-semibold text-green-800">Selecciona un municipio:</label>
             <select id="municipio" class="w-full p-2 border rounded-lg mt-2">
@@ -24,7 +24,7 @@
             </select>
         </div>
 
-        <!-- Selección de categorías -->
+        <!-- Category selection -->  
         <div class="mt-4">
             <label class="block font-semibold text-green-800">Selecciona una o más categorías:</label>
             <div class="flex flex-wrap gap-2 mt-2">
@@ -39,7 +39,7 @@
             </div>
         </div>
 
-        <!-- Resultados -->
+       
         <div id="experience-results" class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
             <p class="text-gray-600 text-center col-span-full">No hay resultados</p>
         </div>
@@ -58,22 +58,22 @@ const fetchExperiences1 = async () => {
         return;
     }
 
-    // ✅ Correct way to format query parameters
+
     let queryString = new URLSearchParams({
         municipality1: municipality1,
-        categories: categories.join(",") // Converts array to comma-separated string
+        categories: categories.join(",") 
     }).toString();
 
-    console.log("Query String:", queryString); // Debugging
+    console.log("Query String:", queryString);
 
     try {
         let response = await fetch(`/experience-search/?${queryString}`);
-        let data = await response.json(); // ✅ Wait for JSON response
+        let data = await response.json(); 
 
         let resultsDiv = document.getElementById("experience-results");
         resultsDiv.innerHTML = "";
 
-        // ✅ Check if all categories are empty
+        
         if (
             data.accommodations.length === 0 &&
             data.activities.length === 0 &&
@@ -83,7 +83,7 @@ const fetchExperiences1 = async () => {
             return;
         }
 
-        // ✅ Append results for each category
+
         function appendResults(title, items) {
             if (title == "Alojamientos"){
                 if (items.length > 0) {
@@ -164,7 +164,6 @@ const fetchExperiences1 = async () => {
     }
 };
 
-// ✅ Attach event listener to the search button
 document.addEventListener("DOMContentLoaded", function () {
     const searchButton = document.getElementById('searchButton');
     searchButton.addEventListener('click', fetchExperiences1);
@@ -176,13 +175,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
             function fetchExperiences() {
 
-                // console.log("llamado")
 
                 let municipio = document.getElementById("municipio").value;
                 let categorias = Array.from(document.querySelectorAll(".categoria-checkbox:checked"))
                     .map(el => el.value);
-                // console.log(categorias)
-
+               
                 if (!municipio) {
                     document.getElementById("experience-results").innerHTML = "<div class='text-gray-600 col-span-full text-center'>Selecciona un municipio</div>";
                     return;
@@ -194,44 +191,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }).toString();
                 console.log(queryString)
 
-                
-
-                // fetch(`/search-experiences/?${queryString}`)                
-                //     .then(response => response.json())
-                //     .then(data => {
-                //         let resultsDiv = document.getElementById("experience-results");
-                //         resultsDiv.innerHTML = "";
-
-                        
-
-                //         if (data.length === 0) {
-                //             resultsDiv.innerHTML = "<div class='text-gray-600 col-span-full text-center'>No hay resultados</div>";
-                //             return;
-                //         }
-
-                //         data.forEach(exp => {
-                //             let card = document.createElement("div");
-                //             card.className = "bg-white border border-gray-300 rounded-lg shadow-lg p-4 transition hover:shadow-xl";
-
-                //             card.innerHTML = `
-                //                 <h3 class="text-lg font-bold text-green-800">${exp.name}</h3>
-                //                 <p class="text-sm text-gray-600">${exp.municipality__name}</p>
-                //                 <button class="mt-2 bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600" 
-                //                         onclick="window.location.href='/experiences/${exp.id}/'">Ver más</button>
-                //             `;
-
-                //             resultsDiv.appendChild(card);
-                //         });
-                //     });
-
             }
-
-            // document.getElementById("municipio").addEventListener("change", fetchExperiences);
-            
-            // document.querySelectorAll(".categoria-checkbox").forEach(checkbox => {
-            //     checkbox.addEventListener("change", fetchExperiences);
-            // });
-            
 
             
         });

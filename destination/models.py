@@ -1,6 +1,6 @@
 from django.db import models
 
-# Nueva tabla para las categorías
+
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True)
 
@@ -40,6 +40,7 @@ class Event(models.Model):
     def __str__(self):
         return f"{self.name} ({self.date})"
 
+  # FR15 Accommodation Guide Model (Located in model.py) 
 class Accommodation(models.Model):
     ACCOMMODATION_TYPES = [
         ('hotel', 'Hotel'),

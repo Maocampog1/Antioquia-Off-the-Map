@@ -10,7 +10,7 @@ class MunicipalityAdmin(admin.ModelAdmin):
     list_display = ('name', 'location')
     list_filter = ('location', 'categories')
     search_fields = ('name',)
-    filter_horizontal = ('categories',)  # Permite seleccionar múltiples categorías
+    filter_horizontal = ('categories',)  
 
 admin.site.register(Municipality, MunicipalityAdmin)
 admin.site.register(Category)
