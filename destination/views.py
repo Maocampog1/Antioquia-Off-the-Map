@@ -116,7 +116,9 @@ def base(request):
         'categories': categories,
         'locations': locations
     })
-
+#FR10 Experience Search - Main Functions -->  
+#Additionally, in the templates of destinations, an HTML file was created for this functionality, 
+# as it was previously directing to another page of the web application. 
 
 def experience_search_page(request):
     municipios = Municipality.objects.all()
@@ -131,19 +133,6 @@ def experience_search_page(request):
         "municipios": municipios,
         "categorias": categorias
     })
-
-# def search_experiences(request):
-#     municipio_id = request.GET.get("municipios")
-#     categorias = request.GET.get("categorias", "").split(",")
-
-#     experiencias = Experience.objects.filter(municipality_id=municipio_id)
-
-#     if categorias and categorias != [""]:
-#         experiencias = experiencias.filter(category__in=categorias)
-
-#     experiencias_data = list(experiencias.values("id", "name", "municipality__name"))
-
-#     return JsonResponse(experiencias_data, safe=False)
 
 def search_experiences(request):
     municipality = request.GET.get("municipality1") 
