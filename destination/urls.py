@@ -1,6 +1,6 @@
 from . import views
 from django.urls import path, include
-from .views import experience_search_page, search_experiences, maps, obtener_ruta
+from .views import experience_search_page, search_experiences
 
 urlpatterns = [
     path('municipalities/names', views.municipality_name_list, name='municipality_name_list'),
@@ -10,13 +10,5 @@ urlpatterns = [
     path('municipalities/<int:municipality_id>/events/', views.event_calendar, name='municipality_events'),
     path('', views.home, name='home'),
     path('buscar-experiencias/', experience_search_page, name='experience_search_page'),
-    # path('experience-search/', search_experiences, name='experience-search'),
     path('experience-search/', search_experiences, name='experience-search'),
-    path('obtener_ruta/', obtener_ruta, name='obtener_ruta'),
-    path('maps/', maps, name='maps'),
-    path('maps2/', views.maps2, name='maps2'),
-    path('maps3/', views.maps3, name='maps3'),
-    path('maps4/', views.map_view, name='maps4'),
-    path('get_directions/', views.get_directions, name='get_directions'),
-    
 ]
