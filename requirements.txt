@@ -2,3 +2,4 @@ Django==5.1.6
 Pillow==11.1.0
 django-tailwind[reload]
 requests
+googlemaps

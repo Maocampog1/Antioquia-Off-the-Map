@@ -5,6 +5,7 @@ from .models import Activity, Event, Restaurant, Accommodation
 from django.conf import settings
 import json
 import requests
+import googlemaps
 
 # Create your views here.
 def municipality_name_list(request):
@@ -140,3 +141,44 @@ def maps(request):
 
 def maps2(request):
     return render(request, 'maps2.html')
+
+def maps3(request):
+    return render(request, 'maps3.html')
+
+gmaps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
+
+def get_directions(request):
+    if request.method == "GET":
+        origin = request.GET.get("origin")
+        destination = request.GET.get("destination")
+        mode = request.GET.get("mode", "driving")
+        
+        if not origin or not destination:
+            return JsonResponse({"error": "Origin and destination are required"}, status=400)
+        
+        directions = gmaps.directions(origin, destination, mode=mode)
+        
+        if not directions:
+            return JsonResponse({"error": "No route found"}, status=404)
+        
+        legs = directions[0]["legs"]
+        tolls = False
+        toll_count = 0
+        
+        for leg in legs:
+            for step in leg.get("steps", []):
+                if "tollRoad" in step.get("html_instructions", "").lower():
+                    tolls = True
+                    toll_count += 1
+        
+        route_info = {
+            "legs": legs,
+            "has_tolls": tolls,
+            "toll_count": toll_count,
+            "overview_polyline": directions[0]["overview_polyline"]["points"]
+        }
+        
+        return JsonResponse(route_info)
+
+def map_view(request):
+    return render(request, "maps4.html", {"api_key": settings.GOOGLE_MAPS_API_KEY})

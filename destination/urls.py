@@ -15,5 +15,8 @@ urlpatterns = [
     path('obtener_ruta/', obtener_ruta, name='obtener_ruta'),
     path('maps/', maps, name='maps'),
     path('maps2/', views.maps2, name='maps2'),
+    path('maps3/', views.maps3, name='maps3'),
+    path('maps4/', views.map_view, name='maps4'),
+    path('get_directions/', views.get_directions, name='get_directions'),
     
 ]

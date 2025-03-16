@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Google Maps Route</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&libraries=places"></script>
+    <script>
+        function initMap() {
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 7,
+                center: { lat: 4.6097, lng: -74.0817 }
+            });
+            var directionsService = new google.maps.DirectionsService();
+            var directionsRenderer = new google.maps.DirectionsRenderer();
+            directionsRenderer.setMap(map);
+            document.getElementById('route-btn').addEventListener('click', function() {
+                calculateAndDisplayRoute(directionsService, directionsRenderer);
+            });
+        }
+        function calculateAndDisplayRoute(directionsService, directionsRenderer) {
+            var origin = document.getElementById('origin').value;
+            var destination = document.getElementById('destination').value;
+            var mode = document.getElementById('mode').value;
+            directionsService.route({
+                origin: origin,
+                destination: destination,
+                travelMode: google.maps.TravelMode[mode.toUpperCase()]
+            }, function(response, status) {
+                if (status === 'OK') {
+                    directionsRenderer.setDirections(response);
+                } else {
+                    alert('Directions request failed due to ' + status);
+                }
+            });
+        }
+    </script>
+</head>
+<body onload="initMap()">
+    <input id="origin" type="text" placeholder="Enter origin">
+    <input id="destination" type="text" placeholder="Enter destination">
+    <select id="mode">
+        <option value="DRIVING">Driving</option>
+        <option value="WALKING">Walking</option>
+        <option value="BICYCLING">Bicycling</option>
+        <option value="TRANSIT">Transit</option>
+    </select>
+    <button id="route-btn">Get Route</button>
+    <div id="map" style="height: 500px; width: 100%;"></div>
+</body>
+</html>
