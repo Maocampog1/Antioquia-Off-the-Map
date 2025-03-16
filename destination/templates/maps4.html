@@ -9,17 +9,28 @@
                 zoom: 7,
                 center: { lat: 4.6097, lng: -74.0817 }
             });
+
             var directionsService = new google.maps.DirectionsService();
             var directionsRenderer = new google.maps.DirectionsRenderer();
             directionsRenderer.setMap(map);
+
+            // Autocomplete para origen y destino
+            var originInput = document.getElementById('origin');
+            var destinationInput = document.getElementById('destination');
+
+            var autocompleteOrigin = new google.maps.places.Autocomplete(originInput);
+            var autocompleteDestination = new google.maps.places.Autocomplete(destinationInput);
+
             document.getElementById('route-btn').addEventListener('click', function() {
                 calculateAndDisplayRoute(directionsService, directionsRenderer);
             });
         }
+
         function calculateAndDisplayRoute(directionsService, directionsRenderer) {
             var origin = document.getElementById('origin').value;
             var destination = document.getElementById('destination').value;
             var mode = document.getElementById('mode').value;
+
             directionsService.route({
                 origin: origin,
                 destination: destination,
