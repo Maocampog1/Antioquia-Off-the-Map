@@ -2,9 +2,6 @@ from django.shortcuts import get_object_or_404, render
 from django.http import JsonResponse
 from .models import Activity, Event, Restaurant, Accommodation, Municipality
 from django.conf import settings
-import json
-import requests
-import googlemaps
 
 # Create your views here.
 def municipality_name_list(request):
@@ -18,7 +15,6 @@ def municipality_detail(request, municipality_id):
 def municipality_detail_by_name(request, municipality_name):
     municipality = get_object_or_404(Municipality, name=municipality_name)
     return render(request, 'municipality_detail.html', {'municipality': municipality})
-
 
 def event_calendar(request, municipality_id):
     municipality = get_object_or_404(Municipality, id=municipality_id)
@@ -46,7 +42,8 @@ def municipality_detail(request, municipality_id):
         'municipality': municipality,
         'accommodations': accommodations,
         'restaurants': restaurants,
-        'activities': activities  # <-- Se envían al template
+        'activities': activities,  # <-- Se envían al template
+        "google_maps_api_key": settings.GOOGLE_MAPS_API_KEY
     })
 
 
@@ -91,46 +88,3 @@ def search_experiences(request):
         )
 
     return JsonResponse(results) 
-
-gmaps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
-
-def get_directions(request):
-    print("GET request received")
-    if request.method == "GET":
-        origin = request.GET.get("origin")
-        destination = request.GET.get("destination")
-        mode = request.GET.get("mode", "driving")
-        
-        if not origin or not destination:
-            return JsonResponse({"error": "Origin and destination are required"}, status=400)
-        
-        directions = gmaps.directions(origin, destination, mode=mode)
-        
-        if not directions:
-            return JsonResponse({"error": "No route found"}, status=404)
-        
-        legs = directions[0]["legs"]
-        tolls = False
-        toll_count = 0
-
-        # Revisar si en cada 'leg' hay peajes
-        for leg in legs:
-            if "tollRoad" in leg:  # Esto es más confiable
-                tolls = True
-                toll_count += 1
-
-            for step in leg.get("steps", []):
-                if step.get("tollRoad"):  # Otra manera de verificar
-                    tolls = True
-                    toll_count += 1
-        
-        route_info = {
-            "legs": legs,
-            "has_tolls": tolls,
-            "toll_count": toll_count,
-            "overview_polyline": directions[0]["overview_polyline"]["points"]
-        }
-
-        print("Toll count:", route_info["toll_count"])  # Debugging
-    
-        return JsonResponse(route_info)

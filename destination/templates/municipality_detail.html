@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSFsy5s-EYHczpcQhbqD9DzB-Rp-I5x68&libraries=places"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&libraries=places"></script>
 
 <title>{{ municipality.name }}</title>
 <div class="max-w-5xl mx-auto px-6 py-5">
@@ -51,7 +51,7 @@
         <div id="map-container" class="hidden">
             <input id="origin" type="text" placeholder="Enter origin">
             <input id="destination" type="text" placeholder="Enter destination">
-            <select id="mode">
+            <select id="mode" title="TravelMode">
                 <option value="DRIVING">Driving</option>
                 <option value="WALKING">Walking</option>
                 <option value="BICYCLING">Bicycling</option>
@@ -217,7 +217,7 @@
 
         mapContainer.classList.toggle("hidden");
     }
-    
+
 </script>
 
 {% endblock %}
