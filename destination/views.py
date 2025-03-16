@@ -148,6 +148,7 @@ def maps3(request):
 gmaps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
 
 def get_directions(request):
+    print("GET request received")
     if request.method == "GET":
         origin = request.GET.get("origin")
         destination = request.GET.get("destination")
@@ -164,10 +165,15 @@ def get_directions(request):
         legs = directions[0]["legs"]
         tolls = False
         toll_count = 0
-        
+
+        # Revisar si en cada 'leg' hay peajes
         for leg in legs:
+            if "tollRoad" in leg:  # Esto es más confiable
+                tolls = True
+                toll_count += 1
+
             for step in leg.get("steps", []):
-                if "tollRoad" in step.get("html_instructions", "").lower():
+                if step.get("tollRoad"):  # Otra manera de verificar
                     tolls = True
                     toll_count += 1
         
@@ -177,8 +183,11 @@ def get_directions(request):
             "toll_count": toll_count,
             "overview_polyline": directions[0]["overview_polyline"]["points"]
         }
-        
+
+        print("Toll count:", route_info["toll_count"])  # Debugging
+    
         return JsonResponse(route_info)
+
 
 def map_view(request):
     return render(request, "maps4.html", {"api_key": settings.GOOGLE_MAPS_API_KEY})
