@@ -2,6 +2,8 @@
 
 {% block content %}
 
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSFsy5s-EYHczpcQhbqD9DzB-Rp-I5x68&libraries=places"></script>
+
 <title>{{ municipality.name }}</title>
 <div class="max-w-5xl mx-auto px-6 py-5">
     <!-- Hero Section -->
@@ -40,9 +42,23 @@
                 <!-- Botones -->
                 <div class="mt-6 flex space-x-4 justify-center">
                     <a href="{% url 'municipality_events' municipality.id %}" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700">Ver Eventos</a>
+                    <a href="#" onclick="toggleMap()" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700">¿Cómo llegar?</a>
                     <a href="{% url 'municipality_name_list' %}" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg shadow-md hover:bg-gray-300">Volver a la Lista</a>
                 </div>
             </div>
+        </div>
+
+        <div id="map-container" class="hidden">
+            <input id="origin" type="text" placeholder="Enter origin">
+            <input id="destination" type="text" placeholder="Enter destination">
+            <select id="mode">
+                <option value="DRIVING">Driving</option>
+                <option value="WALKING">Walking</option>
+                <option value="BICYCLING">Bicycling</option>
+                <option value="TRANSIT">Transit</option>
+            </select>
+            <button id="route-btn">Get Route</button>
+            <div id="map" style="height: 500px; width: 100%;"></div>
         </div>
         
         <!-- Restaurants Section -->
@@ -147,5 +163,62 @@
 
    
 </div>
+
+<script>
+    function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 12,
+            center: { lat: 6.2442, lng: -75.5812 } //Medellín
+        });
+
+        var directionsService = new google.maps.DirectionsService();
+        var directionsRenderer = new google.maps.DirectionsRenderer();
+        directionsRenderer.setMap(map);
+
+        // Autocomplete para origen y destino
+        var originInput = document.getElementById('origin');
+        var destinationInput = document.getElementById('destination');
+
+        var autocompleteOrigin = new google.maps.places.Autocomplete(originInput);
+        var autocompleteDestination = new google.maps.places.Autocomplete(destinationInput);
+
+        document.getElementById('route-btn').addEventListener('click', function() {
+            calculateAndDisplayRoute(directionsService, directionsRenderer);
+        });
+    }
+
+    function calculateAndDisplayRoute(directionsService, directionsRenderer) {
+        var origin = document.getElementById('origin').value;
+        var destination = document.getElementById('destination').value;
+        var mode = document.getElementById('mode').value;
+
+        directionsService.route({
+            origin: origin,
+            destination: destination,
+            travelMode: google.maps.TravelMode[mode.toUpperCase()]
+        }, function(response, status) {
+            if (status === 'OK') {
+                directionsRenderer.setDirections(response);
+            } else {
+                alert('Directions request failed due to ' + status);
+            }
+        });
+    }
+
+    let mapInitialized = false;
+
+    function toggleMap() {
+        var mapContainer = document.getElementById("map-container");
+
+        if (!mapInitialized) {
+            initMap();
+            mapInitialized = true;
+        }
+
+        mapContainer.classList.toggle("hidden");
+    }
+
+
+</script>
 
 {% endblock %}
