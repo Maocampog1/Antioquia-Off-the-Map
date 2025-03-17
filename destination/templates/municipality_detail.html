@@ -42,7 +42,7 @@
                 <!-- Botones -->
                 <div class="mt-6 flex space-x-4 justify-center">
                     <a href="{% url 'municipality_events' municipality.id %}" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700">Ver Eventos</a>
-                    <a href="#" onclick="toggleMap()" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700">¿Cómo llegar?</a>
+                    <button onclick="toggleMap()" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700">¿Cómo llegar?</button>
                     <a href="{% url 'municipality_name_list' %}" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg shadow-md hover:bg-gray-300">Volver a la Lista</a>
                 </div>
             </div>
@@ -204,7 +204,7 @@
         var autocompleteOrigin = new google.maps.places.Autocomplete(originInput);
         var autocompleteDestination = new google.maps.places.Autocomplete(destinationInput);
 
-        destinationInput.value = "{{ municipality.name }}";
+        destinationInput.value = "{{ municipality.name }}, Antioquia, Colombia";
 
         document.getElementById('route-btn').addEventListener('click', function() {
             calculateAndDisplayRoute(directionsService, directionsRenderer);
