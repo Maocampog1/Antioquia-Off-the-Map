@@ -1,7 +1,7 @@
-from .models import Municipality, Event, Category
+from .models import Municipality, Event, Activity, Restaurant, Accommodation, Category
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import JsonResponse
-from .models import Activity, Event, Restaurant, Accommodation
+from django.conf import settings
 from django.urls import reverse
 
 # List of municipality names
@@ -20,7 +20,8 @@ def municipality_detail(request, municipality_id):
         'municipality': municipality,
         'accommodations': accommodations,
         'restaurants': restaurants,
-        'activities': activities
+        'activities': activities,
+        "google_maps_api_key": settings.GOOGLE_MAPS_API_KEY
     })
 
 # Municipality detail by name
@@ -116,6 +117,7 @@ def base(request):
         'categories': categories,
         'locations': locations
     })
+
 #FR10 Experience Search - Main Functions -->  
 #Additionally, in the templates of destinations, an HTML file was created for this functionality, 
 # as it was previously directing to another page of the web application. 
