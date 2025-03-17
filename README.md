@@ -38,16 +38,20 @@ npm install
 cd ../..
 ```
 
-**4. Run the development server**
+**4. Create a .env file to store the private KEYS**
+```
+echo "GOOGLE_MAPS_API_KEY='YOUR_API_KEY'" > .env
+```
+
+Each Google Maps Web Service request requires an API key. API keys
+are generated in the 'Credentials' page of the 'APIs & Services' tab of [Google Cloud console](https://console.cloud.google.com/apis/credentials).
+
+Once you generated your key change it in the .env file
+
+**5. Run the development server**
 
 ```
 python manage.py tailwind start
-```
-
-**Open a new terminal**
-```
-# Activate the virtual environment as explained above
-python manage.py runserver
 ```
 
 The app will be available at http://127.0.0.1:8000/.

@@ -2,7 +2,6 @@ from .models import Municipality, Event, Activity, Restaurant, Accommodation, Ca
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import JsonResponse
 from django.conf import settings
-from django.urls import reverse
 
 # List of municipality names
 def municipality_name_list(request):
