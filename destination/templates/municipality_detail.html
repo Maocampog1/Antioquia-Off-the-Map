@@ -49,20 +49,42 @@
         </div>
 
         <div id="map-container" class="hidden">
-            <input id="origin" type="text" placeholder="Enter origin">
-            <input id="destination" type="text" placeholder="Enter destination">
-            <select id="mode" title="TravelMode">
-                <option value="DRIVING">Driving</option>
-                <option value="WALKING">Walking</option>
-                <option value="BICYCLING">Bicycling</option>
-                <option value="TRANSIT">Transit</option>
-            </select>
-            <button id="route-btn">Get Route</button>
+            <div class="flex flex-col items-center gap-4 p-4 bg-gray-100 rounded-lg shadow-md w-full mx-auto">
+                <input id="origin" type="text" placeholder="Ingresar Origen" 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm">
+            
+                <input id="destination" type="text" placeholder="Ingresar destino" 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm">
+            
+                <select id="mode" title="TravelMode" 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm bg-white">
+                    <option value="DRIVING">Conduciendo</option>
+                    <option value="WALKING">Caminando</option>
+                    <option value="BICYCLING">Bicicleta</option>
+                    <option value="TRANSIT">Transporte público</option>
+                </select>
+            
+                <button id="route-btn" 
+                    class="w-full bg-green-600 text-white font-semibold px-4 py-2 rounded-lg shadow-md hover:bg-green-700 transition duration-300">
+                    Obtener ruta
+                </button>
+            </div>
+            
             <div id="map" style="height: 500px; width: 100%;"></div>
+
+            <div class="flex justify-center p-2">
+                <a href="https://www.google.com/maps/dir/Medell%C3%ADn,+Medellin,+Antioquia/{{ municipality.name }}" 
+                   target="_blank" 
+                   rel="noopener" 
+                   class="bg-green-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-700">
+                   Google Maps
+                </a>
+              </div>
         </div>
         
         <!-- Restaurants Section -->
         <div class="card bg-yellow-100 shadow-lg rounded-lg mt-8 p-6">
+            
             <div class="card-body">
                 <h2 class="card-title text-3xl font-bold text-yellow-800">¿Dónde Comer en {{ municipality.name }}?</h2>
 
@@ -181,6 +203,8 @@
 
         var autocompleteOrigin = new google.maps.places.Autocomplete(originInput);
         var autocompleteDestination = new google.maps.places.Autocomplete(destinationInput);
+
+        destinationInput.value = "{{ municipality.name }}";
 
         document.getElementById('route-btn').addEventListener('click', function() {
             calculateAndDisplayRoute(directionsService, directionsRenderer);
