@@ -4,6 +4,10 @@
 
 Follow these steps to set up and run the project locally.
 
+### Requirements
+- Python
+- A Google Maps API Key
+
 **1. Clone the repository**
 
 ```
