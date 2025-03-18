@@ -44,7 +44,7 @@ cd ../..
 
 **4. Create a .env file to store the private KEYS**
 ```
-echo "GOOGLE_MAPS_API_KEY='YOUR_API_KEY'" > .env
+echo "GOOGLE_MAPS_API_KEY=YOUR_API_KEY" > .env
 ```
 
 Each Google Maps Web Service request requires an API key. API keys
