@@ -22,7 +22,7 @@ def municipality_detail(request, municipality_id):
         'restaurants': restaurants,
         'activities': activities,
         'toll': toll,
-        "google_maps_api_key": settings.GOOGLE_MAPS_API_KEY # FR  Interactiv maps with routes
+        "google_maps_api_key": settings.GOOGLE_MAPS_API_KEY # FR04  Interactiv maps with routes
     })
 
 # Municipality detail by name
@@ -63,7 +63,7 @@ def search_municipalities(request):
     # Show list of municipalities if multiple
     return render(request, 'municipality_list.html', {'municipalities': municipalities})
 
-# Advanced search with filters and redirection if only one result
+# FR14 Advanced search with filters and redirection if only one result
 def filtered_search_municipalities(request):
     query = request.GET.get("q", "").strip()
     selected_location = request.GET.get("location", "").strip()
