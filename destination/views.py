@@ -1,4 +1,4 @@
-from .models import Municipality, Event, Activity, Restaurant, Accommodation, Category
+from .models import Municipality, Event, Activity, Restaurant, Accommodation, Category, Toll
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import JsonResponse
 from django.conf import settings
@@ -14,13 +14,15 @@ def municipality_detail(request, municipality_id):
     accommodations = municipality.accommodations.all()
     restaurants = municipality.restaurants.all()
     activities = municipality.activities.all()
+    toll = municipality.tolls.all() # FR18 Toll cost information
 
     return render(request, 'municipality_detail.html', {
         'municipality': municipality,
         'accommodations': accommodations,
         'restaurants': restaurants,
         'activities': activities,
-        "google_maps_api_key": settings.GOOGLE_MAPS_API_KEY
+        'toll': toll,
+        "google_maps_api_key": settings.GOOGLE_MAPS_API_KEY # FR  Interactiv maps with routes
     })
 
 # Municipality detail by name
