@@ -71,3 +71,7 @@ class Activity(models.Model):
   
     def __str__(self):
         return f"{self.name} - {self.municipality.name}"
+
+class Toll(models.Model):
+    description = models.TextField()
+    municipality = models.ForeignKey(Municipality, on_delete=models.CASCADE, related_name='tolls')

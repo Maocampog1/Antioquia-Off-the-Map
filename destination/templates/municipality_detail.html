@@ -47,6 +47,32 @@
                 </div>
             </div>
         </div>
+            
+        <!-- Tolls Section -->
+        <div class="card bg-white-100 shadow-lg rounded-lg mt-8 p-6">
+            <div class="card-body">
+                <h2 class="card-title text-3xl font-bold text-gray-800">Peajes desde Medellín</h2>
+
+                {% if municipality.tolls.all %}
+                    <ul class="list-disc pl-6 mt-4 text-gray-700">
+                        {% for toll in municipality.tolls.all %}
+                            <li class="border-l-4 border-gray-500 pl-2 py-1">{{ toll.description }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-center text-lg text-gray-700 mt-4">No hay peajes registrados en este municipio.</p>
+                {% endif %}
+                <!-- Toll cost info from other origin -->
+                <div class="mt-6 text-center">
+                    <p class="text-lg text-gray-800 font-semibold">Para buscar peajes desde otros puntos de origen:</p>
+                    <a href="https://tollguru.com/toll-calculator-colombia" target="_blank" 
+                    class="mt-3 inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300">
+                        Calcular Peajes
+                    </a>
+                </div>
+            </div>
+        </div>
+
 
         <div id="map-container" class="hidden">
             <div class="flex flex-col items-center gap-4 p-4 bg-gray-100 rounded-lg shadow-md w-full mx-auto">
@@ -182,6 +208,7 @@
                 {% endif %}
             </div>
         </div>
+    
 
    
 </div>
