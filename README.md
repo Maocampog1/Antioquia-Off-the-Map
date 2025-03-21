@@ -46,7 +46,6 @@ cd ../..
 ```
 echo "GOOGLE_MAPS_API_KEY=YOUR_API_KEY" > .env
 ```
-✅ Ensuring the .env File is in UTF-8 Encoding
 To avoid errors, you must ensure that the .env file is encoded in UTF-8. If it is not, follow these steps:
 
 1️⃣ Open VS Code and open the .env file.
