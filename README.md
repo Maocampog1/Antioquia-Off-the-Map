@@ -46,6 +46,17 @@ cd ../..
 ```
 echo "GOOGLE_MAPS_API_KEY=YOUR_API_KEY" > .env
 ```
+✅ Ensuring the .env File is in UTF-8 Encoding
+To avoid errors, you must ensure that the .env file is encoded in UTF-8. If it is not, follow these steps:
+
+1️⃣ Open VS Code and open the .env file.
+2️⃣ Check the encoding:
+
+Look at the bottom right corner of the VS Code window.
+If it says UTF-16 or anything other than UTF-8, click on it.
+3️⃣ A menu will appear at the top center of the screen. Click "Save with Encoding".
+4️⃣ In the list of encodings, select "UTF-8" and save the file.
+Now your .env file is properly formatted and ready to use! 🚀
 
 Each Google Maps Web Service request requires an API key. API keys
 are generated in the 'Credentials' page of the 'APIs & Services' tab of [Google Cloud console](https://console.cloud.google.com/apis/credentials).
