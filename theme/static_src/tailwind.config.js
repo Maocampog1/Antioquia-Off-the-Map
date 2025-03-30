@@ -45,7 +45,12 @@ module.exports = {
         // '../../**/*.py'
     ],
     theme: {
-        extend: {},
+        extend: {
+            fontFamily: {
+                title: ["Hammersmith One", "sans-serif"], // Fuente para títulos
+                body: ["Montserrat", "sans-serif"], // Fuente para texto normal
+            },
+        },
     },
     plugins: [
         /**
