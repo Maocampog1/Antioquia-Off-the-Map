@@ -54,7 +54,7 @@ module.exports = {
             colors: {
                 customGreen: "#64AE41",
                 customDarkGreen: "#264816",
-                customLightGreen: "#BODA9C",
+                customLightGreen: "#B0DA9C",
                 customAqua: "#2E8B57",
                 customWhite: "#EAEAEA",
             },
