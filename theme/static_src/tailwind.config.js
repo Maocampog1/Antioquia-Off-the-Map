@@ -50,6 +50,14 @@ module.exports = {
                 title: ["Hammersmith One", "sans-serif"], // Fuente para títulos
                 body: ["Montserrat", "sans-serif"], // Fuente para texto normal
             },
+
+            colors: {
+                customGreen: "#64AE41",
+                customDarkGreen: "#264816",
+                customLightGreen: "#BODA9C",
+                customAqua: "#2E8B57",
+                customWhite: "#EAEAEA",
+            },
         },
     },
     plugins: [
