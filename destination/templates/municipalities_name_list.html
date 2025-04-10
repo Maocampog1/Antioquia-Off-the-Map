@@ -6,24 +6,24 @@
 
 <div class="max-w-7xl mx-auto px-6 py-10">
     <!-- Page Title -->
-    <h1 class="text-4xl font-bold text-center text-gray-800 mb-8">Explora los municipios</h1>
+    <h1 class="text-4xl font-title text-center text-customDarkGreen mb-8">Explora los municipios</h1>
 
     <!-- Municipality Cards Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for municipality in municipalities %}
-        <div class="bg-white rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105">
+        <div class="rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105">
             <!-- Image -->
             <img src="{{ municipality.image.url }}" alt="{{ municipality.name }}" class="w-full h-56 object-cover">
             
             <!-- Content -->
             <div class="p-4">
-                <h2 class="text-xl font-bold text-gray-800 text-center">{{ municipality.name }}</h2>
+                <h2 class="text-xl text-customDarkGreen text-center font-title">{{ municipality.name }}</h2>
             </div>
 
             <!-- View More Button -->
-            <div class="p-4">
+            <div class="p-4 pt-0">
                 <a href="{% url 'municipality_detail' municipality.id %}" 
-                class="block text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded">
+                class="block text-center bg-customLightGreen text-customDarkGreen font-semibold font-body py-2 rounded">
                     Ver más
                 </a>
             </div>

@@ -1,47 +1,61 @@
 {% load static tailwind_tags %}
 <!DOCTYPE html>
-<html lang="en" class="bg-white">
+<html lang="en" class="bg-customWhite">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- Connection to Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Hammersmith One Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Hammersmith+One&display=swap" rel="stylesheet">
+
+    <!-- Montserrat Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Hammersmith+One&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    
+    <!-- Icon in web -->
+    <link rel="icon" type="image/png" href="{% static 'favicon_io/favicon-16x16.png' %}">
+
     {% tailwind_css %}
 </head>
 
 <body class="text-black">
-<header class="header sticky top-0 bg-white shadow-md flex items-center justify-between px-8 py-02 text-gray-85 z-50">
+<header class="header sticky top-0 bg-customGreen shadow-md flex items-center px-8 py-02 text-gray-85 z-50">
     <!-- Logo -->
-    <h1 class="w-3/12">
+    <h1 class="">
         <a href="{% url 'home' %}">
-            <img src="{% static 'logo_nombre.png' %}" alt="logo" class="">
+            <img src="{% static 'Abstract_blanco.svg' %}" alt="logo" class="h-20 m-3">
         </a>
     </h1>
 
     <!-- Navigation -->
-    <nav class="nav font-semibold text-lg">
+    <nav class="nav font-body font-semibold text-lg text-white ml-auto">
         <ul class="flex items-center">
-            <li class="p-4 border-b-2 border-green-500 border-opacity-0 hover:border-opacity-100 hover:text-green-500 duration-200 cursor-pointer active">
+            <li class="p-4 border-b-2 border-customDarkGreen border-opacity-0 hover:border-opacity-100 hover:text-customDarkGreen duration-200 cursor-pointer active">
                 <a href="{% url 'home' %}">Inicio</a>
             </li>
-            <li class="p-4 border-b-2 border-green-500 border-opacity-0 hover:border-opacity-100 hover:text-green-500 duration-200 cursor-pointer">
+            <li class="p-4 border-b-2 border-customDarkGreen border-opacity-0 hover:border-opacity-100 hover:text-customDarkGreen duration-200 cursor-pointer">
                 <a href="{% url 'municipality_name_list' %}">Municipios</a>
             </li>
-					<li class="p-4 border-b-2 border-green-500 border-opacity-0 hover:border-opacity-100 hover:text-green-500 duration-200 cursor-pointer">
-						<a href="{% url 'experience_search_page' %}">Buscar Experiencias</a>
-					</li>
+            <li class="p-4 border-b-2 border-customDarkGreen border-opacity-0 hover:border-opacity-100 hover:text-customDarkGreen duration-200 cursor-pointer">
+                <a href="{% url 'experience_search_page' %}">Buscar Experiencias</a>
+            </li>
         </ul>
     </nav>
 
     <!-- Search bar with filters -->
-    <div class="w-3/12 flex justify-end relative mt-32"> <!-- Increased margin -->
-        <div class="search-container relative">
+    <div class="w-80 ml-auto"> <!-- Increased margin -->
+        <div class="search-container relative font-body">
             <input type="text" id="search-bar" placeholder="Buscar municipio..." autocomplete="off" class="border p-2 rounded-lg w-full">
             <button onclick="toggleFilters()" class="absolute right-2 top-2">☰</button>
             <div id="results" class="absolute bg-white shadow-md rounded-lg mt-2 w-full hidden"></div>
         </div>
 
         <!-- Dropdown filters -->
-        <div id="filtersContainer" class="absolute right-0 top-16 mt-8 w-64 bg-white shadow-lg rounded-lg p-4 hidden z-50"> 
+        <div id="filtersContainer" class="absolute top-16 mt-8 w-80 bg-white shadow-lg rounded-lg p-4 hidden z-50 font-body"> 
             <h3 class="text-gray-700 font-semibold">¿Qué buscas?</h3>
             {% for category in categories %}
                 <label class="block text-sm">
@@ -75,6 +89,11 @@
                 Buscar
             </button>
         </div>
+    </div>
+
+    <!-- Login button -->
+    <div class="ml-5">
+        <a href="#" class="bg-customDarkGreen text-white font-semibold px-4 py-2 rounded-lg shadow-md font-body">Iniciar sesión</a>
     </div>
 </header>
 

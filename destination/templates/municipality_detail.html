@@ -11,8 +11,8 @@
         <div class="hero-overlay bg-opacity-60"></div>
         <div class="hero-content text-center text-white">
             <div>
-                <h1 class="text-4xl font-bold">{{ municipality.name }}</h1>
-                <p class="mt-2 text-lg">{{ municipality.location }}</p>
+                <h1 class="text-4xl font-title">{{ municipality.name }}</h1>
+                <p class="mt-2 text-lg font-title">{{ municipality.location }}</p>
             </div>
         </div>
     </div>
@@ -20,14 +20,14 @@
        <!-- Municipality Details -->
         <div class="card bg-white shadow-lg rounded-lg mt-8 p-6">
             <div class="card-body">
-                <h2 class="card-title text-3xl font-bold">{{ municipality.name }}</h2>
+                <h2 class="card-title text-3xl font-title">{{ municipality.name }}</h2>
 
                 <!-- Categories --> 
-                <h2 class="font-semibold text-gray-700">Categorías:</h2>
+                <h2 class="text-customDarkGreen font-title">Categorías:</h2>
                 <div class="flex flex-wrap gap-3 mt-2">
                     {% if municipality.categories.all %}
                         {% for cat in municipality.categories.all %}
-                            <span class="inline-block rounded-full bg-blue-100 text-blue-800 px-4 py-2 text-sm font-semibold border border-blue-300 shadow-md">
+                            <span class="inline-block rounded-full bg-customLightGreen text-customDarkGreen px-4 py-2 text-sm font-title border border-customLightGreen shadow-md">
                                 {{ cat.name }}
                             </span>
                         {% endfor %}
@@ -37,13 +37,13 @@
                 </div>
 
                 <!-- Description -->  
-                <p class="text-gray-700 mt-4">{{ municipality.description }}</p>
+                <p class="text-gray-700 mt-4 font-body">{{ municipality.description }}</p>
 
                <!-- Buttons --> 
                 <div class="mt-6 flex space-x-4 justify-center">
-                    <a href="{% url 'municipality_events' municipality.id %}" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700">Ver Eventos</a>
-                    <button onclick="toggleMap()" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700">¿Cómo llegar?</button>
-                    <a href="{% url 'municipality_name_list' %}" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg shadow-md hover:bg-gray-300">Volver a la Lista</a>
+                    <a href="{% url 'municipality_events' municipality.id %}" class="bg-customLightGreen text-customDarkGreen px-4 py-2 rounded-lg shadow-md hover:bg-customGreen font-title">Ver Eventos</a>
+                    <button onclick="toggleMap()" class="bg-customLightGreen text-customDarkGreen px-4 py-2 rounded-lg shadow-md hover:bg-customGreen font-title">¿Cómo llegar?</button>
+                    <a href="{% url 'municipality_name_list' %}" class="bg-customLightGreen text-customDarkGreen px-4 py-2 rounded-lg shadow-md hover:bg-customGreen font-title">Volver a la Lista</a>
                 </div>
             </div>
         </div>
@@ -51,12 +51,12 @@
         <!-- Tolls Section -->
         <div class="card bg-white-100 shadow-lg rounded-lg mt-8 p-6">
             <div class="card-body">
-                <h2 class="card-title text-3xl font-bold text-gray-800">Peajes desde Medellín</h2>
+                <h2 class="card-title text-3xl text-gray-800 font-title">Peajes desde Medellín</h2>
 
                 {% if municipality.tolls.all %}
                     <ul class="list-disc pl-6 mt-4 text-gray-700">
                         {% for toll in municipality.tolls.all %}
-                            <li class="border-l-4 border-gray-500 pl-2 py-1">{{ toll.description }}</li>
+                            <li class="border-l-4 border-gray-500 pl-2 py-1 font-body">{{ toll.description }}</li>
                         {% endfor %}
                     </ul>
                 {% else %}
@@ -64,9 +64,9 @@
                 {% endif %}
                 <!-- Toll cost info from other origin -->
                 <div class="mt-6 text-center">
-                    <p class="text-lg text-gray-800 font-semibold">Para buscar peajes desde otros puntos de origen:</p>
+                    <p class="text-lg text-gray-800 font-body">Para buscar peajes desde otros puntos de origen:</p>
                     <a href="https://tollguru.com/toll-calculator-colombia" target="_blank" 
-                    class="mt-3 inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300">
+                    class="mt-3 inline-block bg-customLightGreen hover:bg-customGreen text-customDarkGreen font-semibold font-body py-2 px-4 rounded-lg shadow-md transition duration-300">
                         Calcular Peajes
                     </a>
                 </div>
@@ -75,15 +75,15 @@
 
         <!-- Map section -->
         <div id="map-container" class="hidden">
-            <div class="flex flex-col items-center gap-4 p-4 bg-gray-100 rounded-lg shadow-md w-full mx-auto">
+            <div class="flex flex-col items-center gap-4 p-4 mt-5 mb-5 bg-customWhite rounded-lg shadow-md w-full mx-auto">
                 <input id="origin" type="text" placeholder="Ingresar Origen" 
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm">
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-customGreen shadow-sm">
             
                 <input id="destination" type="text" placeholder="Ingresar destino" 
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm">
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-customGreen shadow-sm">
             
                 <select id="mode" title="TravelMode" 
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm bg-white">
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-customGreen shadow-sm bg-white">
                     <option value="DRIVING">Conduciendo</option>
                     <option value="WALKING">Caminando</option>
                     <option value="BICYCLING">Bicicleta</option>
@@ -91,7 +91,7 @@
                 </select>
             
                 <button id="route-btn" 
-                    class="w-full bg-green-600 text-white font-semibold px-4 py-2 rounded-lg shadow-md hover:bg-green-700 transition duration-300">
+                    class="w-full bg-green-600 text-white font-title px-4 py-2 rounded-lg shadow-md hover:bg-green-700 transition duration-300">
                     Obtener ruta
                 </button>
             </div>
@@ -109,25 +109,25 @@
         </div>
         
         <!-- Restaurants Section -->
-        <div class="card bg-yellow-100 shadow-lg rounded-lg mt-8 p-6">
+        <div class="card bg-customLightGreen shadow-lg rounded-lg mt-8 p-6">
             
             <div class="card-body">
-                <h2 class="card-title text-3xl font-bold text-yellow-800">¿Dónde Comer en {{ municipality.name }}?</h2>
+                <h2 class="card-title text-3xl font-bold text-customDarkGreen font-title">¿Dónde Comer en {{ municipality.name }}?</h2>
 
                 {% if restaurants %}
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
                         {% for restaurant in restaurants %}
-                            <div class="card bg-white shadow-md rounded-lg p-4 border border-yellow-300">
+                            <div class="card bg-white shadow-md rounded-lg p-4 border border-customGreen">
                                 <div class="card-body">
-                                    <h3 class="text-xl font-semibold text-yellow-700">{{ restaurant.name }}</h3>
+                                    <h3 class="text-xl font-title text-customDarkGreen">{{ restaurant.name }}</h3>
                                     <p class="mt-1 text-gray-700">
-                                        <span class="font-semibold">Tipo de comida:</span> {{ restaurant.cuisine_type }}
+                                        <span class="font-semibold font-body">Tipo de comida:</span> {{ restaurant.cuisine_type }}
                                     </p>
                                     <p class="mt-1 text-gray-600">
-                                        <span class="font-semibold">Precio:</span> {{ restaurant.price_range }}
+                                        <span class="font-semibold font-body">Precio:</span> {{ restaurant.price_range }}
                                     </p>
                                     <p class="mt-1 text-gray-600">
-                                        <span class="font-semibold">Contacto:</span> {{ restaurant.contact_info|default:"No disponible" }}
+                                        <span class="font-semibold font-body">Contacto:</span> {{ restaurant.contact_info|default:"No disponible" }}
                                     </p>
                                 </div>
                             </div>
@@ -141,24 +141,24 @@
 
 
        <!-- Activities Section -->
-        <div class="card bg-blue-100 shadow-lg rounded-lg mt-8 p-6">
+        <div class="card bg-customLightGreen shadow-lg rounded-lg mt-8 p-6">
             <div class="card-body">
-                <h2 class="card-title text-3xl font-bold text-blue-800">Actividades Imperdibles en {{ municipality.name }}</h2>
+                <h2 class="card-title text-3xl font-bold font-title text-customDarkGreen">Actividades Imperdibles en {{ municipality.name }}</h2>
 
                 {% if activities %}
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
                         {% for activity in activities %}
-                            <div class="card bg-white shadow-md rounded-lg p-4 border border-blue-300">
+                            <div class="card bg-white shadow-md rounded-lg p-4 border border-customGreen">
                                 {% if activity.image %}
                                     <img src="{{ activity.image.url }}" alt="{{ activity.name }}" class="w-full h-48 object-cover rounded-md">
                                 {% endif %}
                                 <div class="card-body mt-4">
-                                    <h3 class="text-xl font-semibold text-blue-700">{{ activity.name }}</h3>
+                                    <h3 class="text-xl font-title text-customDarkGreen">{{ activity.name }}</h3>
                                     
                                     <!-- Hidden description inside a <details> -->  
                                     <details class="mt-2">
-                                        <summary class="text-blue-600 cursor-pointer font-medium">Más info</summary>
-                                        <p class="mt-2 text-gray-600">{{ activity.description }}</p>
+                                        <summary class="text-customDarkGreen cursor-pointer font-medium">Más info</summary>
+                                        <p class="mt-2 text-gray-600 font-body">{{ activity.description }}</p>
                                     </details>
                                 </div>
                             </div>
@@ -174,28 +174,28 @@
 
 
         <!-- Accommodations Section -->
-        <div class="card bg-green-100 shadow-lg rounded-lg mt-8 p-6">
+        <div class="card bg-customLightGreen shadow-lg rounded-lg mt-8 p-6">
             <div class="card-body">
-                <h2 class="card-title text-3xl font-bold text-green-800">Alojamientos en {{ municipality.name }}</h2>
+                <h2 class="card-title text-3xl font-title text-green-800">Alojamientos en {{ municipality.name }}</h2>
 
                 {% if accommodations %}
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
                         {% for accommodation in accommodations %}
                             <div class="card bg-white shadow-md rounded-lg p-4 border border-green-300">
                                 <div class="card-body">
-                                    <h3 class="text-xl font-semibold text-green-700">{{ accommodation.name }}</h3>
-                                    <span class="badge badge-success text-sm">
+                                    <h3 class="text-xl font-title text-customDarkGreen">{{ accommodation.name }}</h3>
+                                    <span class="badge badge-success text-sm bg-customLightGreen">
                                         {{ accommodation.get_accommodation_type_display }}
                                     </span>
 
-                                    <p class="mt-2 text-gray-600">
-                                        <span class="font-semibold">Dirección:</span> 
+                                    <p class="mt-2 text-customDarkGreen">
+                                        <span class="font-semibold font-body">Dirección:</span> 
                                         {{ accommodation.address|default:"No disponible" }}
                                     </p>
 
                                     {% if accommodation.website %}
                                         <a href="{{ accommodation.website }}" target="_blank"
-                                            class="mt-2 inline-block text-green-600 font-medium underline hover:no-underline hover:text-green-800 transition">
+                                            class="mt-2 inline-block text-customDarkGreen font-medium font-body underline hover:no-underline hover:text-customGreen transition">
                                             Visitar sitio web
                                         </a>
                                     {% endif %}
@@ -204,7 +204,7 @@
                         {% endfor %}
                     </div>
                 {% else %}
-                    <p class="text-center text-lg text-green-700 mt-4">No hay alojamientos registrados en este municipio.</p>
+                    <p class="text-center text-lg text-customDarkGreen mt-4 font-body">No hay alojamientos registrados en este municipio.</p>
                 {% endif %}
             </div>
         </div>

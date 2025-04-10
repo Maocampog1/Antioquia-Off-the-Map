@@ -11,11 +11,11 @@
 </head>
 <body class="bg-gray-100 p-6">
     <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
-        <h1 class="text-2xl font-bold text-center text-green-800">Buscador de experiencias en Antioquia</h1>
+        <h1 class="text-2xl font-bold font-title text-center text-green-800">Buscador de experiencias en Antioquia</h1>
 
         <!-- Municipality selection -->  
-        <div class="mt-4">
-            <label for="municipio" class="block font-semibold text-green-800">Selecciona un municipio:</label>
+        <div class="mt-4 font-body">
+            <label for="municipio" class="block font-semibold font-body text-green-800">Selecciona un municipio:</label>
             <select id="municipio" class="w-full p-2 border rounded-lg mt-2">
                 <option value="">-- Selecciona --</option>
                 {% for municipio in municipios %}
@@ -25,22 +25,22 @@
         </div>
 
         <!-- Category selection -->  
-        <div class="mt-4">
+        <div class="mt-4 font-body">
             <label class="block font-semibold text-green-800">Selecciona una o más categorías:</label>
-            <div class="flex flex-wrap gap-2 mt-2">
+            <div class="flex flex-wrap gap-2 mt-3 justify-center">
                 {% for categoria in categorias %}
-                <label class="flex items-center bg-green-100 text-green-800 px-4 py-2 rounded-lg cursor-pointer">
+                <label class="flex items-center bg-customLightGreen text-black px-4 py-2 rounded-lg cursor-pointer">
                     <input type="checkbox" value="{{ categoria.value }}" class="categoria-checkbox">
                     <span class="ml-2">{{ categoria.label }}</span>
                 </label>
                 {% endfor %}
 
-                <button id="searchButton">Buscar</button>
+                <button id="searchButton" class="bg-customDarkGreen text-white rounded-lg px-5 py-2">Buscar</button>
             </div>
         </div>
 
        
-        <div id="experience-results" class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div id="experience-results" class="mt-6">
             <p class="text-gray-600 text-center col-span-full">No hay resultados</p>
         </div>
     </div>
@@ -179,7 +179,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 let municipio = document.getElementById("municipio").value;
                 let categorias = Array.from(document.querySelectorAll(".categoria-checkbox:checked"))
                     .map(el => el.value);
-               
+            
                 if (!municipio) {
                     document.getElementById("experience-results").innerHTML = "<div class='text-gray-600 col-span-full text-center'>Selecciona un municipio</div>";
                     return;
