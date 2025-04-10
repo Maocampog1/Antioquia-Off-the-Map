@@ -3272,6 +3272,10 @@ details.collapse summary::-webkit-details-marker {
   margin: 1rem;
 }
 
+.m-5 {
+  margin: 1.25rem;
+}
+
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -3332,6 +3336,14 @@ details.collapse summary::-webkit-details-marker {
 
 .mt-8 {
   margin-top: 2rem;
+}
+
+.mt-5 {
+  margin-top: 1.25rem;
+}
+
+.mb-5 {
+  margin-bottom: 1.25rem;
 }
 
 .block {
@@ -3570,6 +3582,16 @@ details.collapse summary::-webkit-details-marker {
 .border-yellow-300 {
   --tw-border-opacity: 1;
   border-color: rgb(253 224 71 / var(--tw-border-opacity, 1));
+}
+
+.border-customLightGreen {
+  --tw-border-opacity: 1;
+  border-color: rgb(176 218 156 / var(--tw-border-opacity, 1));
+}
+
+.border-customGreen {
+  --tw-border-opacity: 1;
+  border-color: rgb(100 174 65 / var(--tw-border-opacity, 1));
 }
 
 .border-opacity-0 {
@@ -3936,6 +3958,21 @@ details.collapse summary::-webkit-details-marker {
   color: rgb(133 77 14 / var(--tw-text-opacity, 1));
 }
 
+.text-green-500 {
+  --tw-text-opacity: 1;
+  color: rgb(34 197 94 / var(--tw-text-opacity, 1));
+}
+
+.text-green-100 {
+  --tw-text-opacity: 1;
+  color: rgb(220 252 231 / var(--tw-text-opacity, 1));
+}
+
+.text-customAqua {
+  --tw-text-opacity: 1;
+  color: rgb(46 139 87 / var(--tw-text-opacity, 1));
+}
+
 .underline {
   text-decoration-line: underline;
 }
@@ -4039,6 +4076,16 @@ details.collapse summary::-webkit-details-marker {
   background-color: rgb(236 72 153 / var(--tw-bg-opacity, 1));
 }
 
+.hover\:bg-customGreen:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(100 174 65 / var(--tw-bg-opacity, 1));
+}
+
+.hover\:bg-customAqua:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(46 139 87 / var(--tw-bg-opacity, 1));
+}
+
 .hover\:text-customDarkGreen:hover {
   --tw-text-opacity: 1;
   color: rgb(38 72 22 / var(--tw-text-opacity, 1));
@@ -4057,6 +4104,11 @@ details.collapse summary::-webkit-details-marker {
 .hover\:text-white:hover {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+}
+
+.hover\:text-customGreen:hover {
+  --tw-text-opacity: 1;
+  color: rgb(100 174 65 / var(--tw-text-opacity, 1));
 }
 
 .hover\:no-underline:hover {
@@ -4083,6 +4135,11 @@ details.collapse summary::-webkit-details-marker {
 .focus\:ring-blue-500:focus {
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(59 130 246 / var(--tw-ring-opacity, 1));
+}
+
+.focus\:ring-customGreen:focus {
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(100 174 65 / var(--tw-ring-opacity, 1));
 }
 
 .active\:bg-pink-700:active {
