@@ -1,0 +1,59 @@
+
+<!-- templates/login.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Iniciar Sesión</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    {% load static %}
+</head>
+<body class="bg-gray-100 min-h-screen h-screen flex items-center justify-center">
+
+    <div class="w-full h-screen bg-white shadow-lg overflow-hidden flex">
+        <!-- Left side (Image + Title) -->
+        <div class="w-1/2 bg-cover bg-center relative" style="background-image: url('/static/logo_bg.svg');">
+            <div class="absolute inset-0 bg-black bg-opacity-40 flex flex-col items-center justify-center text-white text-center p-6">
+                <h1 class="text-4xl font-bold leading-tight">ANTIOQUIA OFF<br>THE MAP</h1>
+            </div>
+        </div>
+
+        <!-- Right side (Form) -->
+        <div class="w-1/2 p-10 flex flex-col justify-center">
+            <h2 class="text-2xl font-bold mb-2">Inicio de Sesión</h2>
+            <p class="text-gray-600 mb-6">Bienvenido de vuelta a Antioquia Off The Map. Por favor, inicia sesión</p>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="mb-4 p-3 text-sm text-red-600 bg-red-100 rounded-md">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST" action="" class="space-y-5">
+                {% csrf_token %}
+                <div>
+                    <label class="block font-medium text-gray-700">Usuario</label>
+                    <input type="text" name="username" required
+                           class="w-full mt-1 p-2 border border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+                <div>
+                    <label class="block font-medium text-gray-700">Contraseña</label>
+                    <input type="password" name="password" required
+                           class="w-full mt-1 p-2 border border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+                <button type="submit"
+                        class="w-full py-2 text-white bg-green-500 hover:bg-green-600 rounded-md">
+                    Iniciar Sesión
+                </button>
+            </form>
+
+            <div class="mt-6 text-sm text-black">
+                ¿Usuario nuevo? <a href="#" class="font-bold underline">Crear cuenta</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
