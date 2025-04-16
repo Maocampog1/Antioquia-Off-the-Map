@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from .models import Municipality, Event, Activity, Restaurant, Accommodation, Category, Toll
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import JsonResponse

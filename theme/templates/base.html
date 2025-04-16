@@ -92,9 +92,14 @@
     </div>
 
     <!-- Login button -->
-    <div class="ml-5">
-        <a href="#" class="bg-customDarkGreen text-white font-semibold px-4 py-2 rounded-lg shadow-md font-body">Iniciar sesión</a>
-    </div>
+        {% if user.is_authenticated %}
+        <form method="POST" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="bg-customDarkGreen text-white font-semibold px-4 py-2 rounded-lg shadow-md font-body">Cerrar sesión</button>
+        </form>
+        {% else %}
+            <a href="{% url 'login' %}" class="bg-customDarkGreen text-white font-semibold px-4 py-2 rounded-lg shadow-md font-body">Iniciar sesión</a>    <a href="{% url 'register' %}" class="bg-customDarkGreen text-white font-semibold px-4 py-2 rounded-lg shadow-md font-body" >Registrarse</a>
+        {% endif %}
 </header>
 
 <!-- Dynamic content -->

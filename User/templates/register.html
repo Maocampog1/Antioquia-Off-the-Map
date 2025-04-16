@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<title>Registro</title>
+
+<!-- Imagen de fondo con superposición oscura -->
+<div class="relative rounded-lg overflow-hidden shadow-lg m-4">
+    <img src="{% static 'landing_main_image.svg' %}" alt="registro_background" class="h-600 w-full object-cover">
+    
+    <div class="absolute inset-0 bg-black/50 flex items-center justify-center">
+        <!-- Formulario centrado -->
+        <div class="bg-white bg-opacity-90 p-10 rounded-xl shadow-xl max-w-md w-full font-body">
+            <h2 class="text-2xl font-bold text-customDarkGreen mb-6 text-center">Crea tu cuenta</h2>
+
+            <form method="POST" novalidate>
+                {% csrf_token %}
+
+                {% for field in form %}
+                    <div class="mb-5">
+                        <label for="{{ field.id_for_label }}" class="block text-customDarkGreen font-semibold mb-1">
+                            {{ field.label }}
+                        </label>
+
+                        {{ field }}  <!-- Aquí se renderiza el campo sin modificar -->
+
+                        {% if field.errors %}
+                            <p class="text-red-600 text-sm mt-1">{{ field.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                {% if form.non_field_errors %}
+                    <div class="text-red-600 text-sm mb-4">
+                        {% for error in form.non_field_errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <button type="submit" class="w-full bg-customGreen text-white font-semibold py-2 rounded-lg hover:bg-green-700 shadow-md transition duration-300">
+                    Registrarse
+                </button>
+            </form>
+
+            <p class="text-sm text-center mt-4 text-gray-700">
+                ¿Ya tienes una cuenta?
+                <a href="{% url 'login' %}" class="text-customDarkGreen font-semibold hover:underline">Inicia sesión aquí</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
