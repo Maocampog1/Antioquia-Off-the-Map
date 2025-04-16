@@ -4,50 +4,109 @@
 {% block content %}
 <title>Registro</title>
 
-<!-- Imagen de fondo con superposición oscura -->
 <div class="relative rounded-lg overflow-hidden shadow-lg m-4">
-    <img src="{% static 'landing_main_image.svg' %}" alt="registro_background" class="h-600 w-full object-cover">
-    
-    <div class="absolute inset-0 bg-black/50 flex items-center justify-center">
-        <!-- Formulario centrado -->
-        <div class="bg-white bg-opacity-90 p-10 rounded-xl shadow-xl max-w-md w-full font-body">
-            <h2 class="text-2xl font-bold text-customDarkGreen mb-6 text-center">Crea tu cuenta</h2>
+    <img src="{% static 'landing_main_image.svg' %}" alt="registro_background" class="h-[600px] w-full object-cover">
 
-            <form method="POST" novalidate>
-                {% csrf_token %}
-
-                {% for field in form %}
-                    <div class="mb-5">
-                        <label for="{{ field.id_for_label }}" class="block text-customDarkGreen font-semibold mb-1">
-                            {{ field.label }}
-                        </label>
-
-                        {{ field }}  <!-- Aquí se renderiza el campo sin modificar -->
-
-                        {% if field.errors %}
-                            <p class="text-red-600 text-sm mt-1">{{ field.errors.0 }}</p>
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center px-4">
+        <div class="bg-white bg-opacity-95 p-8 shadow-2xl w-full max-w-md font-body" style="border-radius: 28px;">
+            <!-- Div interno con borde -->
+            <div class="border border-gray-200 rounded-2xl p-6">
+                <h2 class="text-3xl font-bold text-customDarkGreen text-center mb-8">Crea tu cuenta</h2>
+            
+                <form method="POST" novalidate="" class="space-y-6">
+                    {% csrf_token %}
+                    
+                    <!-- Mostrar errores generales del formulario -->
+                    {% if form.non_field_errors %}
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+                            {% for error in form.non_field_errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+            
+                    <!-- Campo de usuario -->
+                    <div class="flex flex-col space-y-2">
+                        <label for="id_username" class="text-sm font-semibold text-gray-800">Usuario</label>
+                        <input type="text" name="username" maxlength="150" autofocus="" class="form-control rounded-full px-4 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-customGreen" required="" id="id_username" value="{{ form.username.value|default:'' }}">
+                        <!-- Mostrar errores específicos del campo -->
+                        {% if form.username.errors %}
+                            <p class="text-red-500 text-sm mt-1">
+                                {{ form.username.errors|striptags }}
+                            </p>
                         {% endif %}
                     </div>
-                {% endfor %}
-
-                {% if form.non_field_errors %}
-                    <div class="text-red-600 text-sm mb-4">
-                        {% for error in form.non_field_errors %}
-                            <p>{{ error }}</p>
-                        {% endfor %}
+            
+                    <!-- Campo de correo -->
+                    <div class="flex flex-col space-y-2">
+                        <label for="id_email" class="text-sm font-semibold text-gray-800">Correo</label>
+                        <input type="email" name="email" class="form-control rounded-full px-4 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-customGreen" maxlength="320" required="" id="id_email" value="{{ form.email.value|default:'' }}">
+                        {% if form.email.errors %}
+                            <p class="text-red-500 text-sm mt-1">
+                                {{ form.email.errors|striptags }}
+                            </p>
+                        {% endif %}
                     </div>
-                {% endif %}
-
-                <button type="submit" class="w-full bg-customGreen text-white font-semibold py-2 rounded-lg hover:bg-green-700 shadow-md transition duration-300">
-                    Registrarse
-                </button>
-            </form>
-
-            <p class="text-sm text-center mt-4 text-gray-700">
-                ¿Ya tienes una cuenta?
-                <a href="{% url 'login' %}" class="text-customDarkGreen font-semibold hover:underline">Inicia sesión aquí</a>
-            </p>
+            
+                    <!-- Campo de contraseña -->
+                    <div class="flex flex-col space-y-2">
+                        <label for="id_password1" class="text-sm font-semibold text-gray-800">Contraseña</label>
+                        <input type="password" name="password1" autocomplete="new-password" class="form-control rounded-full px-4 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-customGreen" required="" id="id_password1">
+                        {% if form.password1.errors %}
+                            <p class="text-red-500 text-sm mt-1">
+                                {{ form.password1.errors|striptags }}
+                            </p>
+                        {% endif %}
+                    </div>
+            
+                    <!-- Campo de confirmación de contraseña -->
+                    <div class="flex flex-col space-y-2">
+                        <label for="id_password2" class="text-sm font-semibold text-gray-800">Confirme su contraseña</label>
+                        <input type="password" name="password2" autocomplete="new-password" class="form-control rounded-full px-4 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-customGreen" required="" id="id_password2">
+                        {% if form.password2.errors %}
+                            <p class="text-red-500 text-sm mt-1">
+                                {{ form.password2.errors|striptags }}
+                            </p>
+                        {% endif %}
+                    </div>
+            
+                    <button type="submit" class="w-full bg-customGreen text-white font-semibold py-3 rounded-full hover:bg-green-700 transition duration-300 shadow-md mt-8">
+                        Registrarse
+                    </button>
+                </form>
+            
+                <p class="text-sm text-center mt-6 text-gray-700">
+                    ¿Ya tienes una cuenta?
+                    <a href="/accounts/login/" class="text-customDarkGreen font-semibold hover:underline">Inicia sesión aquí</a>
+                </p>
+            </div>
         </div>
     </div>
 </div>
+
+<!-- Estilos específicos para los inputs -->
+<style>
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    select,
+    textarea {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid #d1d5db;
+        border-radius: 9999px; /* Borde completamente redondeado */
+        background-color: #f9fafb;
+        font-size: 1rem;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+        outline: none;
+        border-color: #219653;
+        background-color: #fff;
+        box-shadow: 0 0 0 3px rgba(33, 150, 83, 0.2);
+    }
+</style>
 {% endblock %}
