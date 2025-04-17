@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -75,3 +75,15 @@ class Activity(models.Model):
 class Toll(models.Model):
     description = models.TextField()
     municipality = models.ForeignKey(Municipality, on_delete=models.CASCADE, related_name='tolls')
+
+
+class TravelerPost(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    image = models.ImageField(upload_to='traveler_posts/', blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.title} - {self.user.username}"
+    
