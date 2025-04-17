@@ -3,6 +3,8 @@ from .models import Municipality, Event, Activity, Restaurant, Accommodation, Ca
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import JsonResponse
 from django.conf import settings
+from .models import TravelerPost
+from .forms import TravelerPostForm
 
 # List of municipality names
 def municipality_name_list(request):
@@ -165,3 +167,28 @@ def search_experiences(request):
         )
 
     return JsonResponse(results) 
+
+##########
+# User-generated content system (FR08) ##########
+def traveler_post_list(request):
+    posts = TravelerPost.objects.all().order_by('-created_at')
+    return render(request, 'traveler_posts/list.html', {'posts': posts})
+
+@login_required
+def create_traveler_post(request):
+    if request.method == 'POST':
+        form = TravelerPostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = request.user
+            post.save()
+            return redirect('traveler_post_list')
+    else:
+        form = TravelerPostForm()
+    return render(request, 'traveler_posts/create.html', {'form': form})
+
+@login_required
+def delete_traveler_post(request, post_id):
+    post = get_object_or_404(TravelerPost, id=post_id, user=request.user)
+    post.delete()
+    return redirect('traveler_post_list')
