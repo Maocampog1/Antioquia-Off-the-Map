@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mx-auto p-6">
+
+    <h1 class="text-2xl font-bold mb-4">De Viajero a Viajero</h1>
+
+    {% if user.is_authenticated %}
+    <!-- Formulario para crear nueva publicación -->
+    <div class="max-w-2xl mx-auto mt-6 p-6 bg-white rounded-xl shadow-md">
+        <h2 class="text-xl font-bold mb-4">Publicar experiencia</h2>
+        <form method="POST" enctype="multipart/form-data" class="space-y-4">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Publicar</button>
+        </form>
+    </div>
+    {% endif %}
+
+    <!-- Lista de publicaciones -->
+    <div class="grid gap-6 mt-10">
+        {% for post in posts %}
+        <div class="border rounded-xl p-4 shadow-lg">
+            <h2 class="text-xl font-semibold">{{ post.title }}</h2>
+            <p class="text-sm text-gray-500">Por {{ post.user.username }} el {{ post.created_at|date:"d M Y" }}</p>
+            <p class="mt-2">{{ post.content }}</p>
+            {% if post.image %}
+                <img src="{{ post.image.url }}" alt="Imagen" class="mt-2 rounded-lg max-h-60 object-cover">
+            {% endif %}
+            {% if user == post.user %}
+                <a href="{% url 'delete_traveler_post' post.id %}" class="text-red-600 hover:underline mt-2 inline-block">Eliminar</a>
+            {% endif %}
+        </div>
+        {% empty %}
+        <p>No hay publicaciones todavía.</p>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}
