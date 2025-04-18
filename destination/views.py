@@ -1,12 +1,12 @@
 from django.contrib.auth.decorators import login_required
-from .models import Municipality, Event, Activity, Restaurant, Accommodation, Category, Toll
+from .models import Municipality, Event, Activity, Restaurant, Accommodation, Category, Toll, TravelerPost
+from .forms import TravelerPostForm
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import JsonResponse
 from django.conf import settings
 import json
 import os
 SEARCH_COUNT_PATH = os.path.join('destination/data', 'search_counts.json')
-
 
 # List of municipality names
 def municipality_name_list(request):
@@ -219,3 +219,32 @@ def search_experiences(request):
         )
 
     return JsonResponse(results) 
+
+##########
+# User-generated content system (FR08) ##########
+def traveler_post_list_and_create(request):
+    posts = TravelerPost.objects.all().order_by('-created_at')
+    
+    if request.method == 'POST':
+        form = TravelerPostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = request.user
+            post.save()
+            form.save_m2m()
+            return redirect('traveler_post_list')
+    else:
+        form = TravelerPostForm()
+
+    # Ruta corregida de la plantilla
+    return render(request, 'from-traveler-to-traveler.html', {
+        'posts': posts,
+        'form': form
+    })
+
+@login_required
+def delete_post(request, post_id):
+    post = get_object_or_404(TravelerPost, id=post_id)
+    if post.user == request.user:
+        post.delete()
+    return redirect('traveler_post_list')
