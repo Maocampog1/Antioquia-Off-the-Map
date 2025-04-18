@@ -15,5 +15,4 @@ urlpatterns = [
     path('traveler-posts/', views.traveler_post_list_and_create, name='traveler_post_list'),
     path('traveler-posts/delete/<int:post_id>/', views.delete_post, name='delete_post'),
     path('track/<int:municipality_id>/', views.track_and_redirect, name='track_and_redirect'),
-
 ]
