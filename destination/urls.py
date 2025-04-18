@@ -12,4 +12,6 @@ urlpatterns = [
     path('buscar-experiencias/', experience_search_page, name='experience_search_page'),
     path('experience-search/', search_experiences, name='experience-search'),
     path('filtered-search/', views.filtered_search_municipalities, name='filtered_search_municipalities'),
+    path('traveler-posts/', views.traveler_post_list_and_create, name='traveler_post_list'),
+    path('traveler-posts/delete/<int:post_id>/', views.delete_post, name='delete_post'),
 ]
