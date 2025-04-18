@@ -77,13 +77,35 @@ class Toll(models.Model):
     municipality = models.ForeignKey(Municipality, on_delete=models.CASCADE, related_name='tolls')
 
 
+ 
+
+TRAVELER_CATEGORY_CHOICES = [
+    ("movilidad", "Movilidad"),
+    ("experiencia", "Experiencia en un municipio"),
+    ("presupuesto", "Presupuesto de viaje"),
+    ("recomendados", "Recomendados increíbles"),
+    ("anecdota", "Anécdota"),
+    ("consejo", "Consejo para viajeros"),
+    ("otras", "Otras"),
+]
+
+class TravelerCategory(models.Model):
+    name = models.CharField(max_length=50, choices=TRAVELER_CATEGORY_CHOICES, unique=True)
+
+    def __str__(self):
+        return self.get_name_display()
+    # models.py
+
 class TravelerPost(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     content = models.TextField()
     image = models.ImageField(upload_to='traveler_posts/', blank=True, null=True)
+    image2 = models.ImageField(upload_to='traveler_posts/', blank=True, null=True)
+    image3 = models.ImageField(upload_to='traveler_posts/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    categories = models.ManyToManyField('TravelerCategory')  # ← Usa el nuevo modelo
+    municipality = models.ForeignKey('Municipality', on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return f"{self.title} - {self.user.username}"
-    
