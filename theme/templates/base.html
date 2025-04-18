@@ -162,7 +162,7 @@
                     item.classList.add("p-2", "hover:bg-gray-100", "cursor-pointer");
                     item.textContent = municipality.name;
                     item.onclick = function () {
-                        window.location.href = `/municipalities/${municipality.id}/`;
+                        window.location.href = `/track/${municipality.id}/`;
                     };
                     resultsDiv.appendChild(item);
                 });
