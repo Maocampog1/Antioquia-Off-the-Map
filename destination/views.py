@@ -170,23 +170,29 @@ def search_experiences(request):
 
 ##########
 # User-generated content system (FR08) ##########
-@login_required
-def traveler_posts_combined(request):
+def traveler_post_list_and_create(request):
     posts = TravelerPost.objects.all().order_by('-created_at')
+    
     if request.method == 'POST':
         form = TravelerPostForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
             post.user = request.user
             post.save()
-            return redirect('traveler_posts_combined')
+            form.save_m2m()
+            return redirect('traveler_post_list')
     else:
         form = TravelerPostForm()
 
-    return render(request, 'list_create.html', {'posts': posts, 'form': form})
+    # Ruta corregida de la plantilla
+    return render(request, 'from-traveler-to-traveler.html', {
+        'posts': posts,
+        'form': form
+    })
 
 @login_required
-def delete_traveler_post(request, post_id):
-    post = get_object_or_404(TravelerPost, id=post_id, user=request.user)
-    post.delete()
-    return redirect('traveler_posts_combined')
+def delete_post(request, post_id):
+    post = get_object_or_404(TravelerPost, id=post_id)
+    if post.user == request.user:
+        post.delete()
+    return redirect('traveler_post_list')
