@@ -23,9 +23,11 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include("destination.urls")),
-
+    path('accounts/', include('User.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
 
     path("__reload__/", include("django_browser_reload.urls")),
+   
 ]
 
 

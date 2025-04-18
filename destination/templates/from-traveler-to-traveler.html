@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 py-8">
+    <!-- Title card with description and categories -->
+    <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+        <h2 class="text-2xl font-bold mb-4 text-center text-[#2E8B57]">Publicaciones de Viajeros</h2>
+        <p class="text-gray-700 text-center">
+            Este espacio es para que cuentes a la comunidad de Antioquia off the map: tips de viaje, experiencias, 
+            anécdotas que pueden ser muy útiles a otros viajeros. Recuerda categorizar bien tus publicaciones 
+            y sé muy respetuoso con lo que publicas.
+        </p>
+        
+            <!-- Category tags with icons -->
+        <div class="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 text-center">
+          
+            <span class="bg-[#b0da9c] rounded-full px-3 py-1 text-xs flex items-center justify-center gap-1">
+                <i class="fas fa-car text-xs"></i>
+                Movilidad
+            </span>
+            
+           
+            <span class="bg-[#B0DA9C] rounded-full px-3 py-1 text-xs flex items-center justify-center gap-1">
+                <i class="fas fa-map-marked-alt text-xs"></i>
+                Experiencia
+            </span>
+            
+            
+            <span class="bg-[#B0DA9C] rounded-full px-3 py-1 text-xs flex items-center justify-center gap-1">
+                <i class="fas fa-wallet text-xs"></i>
+                Presupuesto
+            </span>
+            
+          
+            <span class="bg-[#B0DA9C] rounded-full px-3 py-1 text-xs flex items-center justify-center gap-1">
+                <i class="fas fa-thumbs-up text-xs"></i>
+                Recomendados
+            </span>
+            
+         
+            <span class="bg-[#B0DA9C] rounded-full px-3 py-1 text-xs flex items-center justify-center gap-1">
+                <i class="fas fa-comment-dots text-xs"></i>
+                Anécdota
+            </span>
+            
+            
+            <span class="bg-[#B0DA9C] rounded-full px-3 py-1 text-xs flex items-center justify-center gap-1">
+                <i class="fas fa-lightbulb text-xs"></i>
+                Consejo
+            </span>
+        </div>
+    </div>
+
+    <!-- Posts grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for post in posts %}
+        <div class="bg-white rounded-2xl shadow-md p-4 flex flex-col h-full">
+            <!-- Image container (shows all available images) -->
+            {% if post.image or post.image2 or post.image3 %}
+            <div class="mb-4 space-y-2">
+                {% if post.image %}
+                <img src="{{ post.image.url }}" class="w-full h-auto rounded-lg object-cover max-h-64" alt="Imagen del post">
+                {% endif %}
+                
+                {% if post.image2 %}
+                <img src="{{ post.image2.url }}" class="w-full h-auto rounded-lg object-cover max-h-64" alt="Imagen 2 del post">
+                {% endif %}
+                
+                {% if post.image3 %}
+                <img src="{{ post.image3.url }}" class="w-full h-auto rounded-lg object-cover max-h-64" alt="Imagen 3 del post">
+                {% endif %}
+            </div>
+            {% endif %}
+            
+                            <!-- Post content -->
+                <div class="flex-grow">
+                    <h3 class="text-xl font-semibold text-[#2E8B57] mb-2">{{ post.title }}</h3>
+
+                    <!-- Category tags as ovals -->
+                    <div class="mt-auto">
+                        <div class="flex flex-wrap gap-2">
+                        {% for cat in post.categories.all %}
+                            <span class="bg-green-600 text-white px-4 py-1 rounded-full text-xs font-medium">
+                            {{ cat }}
+                            </span>
+                        {% empty %}
+                            <span class="text-red-500 text-xs italic">No hay categorías</span>
+                        {% endfor %}
+                        </div>
+                    </div>
+
+                    <p class="text-sm text-gray-600 mb-1">
+                    Publicado por {{ post.user.username }}
+                    </p>
+
+                    <p class="text-sm text-gray-600 mb-1">
+                    Lugar: {{ post.municipality.name }}
+                    </p>
+
+                    <!-- Fecha de publicación añadida -->
+                    <p class="text-sm text-gray-600 mb-1">
+                    Fecha: {{ post.created_at|date:"d/m/Y" }}
+                    </p>
+
+                    <!-- Description with text overflow control -->
+                    <div class="mb-4">
+                        <p class="text-gray-700 overflow-hidden text-ellipsis line-clamp-3 break-words max-h-[4.5rem]">
+                        {{ post.content }}
+                        </p>
+                    </div>
+                </div>
+
+            <!-- Delete button (only shown to post owner) -->
+            {% if user == post.user %}
+            <form method="post" action="{% url 'delete_post' post.id %}" class="mt-4">
+                {% csrf_token %}
+                <button type="submit" style="background-color: #dc2626; color: white; padding: 0.25rem 0.75rem; border-radius: 0.375rem;">
+                    Eliminar
+                </button>
+            </form>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- New post form -->
+    <div class="mt-12 flex justify-center">
+        {% if user.is_authenticated %}
+        <div class="w-full max-w-2xl">
+            <h2 class="text-3xl font-bold mb-8 text-center text-[#2E8B57]">Crear nueva publicación</h2>
+            <form method="post" enctype="multipart/form-data" class="space-y-6 bg-[#F7F7F7] p-10 rounded-xl shadow-md">
+                {% csrf_token %}
+                
+                <!-- Form fields -->
+                {% for field in form %}
+                <div class="space-y-2">
+                    <label for="{{ field.id_for_label }}" class="block font-semibold text-gray-700 text-lg">
+                        {{ field.label }}
+                        {% if field.field.required %}<span class="text-red-500">*</span>{% endif %}
+                    </label>
+                    {{ field.as_widget|safe }}
+                    <script>
+                        document.addEventListener('DOMContentLoaded', () => {
+                            const input = document.getElementById('{{ field.id_for_label }}');
+                            if (input) {
+                                input.className = 'w-full p-3 text-lg border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500';
+                            }
+                        });
+                    </script>
+                    {% if field.help_text %}
+                    <p class="text-sm text-gray-500">{{ field.help_text }}</p>
+                    {% endif %}
+                    {% for error in field.errors %}
+                    <p class="text-sm text-red-500">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+        
+                <!-- Submit button -->
+                <div class="text-center py-8 mt-8">
+                    <button type="submit" 
+                        style="background-color: #16a34a; color: white; padding: 1rem 2rem; font-size: 1.125rem; font-weight: 600; border-radius: 0.375rem; transition: background-color 0.3s;">
+                    Publicar
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        {% else %}
+        <!-- Login prompt for unauthenticated users -->
+        <div class="text-center py-8 mt-8">
+            <h3 class="text-2xl font-bold mb-4 text-[#2E8B57]">¿Quieres compartir tu experiencia?</h3>
+            <p class="text-gray-700 mb-6 text-lg">Debes iniciar sesión para poder publicar.</p>
+            <a href="{% url 'login' %}" 
+               class="inline-block bg-green-600 text-white text-lg font-semibold py-3 px-8 rounded-lg hover:bg-green-700 transition-all shadow-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
+              Iniciar sesión
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

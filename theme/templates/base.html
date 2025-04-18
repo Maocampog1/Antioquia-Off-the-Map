@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
+    {% load static %}
+   <link href="{% static 'css/dist/styles.css' %}" rel="stylesheet">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Connection to Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,79 +25,110 @@
 </head>
 
 <body class="text-black">
-<header class="header sticky top-0 bg-customGreen shadow-md flex items-center px-8 py-02 text-gray-85 z-50">
-    <!-- Logo -->
-    <h1 class="">
-        <a href="{% url 'home' %}">
-            <img src="{% static 'Abstract_blanco.svg' %}" alt="logo" class="h-20 m-3">
-        </a>
-    </h1>
-
-    <!-- Navigation -->
-    <nav class="nav font-body font-semibold text-lg text-white ml-auto">
-        <ul class="flex items-center">
-            <li class="p-4 border-b-2 border-customDarkGreen border-opacity-0 hover:border-opacity-100 hover:text-customDarkGreen duration-200 cursor-pointer active">
-                <a href="{% url 'home' %}">Inicio</a>
-            </li>
-            <li class="p-4 border-b-2 border-customDarkGreen border-opacity-0 hover:border-opacity-100 hover:text-customDarkGreen duration-200 cursor-pointer">
-                <a href="{% url 'municipality_name_list' %}">Municipios</a>
-            </li>
-            <li class="p-4 border-b-2 border-customDarkGreen border-opacity-0 hover:border-opacity-100 hover:text-customDarkGreen duration-200 cursor-pointer">
-                <a href="{% url 'experience_search_page' %}">Buscar Experiencias</a>
-            </li>
-        </ul>
-    </nav>
-
-    <!-- Search bar with filters -->
-    <div class="w-80 ml-auto"> <!-- Increased margin -->
-        <div class="search-container relative font-body">
-            <input type="text" id="search-bar" placeholder="Buscar municipio..." autocomplete="off" class="border p-2 rounded-lg w-full">
-            <button onclick="toggleFilters()" class="absolute right-2 top-2">☰</button>
-            <div id="results" class="absolute bg-white shadow-md rounded-lg mt-2 w-full hidden"></div>
-        </div>
-
-        <!-- Dropdown filters -->
-        <div id="filtersContainer" class="absolute top-16 mt-8 w-80 bg-white shadow-lg rounded-lg p-4 hidden z-50 font-body"> 
-            <h3 class="text-gray-700 font-semibold">¿Qué buscas?</h3>
-            {% for category in categories %}
-                <label class="block text-sm">
-                    <input type="checkbox" name="category" value="{{ category.id }}">
-                    {{ category.name }}
-                </label>
-            {% endfor %}
-
-            <!-- Locations -->
-            <h3 class="mt-3 text-gray-700 font-semibold">¿En qué ubicación?</h3>
-            <button type="button" onclick="toggleLocations()"
-                    class="w-full border border-gray-300 p-2 rounded-lg flex justify-between items-center">
-                <span>Despliega ubicaciones...</span>
-                <span>▼</span>
-            </button>
-
-            <div id="locationsContainer" class="hidden mt-2 border border-gray-300 rounded-lg p-2 text-sm text-gray-600">
-                {% for location in locations %}
-                    <label class="block">
-                        <input type="radio" name="location" value="{{ location }}">
-                        {{ location }}
-                    </label>
-                {% empty %}
-                    <p class="text-gray-500">No hay ubicaciones disponibles.</p>
-                {% endfor %}
+    <header class="header sticky top-0 bg-customGreen shadow-md flex items-center px-8 py-2 text-gray-85 z-50 gap-6 flex-wrap">
+        <!-- Logo -->
+        <h1>
+            <a href="{% url 'home' %}">
+                <img src="{% static 'Abstract_blanco.svg' %}" alt="logo" class="h-20 m-3">
+            </a>
+        </h1>
+    
+        <!-- Navigation -->
+        <nav class="nav font-body font-semibold text-lg text-white ml-auto">
+            <ul class="flex gap-6 items-center">
+                <li class="p-2 border-b-2 border-customDarkGreen border-opacity-0 hover:border-opacity-100 hover:text-customDarkGreen duration-200 cursor-pointer active">
+                    <a href="{% url 'home' %}">Inicio</a>
+                </li>
+                <li class="p-2 border-b-2 border-customDarkGreen border-opacity-0 hover:border-opacity-100 hover:text-customDarkGreen duration-200 cursor-pointer">
+                    <a href="{% url 'municipality_name_list' %}">Municipios</a>
+                </li>
+                <li class="p-2 border-b-2 border-customDarkGreen border-opacity-0 hover:border-opacity-100 hover:text-customDarkGreen duration-200 cursor-pointer">
+                    <a href="{% url 'experience_search_page' %}">Buscar Experiencias</a>
+                </li>
+                  <!-- Nuevo enlace "De Viajero a Viajero" -->
+                <li>
+                    <a href="{% url 'traveler_post_list' %}" class="text-white hover:text-gray-200">De viajero a viajero</a>
+                </li>
+            </ul>
+        </nav>
+    
+        <!-- Search bar with filters -->
+        <div class="w-80 ml-8">
+            <div class="search-container relative font-body mb-2">
+                <input type="text" id="search-bar" placeholder="Buscar municipio..." autocomplete="off" class="border p-2 rounded-lg w-full">
+                <button onclick="toggleFilters()" class="absolute right-2 top-2">☰</button>
+                <div id="results" class="absolute bg-white shadow-md rounded-lg mt-2 w-full hidden"></div>
             </div>
-
-            <!-- Search button -->
-            <button onclick="applyFilters()" 
-        class="bg-green-600 hover:bg-green-700 text-green font-semibold px-4 py-2 rounded-lg w-full mt-2 shadow-md">
-                Buscar
-            </button>
+    
+            <!-- Dropdown filters -->
+            <div id="filtersContainer" class="absolute top-16 mt-8 w-80 bg-white shadow-lg rounded-lg p-4 hidden z-50 font-body"> 
+                <h3 class="text-gray-700 font-semibold">¿Qué buscas?</h3>
+                {% for category in categories %}
+                    <label class="block text-sm">
+                        <input type="checkbox" name="category" value="{{ category.id }}">
+                        {{ category.name }}
+                    </label>
+                {% endfor %}
+    
+                <h3 class="mt-3 text-gray-700 font-semibold">¿En qué ubicación?</h3>
+                <button type="button" onclick="toggleLocations()" class="w-full border border-gray-300 p-2 rounded-lg flex justify-between items-center mt-2">
+                    <span>Despliega ubicaciones...</span>
+                    <span>▼</span>
+                </button>
+    
+                <div id="locationsContainer" class="hidden mt-2 border border-gray-300 rounded-lg p-2 text-sm text-gray-600">
+                    {% for location in locations %}
+                        <label class="block">
+                            <input type="radio" name="location" value="{{ location }}">
+                            {{ location }}
+                        </label>
+                    {% empty %}
+                        <p class="text-gray-500">No hay ubicaciones disponibles.</p>
+                    {% endfor %}
+                </div>
+    
+                <button onclick="applyFilters()" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-lg w-full mt-4 shadow-md">
+                    Buscar
+                </button>
+            </div>
         </div>
-    </div>
+    
+        <!-- Login / Register -->
+        <div class="flex gap-4 ml-8">
+            {% if user.is_authenticated %}
+            <form method="POST" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="bg-customDarkGreen text-white font-semibold px-4 py-2 rounded-lg shadow-md font-body">Cerrar sesión</button>
+            </form>
+            {% else %}
+                <a href="{% url 'login' %}" class="bg-customDarkGreen text-white font-semibold px-4 py-2 rounded-lg shadow-md font-body">Iniciar sesión</a>
+                <a href="{% url 'register' %}" class="bg-customDarkGreen text-white font-semibold px-4 py-2 rounded-lg shadow-md font-body">Registrarse</a>
+            {% endif %}
+        </div>
+    </header>
+    
 
-    <!-- Login button -->
-    <div class="ml-5">
-        <a href="#" class="bg-customDarkGreen text-white font-semibold px-4 py-2 rounded-lg shadow-md font-body">Iniciar sesión</a>
-    </div>
-</header>
+<!-- message config by taildwind -->
+{% if messages %}
+  <div class="fixed top-24 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-md font-body">
+    {% for message in messages %}
+      {% if message.tags == "success" %}
+        <div class="auto-dismiss bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4 shadow-md" role="alert">
+      {% elif message.tags == "error" %}
+        <div class="auto-dismiss bg-red-100 border border-red-400 text-red-700 !text-red-700 px-4 py-3 rounded relative mb-4 shadow-md" role="alert">
+      {% elif message.tags == "warning" %}
+        <div class="auto-dismiss bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative mb-4 shadow-md" role="alert">
+      {% elif message.tags == "info" %}
+        <div class="auto-dismiss bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative mb-4 shadow-md" role="alert">
+      {% else %}
+        <div class="auto-dismiss bg-gray-100 border border-gray-400 text-gray-700 px-4 py-3 rounded relative mb-4 shadow-md" role="alert">
+      {% endif %}
+          <span class="block sm:inline">{{ message }}</span>
+        </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
 
 <!-- Dynamic content -->
 <div>
@@ -170,11 +203,16 @@
 
     // Build the URL to redirect
     let url = `/search/?q=${encodeURIComponent(query)}&location=${encodeURIComponent(selectedLocation)}&categories=${encodeURIComponent(selectedCategories.join(","))}`;
-
+    
+    setTimeout(function () {
+    document.querySelectorAll('.auto-dismiss').forEach(el => el.remove());
+    }, 3000); // this makes the message disappear after 3 seconds
    
     window.location.href = url;
 }
 </script>
+<script src="https://unpkg.com/flowbite@latest/dist/flowbite.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
 
 </body>
 </html>
