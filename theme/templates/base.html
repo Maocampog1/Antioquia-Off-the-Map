@@ -104,24 +104,37 @@
 
 <!-- message config by taildwind -->
 {% if messages %}
-  <div class="fixed top-24 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-md font-body">
+  <div class="mb-6 space-y-2">
     {% for message in messages %}
-      {% if message.tags == "success" %}
-        <div class="auto-dismiss bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4 shadow-md" role="alert">
-      {% elif message.tags == "error" %}
-        <div class="auto-dismiss bg-red-100 border border-red-400 text-red-700 !text-red-700 px-4 py-3 rounded relative mb-4 shadow-md" role="alert">
-      {% elif message.tags == "warning" %}
-        <div class="auto-dismiss bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative mb-4 shadow-md" role="alert">
-      {% elif message.tags == "info" %}
-        <div class="auto-dismiss bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative mb-4 shadow-md" role="alert">
-      {% else %}
-        <div class="auto-dismiss bg-gray-100 border border-gray-400 text-gray-700 px-4 py-3 rounded relative mb-4 shadow-md" role="alert">
-      {% endif %}
-          <span class="block sm:inline">{{ message }}</span>
+      {% if "success" in message.tags %}
+        <div class="auto-dismiss bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg shadow-md" role="alert">
+          <span class="text-sm">✅ {{ message }}</span>
         </div>
+
+      {% elif "error" in message.tags %}
+        <div class="auto-dismiss bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg shadow-md" role="alert">
+          <span class="text-sm">❌ {{ message }}</span>
+        </div>
+
+      {% elif "warning" in message.tags %}
+        <div class="auto-dismiss bg-yellow-100 border border-yellow-400 text-yellow-800 px-4 py-3 rounded-lg shadow-md" role="alert">
+          <span class="text-sm">⚠️ {{ message }}</span>
+        </div>
+
+      {% elif "info" in message.tags %}
+        <div class="auto-dismiss bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded-lg shadow-md" role="alert">
+          <span class="text-sm">ℹ️ {{ message }}</span>
+        </div>
+
+      {% else %}
+        <div class="auto-dismiss bg-gray-100 border border-gray-400 text-gray-700 px-4 py-3 rounded-lg shadow-md" role="alert">
+          <span class="text-sm">💬 {{ message }}</span>
+        </div>
+      {% endif %}
     {% endfor %}
   </div>
 {% endif %}
+
 
 
 <!-- Dynamic content -->
@@ -168,14 +181,15 @@
     });
 
     // Hide results if clicking outside the search bar
-    document.addEventListener("click", function (e) {
-        let searchBar = document.getElementById("search-bar");
-        let resultsDiv = document.getElementById("results");
-
-        if (!searchBar.contains(e.target) && !resultsDiv.contains(e.target)) {
-            resultsDiv.classList.add("hidden");
-        }
+    window.addEventListener('DOMContentLoaded', () => {
+    const alerts = document.querySelectorAll('.auto-dismiss');
+    alerts.forEach(alert => {
+      setTimeout(() => {
+        alert.classList.add('opacity-0', 'transition', 'duration-500');
+        setTimeout(() => alert.remove(), 500);  // Remove from DOM after fade-out
+      }, 4000);
     });
+  });
 
     // Show / Hide filters
     function toggleFilters() {
