@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from .models import Municipality, Event, Activity, Restaurant, Accommodation, Category, Toll, TravelerPost
-from .forms import TravelerPostForm
+from .forms import TravelerPostForm, ReviewForm
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import JsonResponse
 from django.conf import settings
