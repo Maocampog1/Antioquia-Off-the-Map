@@ -213,7 +213,7 @@
     <!-- Customer Reviews Section -->
     <div class="card bg-white shadow-lg rounded-lg mt-8 p-6">
         <div class="card-body">
-            <h2 class="card-title text-3xl font-title">Customer Reviews</h2>
+            <h2 class="card-title text-3xl font-title">Reseñas de viajeros</h2>
             
             <!-- Rating Summary -->
             <div class="flex items-center mb-6">
@@ -225,21 +225,21 @@
                     {% endif %}
                 </div>
                 <div>
-                    <p class="text-gray-600">Based on {{ total_reviews }} reviews</p>
+                    <p class="text-gray-600 font-body">Basado en {{ total_reviews }} reseñas</p>
                 </div>
             </div>
 
             <!-- Rating Distribution -->
             <div class="mb-8">
                 {% for rating in "54321" %}
-                    {% with rating=rating|add:"0" %}  {# Convert string to integer #}
+                    {% with rating=rating|add:"0" %} 
                         <div class="flex items-center mb-2">
-                            <span class="w-10">{{ rating }} ★</span>
+                            <span class="w-10 font-body">{{ rating }} ★</span>
                             <div class="w-full bg-gray-200 rounded-full h-2.5 mx-2">
                                 <div class="bg-yellow-400 h-2.5 rounded-full" 
                                     style="width: {{ rating_distribution|get_item:rating }}%"></div>
                             </div>
-                            <span class="w-10 text-right">{{ rating_distribution|get_item:rating }}%</span>
+                            <span class="w-10 text-right font-body">{{ rating_distribution|get_item:rating }}%</span>
                         </div>
                     {% endwith %}
                 {% endfor %}
@@ -249,36 +249,36 @@
 
             <!-- Share Your Thoughts -->
             <div class="mb-8">
-                <h3 class="text-xl font-semibold mb-4">Share your thoughts</h3>
-                <p class="mb-4">If you've visited {{ municipality.name }}, share your experience with other travelers</p>
+                <h3 class="text-xl mb-4 font-title">Comparte tus pensamientos</h3>
+                <p class="mb-4 font-body">Si visitaste {{ municipality.name }}, comparte tu experiencia con otros viajeros</p>
                 
                 {% if user.is_authenticated %}
                     <button onclick="document.getElementById('review-form').classList.toggle('hidden')" 
                             class="bg-customLightGreen text-customDarkGreen px-4 py-2 rounded-lg shadow-md hover:bg-customGreen font-title">
-                        Write a review
+                        Escribe una reseña
                     </button>
                     
                     <div id="review-form" class="hidden mt-4">
                         <form method="post">
                             {% csrf_token %}
                             <div class="mb-4">
-                                <label class="block text-gray-700 mb-2">Your Rating</label>
+                                <label class="block text-gray-700 mb-2">Tu Calificación</label>
                                 {{ form.rating }}
                             </div>
                             <div class="mb-4">
-                                <label class="block text-gray-700 mb-2">Your Review</label>
+                                <label class="block text-gray-700 mb-2">Tu reseña</label>
                                 {{ form.comment }}
                             </div>
                             <button type="submit" 
                                     class="bg-customGreen text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-700 font-title">
-                                Submit Review
+                                Enviar reseña
                             </button>
                         </form>
                     </div>
                 {% else %}
                     <a href="{% url 'login' %}?next={{ request.path }}" 
                     class="bg-customLightGreen text-customDarkGreen px-4 py-2 rounded-lg shadow-md hover:bg-customGreen font-title">
-                        Login to write a review
+                        Iniciar sesión para dejar una reseña
                     </a>
                 {% endif %}
             </div>
@@ -297,7 +297,7 @@
                         <p class="mt-2 text-gray-700">{{ review.comment }}</p>
                     </div>
                 {% empty %}
-                    <p class="text-gray-500">No reviews yet. Be the first to review!</p>
+                    <p class="text-gray-500">Aún no hay reseñas. ¡Sé el primero en dejar una reseña!</p>
                 {% endfor %}
             </div>
         </div>
