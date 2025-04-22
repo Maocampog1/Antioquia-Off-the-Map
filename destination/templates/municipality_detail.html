@@ -231,15 +231,17 @@
 
             <!-- Rating Distribution -->
             <div class="mb-8">
-                {% for rating in 54321 %}
-                    <div class="flex items-center mb-2">
-                        <span class="w-10">{{ rating }} ★</span>
-                        <div class="w-full bg-gray-200 rounded-full h-2.5 mx-2">
-                            <div class="bg-yellow-400 h-2.5 rounded-full" 
-                                style="width: {{ rating_distribution|get_item:rating }}%"></div>
+                {% for rating in "54321" %}
+                    {% with rating=rating|add:"0" %}  {# Convert string to integer #}
+                        <div class="flex items-center mb-2">
+                            <span class="w-10">{{ rating }} ★</span>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5 mx-2">
+                                <div class="bg-yellow-400 h-2.5 rounded-full" 
+                                    style="width: {{ rating_distribution|get_item:rating }}%"></div>
+                            </div>
+                            <span class="w-10 text-right">{{ rating_distribution|get_item:rating }}%</span>
                         </div>
-                        <span class="w-10 text-right">{{ rating_distribution|get_item:rating }}%</span>
-                    </div>
+                    {% endwith %}
                 {% endfor %}
             </div>
 
