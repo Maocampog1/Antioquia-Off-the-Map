@@ -1,11 +1,13 @@
 from django.contrib.auth.decorators import login_required
 from .models import Municipality, Event, Activity, Restaurant, Accommodation, Category, Toll, TravelerPost
-from .forms import TravelerPostForm
+from .forms import TravelerPostForm, ReviewForm
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import JsonResponse
 from django.conf import settings
+from django.contrib import messages
 import json
 import os
+
 SEARCH_COUNT_PATH = os.path.join('destination/data', 'search_counts.json')
 
 # List of municipality names
@@ -19,7 +21,35 @@ def municipality_detail(request, municipality_id):
     accommodations = municipality.accommodations.all()
     restaurants = municipality.restaurants.all()
     activities = municipality.activities.all()
-    toll = municipality.tolls.all() # FR18 Toll cost information
+    toll = municipality.tolls.all()
+    reviews = municipality.reviews.all().order_by('-created_at')
+    
+    if request.method == 'POST':
+        if not request.user.is_authenticated:
+            messages.error(request, 'You need to be logged in to submit a review.')
+            return redirect('login')
+            
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.municipality = municipality
+            review.user = request.user
+            review.save()
+            messages.success(request, 'Your review has been submitted!')
+            return redirect('municipality_detail', municipality_id=municipality.id)
+    else:
+        form = ReviewForm()
+
+    # Calculate rating percentages
+    total_reviews = reviews.count()
+    rating_distribution = {5: 0, 4: 0, 3: 0, 2: 0, 1: 0}
+    
+    for review in reviews:
+        rating_distribution[review.rating] += 1
+    
+    if total_reviews > 0:
+        for rating in rating_distribution:
+            rating_distribution[rating] = round((rating_distribution[rating] / total_reviews) * 100)
 
     return render(request, 'municipality_detail.html', {
         'municipality': municipality,
@@ -27,7 +57,11 @@ def municipality_detail(request, municipality_id):
         'restaurants': restaurants,
         'activities': activities,
         'toll': toll,
-        "google_maps_api_key": settings.GOOGLE_MAPS_API_KEY # FR04  Interactive maps with routes
+        "google_maps_api_key": settings.GOOGLE_MAPS_API_KEY,
+        'reviews': reviews,
+        'form': form,
+        'total_reviews': total_reviews,
+        'rating_distribution': rating_distribution
     })
 
 # Municipality detail by name

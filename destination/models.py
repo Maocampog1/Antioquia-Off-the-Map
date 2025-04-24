@@ -109,3 +109,21 @@ class TravelerPost(models.Model):
 
     def __str__(self):
         return f"{self.title} - {self.user.username}"
+    
+class Review(models.Model):
+    RATING_CHOICES = [
+        (5, '★★★★★'),
+        (4, '★★★★'),
+        (3, '★★★'),
+        (2, '★★'),
+        (1, '★'),
+    ]
+    
+    municipality = models.ForeignKey(Municipality, on_delete=models.CASCADE, related_name='reviews')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rating = models.IntegerField(choices=RATING_CHOICES)
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.get_rating_display()} - {self.municipality.name}"
