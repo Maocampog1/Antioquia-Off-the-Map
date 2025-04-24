@@ -5,7 +5,16 @@ from django.contrib.auth import logout as django_logout
 from django.contrib import messages
 from .forms import CustomUserCreationForm
 
+# FR11 Login system
 def login_user(request):
+    
+    """
+    Handles user login.
+    If the request method is POST, it authenticates the user with the provided credentials.
+    If the credentials are valid, the user is logged in and redirected to the home page.
+    Otherwise, an error message is displayed, and the user is redirected to the login page.
+    """
+    
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
@@ -20,13 +29,27 @@ def login_user(request):
             return redirect('login')    
     else:
         return render(request, "login.html")
-
+    
+# FR11 Logout system
 def logout_user(request):
+    """
+    Handles user logout.
+    Logs out the current user and redirects them to the home page with a success message.
+    """
     django_logout(request)
     messages.success(request, "¡Cerraste sesión correctamente!")
     return redirect('home')
 
+# FR12 Register system
 def register(request):
+    
+    """
+    Handles user registration.
+    If the request method is POST, it validates the form data and creates a new user.
+    If the form is valid, the user is logged in and redirected to the home page with a success message.
+    If the form is not valid, it displays the errors to the user.
+    If the request method is GET, it renders an empty registration form.
+    """
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():

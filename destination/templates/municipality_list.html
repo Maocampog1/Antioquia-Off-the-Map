@@ -15,13 +15,13 @@
                 Municipio
               </h6>
               <h4 class="mb-2 block font-sans text-2xl font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased">
-                <a href="{% url 'municipality_detail' municipality.id %}" class="hover:text-pink-500 transition-colors">{{ municipality.name }}</a>
+                <a href="{% url 'track_and_redirect' municipality.id %}" class="hover:text-pink-500 transition-colors">{{ municipality.name }}</a>
               </h4>
               <p class="mb-4 block font-sans text-base font-normal leading-relaxed text-gray-700 antialiased">
                 Información adicional sobre el municipio...
               </p>
             </div>
-            <a class="inline-block" href="{% url 'municipality_detail' municipality.id %}">
+            <a class="inline-block" href="{% url 'track_and_redirect' municipality.id %}">
               <button class="flex items-center gap-2 rounded-lg py-1 px-100 text-center text-sm font-bold uppercase text-pink-500 border border-pink-500 transition-all hover:bg-pink-500 hover:text-white active:bg-pink-700" type="button">
                 Ver más
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true" class="h-4 w-4">

@@ -1,8 +1,12 @@
 from django.contrib.auth.decorators import login_required
-from .models import Municipality, Event, Activity, Restaurant, Accommodation, Category, Toll
+from .models import Municipality, Event, Activity, Restaurant, Accommodation, Category, Toll, TravelerPost
+from .forms import TravelerPostForm
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import JsonResponse
 from django.conf import settings
+import json
+import os
+SEARCH_COUNT_PATH = os.path.join('destination/data', 'search_counts.json')
 
 # List of municipality names
 def municipality_name_list(request):
@@ -31,6 +35,36 @@ def municipality_detail_by_name(request, municipality_name):
     municipality = get_object_or_404(Municipality, name=municipality_name)
     return render(request, 'municipality_detail.html', {'municipality': municipality})
 
+# FR13 Data analysis - Search count
+def track_and_redirect(request, municipality_id):
+    municipality = get_object_or_404(Municipality, id=municipality_id)
+
+    # Registrar búsqueda en archivo JSON
+    file_path = SEARCH_COUNT_PATH
+    
+    # Leer archivo si existe
+    if os.path.exists(file_path) and os.path.getsize(file_path) > 0:
+        with open(file_path, 'r', encoding='utf-8') as file:
+            try:
+                search_counts = json.load(file)
+            except json.JSONDecodeError:
+                search_counts = {}
+    else:
+        search_counts = {}
+
+    # Actualizar el conteo
+    name = municipality.name
+    search_counts[name] = search_counts.get(name, 0) + 1
+
+    # Guardar archivo
+    with open(file_path, 'w', encoding='utf-8') as file:
+        json.dump(search_counts, file, indent=2)
+
+    # Redirigir al detalle
+    return redirect('municipality_detail', municipality_id=municipality.id)
+
+
+
 # Real-time search without advanced filters
 def search_municipalities(request):
     query = request.GET.get("q", "").strip()
@@ -56,9 +90,10 @@ def search_municipalities(request):
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         municipalities = municipalities.values("id", "name")  # Only return necessary fields
         return JsonResponse(list(municipalities), safe=False)
-
-    # Redirect to detail page if only one municipality
+    
+    # Redirect to detail page if only one municipality and adds 1 to the search count for the municipality found
     if municipalities.count() == 1:
+
         return redirect('municipality_detail', municipality_id=municipalities.first().id)
 
     # Show list of municipalities if multiple
@@ -98,16 +133,35 @@ def event_calendar(request, municipality_id):
     events = municipality.events.all().order_by("date")  # Order events by date
     return render(request, "municipality_events.html", {"municipality": municipality, "events": events})
 
-# Home page
+# Home page with FR13 functionality added (data anal)
 def home(request):
-    municipalities = Municipality.objects.all()
+    municipalities = list(Municipality.objects.all())
     categories = Category.objects.all()
     locations = Municipality.objects.values_list('location', flat=True).distinct()
+
+    # Ruta al archivo JSON
+    json_path = SEARCH_COUNT_PATH
+
+    # Cargar los conteos
+    if os.path.exists(json_path):
+        with open(json_path, 'r') as f:
+            counts = json.load(f)
+    else:
+        counts = {}
+
+    # Añadir el contador a cada municipio (si no hay, valor 0)
+    for m in municipalities:
+        m.search_count = counts.get(m.name, 0)
+
+    # Ordenar municipios de menor a mayor
+    municipalities.sort(key=lambda x: x.search_count)
+
     return render(request, 'home.html', {
         'municipalities': municipalities,
         'categories': categories,
         'locations': locations
     })
+
 
 # Site base
 def base(request):
@@ -165,3 +219,32 @@ def search_experiences(request):
         )
 
     return JsonResponse(results) 
+
+##########
+# User-generated content system (FR08) ##########
+def traveler_post_list_and_create(request):
+    posts = TravelerPost.objects.all().order_by('-created_at')
+    
+    if request.method == 'POST':
+        form = TravelerPostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = request.user
+            post.save()
+            form.save_m2m()
+            return redirect('traveler_post_list')
+    else:
+        form = TravelerPostForm()
+
+    # Ruta corregida de la plantilla
+    return render(request, 'from-traveler-to-traveler.html', {
+        'posts': posts,
+        'form': form
+    })
+
+@login_required
+def delete_post(request, post_id):
+    post = get_object_or_404(TravelerPost, id=post_id)
+    if post.user == request.user:
+        post.delete()
+    return redirect('traveler_post_list')

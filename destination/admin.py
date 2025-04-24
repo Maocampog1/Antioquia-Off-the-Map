@@ -6,6 +6,9 @@ from .models import Category
 from .models import Restaurant
 from .models import Activity 
 from .models import Toll
+from .models import TravelerPost
+
+admin.site.register(TravelerPost)
 
 class MunicipalityAdmin(admin.ModelAdmin):
     list_display = ('name', 'location')
