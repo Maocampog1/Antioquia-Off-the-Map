@@ -3388,6 +3388,14 @@ details.collapse summary::-webkit-details-marker {
   margin-bottom: 1.5rem;
 }
 
+.mb-5 {
+  margin-bottom: 1.25rem;
+}
+
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+
 .mb-8 {
   margin-bottom: 2rem;
 }
@@ -3430,6 +3438,10 @@ details.collapse summary::-webkit-details-marker {
 
 .mt-4 {
   margin-top: 1rem;
+}
+
+.mt-5 {
+  margin-top: 1.25rem;
 }
 
 .mt-5 {
@@ -3771,7 +3783,7 @@ details.collapse summary::-webkit-details-marker {
   border-color: rgb(96 165 250 / var(--tw-border-opacity, 1));
 }
 
-.border-customDarkGreen {
+.border-customGreen {
   --tw-border-opacity: 1;
   border-color: rgb(38 72 22 / var(--tw-border-opacity, 1));
 }
@@ -3794,6 +3806,11 @@ details.collapse summary::-webkit-details-marker {
 .border-gray-300 {
   --tw-border-opacity: 1;
   border-color: rgb(209 213 219 / var(--tw-border-opacity, 1));
+}
+
+.border-gray-400 {
+  --tw-border-opacity: 1;
+  border-color: rgb(156 163 175 / var(--tw-border-opacity, 1));
 }
 
 .border-gray-400 {
@@ -3888,19 +3905,9 @@ details.collapse summary::-webkit-details-marker {
   background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1));
 }
 
-.bg-gray-200 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(229 231 235 / var(--tw-bg-opacity, 1));
-}
-
 .bg-gray-50 {
   --tw-bg-opacity: 1;
   background-color: rgb(249 250 251 / var(--tw-bg-opacity, 1));
-}
-
-.bg-green-100 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(220 252 231 / var(--tw-bg-opacity, 1));
 }
 
 .bg-green-500 {
@@ -3911,6 +3918,11 @@ details.collapse summary::-webkit-details-marker {
 .bg-green-600 {
   --tw-bg-opacity: 1;
   background-color: rgb(22 163 74 / var(--tw-bg-opacity, 1));
+}
+
+.bg-red-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 226 226 / var(--tw-bg-opacity, 1));
 }
 
 .bg-red-100 {
@@ -3957,6 +3969,10 @@ details.collapse summary::-webkit-details-marker {
   background-clip: border-box;
 }
 
+.bg-center {
+  background-position: center;
+}
+
 .object-cover {
   -o-object-fit: cover;
      object-fit: cover;
@@ -3966,8 +3982,16 @@ details.collapse summary::-webkit-details-marker {
   padding: 2.5rem;
 }
 
+.p-10 {
+  padding: 2.5rem;
+}
+
 .p-2 {
   padding: 0.5rem;
+}
+
+.p-3 {
+  padding: 0.75rem;
 }
 
 .p-3 {
@@ -4165,6 +4189,10 @@ details.collapse summary::-webkit-details-marker {
 
 .leading-snug {
   line-height: 1.375;
+}
+
+.leading-tight {
+  line-height: 1.25;
 }
 
 .tracking-normal {
@@ -4370,7 +4398,9 @@ details.collapse summary::-webkit-details-marker {
 }
 
 .hover\:bg-customGreen:hover {
+.hover\:bg-customGreen:hover {
   --tw-bg-opacity: 1;
+  background-color: rgb(100 174 65 / var(--tw-bg-opacity, 1));
   background-color: rgb(100 174 65 / var(--tw-bg-opacity, 1));
 }
 
@@ -4399,6 +4429,7 @@ details.collapse summary::-webkit-details-marker {
   color: rgb(38 72 22 / var(--tw-text-opacity, 1));
 }
 
+.hover\:text-customGreen:hover {
 .hover\:text-customGreen:hover {
   --tw-text-opacity: 1;
   color: rgb(100 174 65 / var(--tw-text-opacity, 1));
@@ -4445,10 +4476,13 @@ details.collapse summary::-webkit-details-marker {
 }
 
 .focus\:ring-customGreen:focus {
+.focus\:ring-customGreen:focus {
   --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(100 174 65 / var(--tw-ring-opacity, 1));
   --tw-ring-color: rgb(100 174 65 / var(--tw-ring-opacity, 1));
 }
 
+.focus\:ring-green-500:focus {
 .focus\:ring-green-500:focus {
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(34 197 94 / var(--tw-ring-opacity, 1));
