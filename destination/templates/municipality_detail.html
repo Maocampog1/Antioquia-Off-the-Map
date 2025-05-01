@@ -7,16 +7,33 @@
 
 <title>{{ municipality.name }}</title>
 <div class="max-w-5xl mx-auto px-6 py-5">
-    <!-- Hero Section -->
-    <div class="hero h-96 rounded-lg shadow-lg overflow-hidden" style="background-image: url('{{ municipality.image.url }}');">
-        <div class="hero-overlay bg-opacity-60"></div>
-        <div class="hero-content text-center text-white">
-            <div>
-                <h1 class="text-4xl font-title">{{ municipality.name }}</h1>
-                <p class="mt-2 text-lg font-title">{{ municipality.location }}</p>
-            </div>
+    
+
+<!-- Hero Section (ya existente) -->
+<div class="hero h-96 rounded-lg shadow-lg overflow-hidden" style="background-image: url('{{ municipality.image.url }}');">
+    <div class="hero-overlay bg-opacity-60"></div>
+    <div class="hero-content text-center text-white">
+        <div>
+            <h1 class="text-4xl font-title">{{ municipality.name }}</h1>
+            <p class="mt-2 text-lg font-title">{{ municipality.location }}</p>
         </div>
     </div>
+</div>
+
+<!-- Botón Like alineado a la derecha -->
+<div class="mt-4 flex justify-end">
+    {% if user.is_authenticated %}
+        <button class="text-2xl bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:shadow-lg transition-all favorite-btn"
+                data-municipality-id="{{ municipality.id }}"
+                style="{% if municipality.id in user_favorites %}color: red;{% else %}color: gray;{% endif %}">
+            {% if municipality.id in user_favorites %}♥{% else %}♡{% endif %}
+        </button>
+    {% endif %}
+</div>
+
+<!-- Continuar con el contenido existente... -->
+
+
 
        <!-- Municipality Details -->
         <div class="card bg-white shadow-lg rounded-lg mt-8 p-6">
@@ -362,5 +379,6 @@
     }
 
 </script>
+
 
 {% endblock %}

@@ -15,9 +15,10 @@
                     <span class="text-white font-bold">{{ favorite.municipality.name|upper }}</span>
                 </div>
             </a>
-            <button class="absolute top-2 right-2 text-red-500 hover:text-red-700 favorite-btn" 
-                    data-municipality-id="{{ favorite.municipality.id }}">
-                ❤️
+            <button class="absolute top-2 right-2 z-10 text-2xl w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-md hover:shadow-lg transition-all favorite-btn"
+                    data-municipality-id="{{ favorite.municipality.id }}"
+                    style="color: red;">
+                ♥
             </button>
         </div>
         {% endfor %}
