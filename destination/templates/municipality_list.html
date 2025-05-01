@@ -11,9 +11,19 @@
     <!-- Municipality Cards Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for municipality in municipalities %}
-        <div class="rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105">
+        <div class="relative rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105 group">
+            <!-- Favorite Button - A la derecha arriba -->
+            {% if user.is_authenticated %}
+            <button class="absolute top-2 right-2 z-10 text-2xl bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:shadow-lg transition-all favorite-btn"
+                    data-municipality-id="{{ municipality.id }}"
+                    style="{% if municipality.id in user_favorites %}color: red;{% else %}color: gray;{% endif %}">
+                {% if municipality.id in user_favorites %}♥{% else %}♡{% endif %}
+            </button>
+            {% endif %}
+            
             <!-- Image -->
-            <img src="{{ municipality.image.url }}" alt="{{ municipality.name }}" class="w-full h-56 object-cover">
+            <img src="{{ municipality.image.url }}" alt="{{ municipality.name }}" 
+                 class="w-full h-56 object-cover group-hover:brightness-90 transition duration-300">
             
             <!-- Content -->
             <div class="p-4">
@@ -23,14 +33,14 @@
             <!-- View More Button -->
             <div class="p-4 pt-0">
                 <a href="{% url 'municipality_detail' municipality.id %}" 
-                class="block text-center bg-customLightGreen text-customDarkGreen font-semibold font-body py-2 rounded">
+                class="block text-center bg-customLightGreen hover:bg-customDarkGreen hover:text-white text-customDarkGreen font-semibold font-body py-2 rounded transition duration-200">
                     Ver más
                 </a>
             </div>
         </div>
         
         {% empty %}
-        <p class="text-center text-gray-600">No municipalities found.</p>
+        <p class="text-center text-gray-600">No se encontraron municipios</p>
         {% endfor %}
     </div>
 </div>

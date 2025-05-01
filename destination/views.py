@@ -13,14 +13,17 @@ SEARCH_COUNT_PATH = os.path.join('destination/data', 'search_counts.json')
 
 def municipality_name_list(request):
     municipalities = Municipality.objects.all()
-    favorites = []
-
+    user_favorites = set()
+    
     if request.user.is_authenticated:
-        favorites = request.user.favorites.all()  # ← ¡Aquí el cambio!
-
+        # Obtenemos solo los IDs de los municipios favoritos para mayor eficiencia
+        user_favorites = set(
+            request.user.favorites.values_list('municipality_id', flat=True)
+        )
+    
     return render(request, 'municipality_list.html', {
         'municipalities': municipalities,
-        'favorites': favorites,
+        'user_favorites': user_favorites  # Pasamos un set con los IDs
     })
 
 # Municipality detail by ID

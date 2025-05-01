@@ -235,52 +235,62 @@
 </script>
 <script src="https://unpkg.com/flowbite@latest/dist/flowbite.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const csrftoken = document.querySelector('[name=csrf-token]').content;
-
-            document.querySelectorAll('.favorite-btn').forEach(button => {
-                button.addEventListener('click', async function (e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-
-                    const municipalityId = this.getAttribute('data-municipality-id');
-
-                    try {
-                        const response = await fetch(`/toggle-favorite/${municipalityId}/`, {
-                            method: 'POST',
-                            headers: {
-                                'X-CSRFToken': csrftoken,
-                                'X-Requested-With': 'XMLHttpRequest',
-                                'Accept': 'application/json',
-                                'Content-Type': 'application/json'
-                            },
-                            credentials: 'same-origin'
-                        });
-
-                        if (!response.ok) throw new Error('Error en la solicitud');
-
-                        const data = await response.json();
-
-                        // Cambia la apariencia del botón
-                        if (data.is_favorite) {
-                            this.style.color = 'red';
-                            this.innerHTML = '♥';
-                        } else {
-                            this.style.color = 'gray';
-                            this.innerHTML = '♡';
-                        }
-
-                    } catch (error) {
-                        console.error('Error:', error);
-                        alert('Debes iniciar sesión para guardar favoritos');
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    
+        // Manejar clicks en botones de favoritos
+        document.querySelectorAll('.favorite-btn').forEach(button => {
+            button.addEventListener('click', async function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const municipalityId = this.getAttribute('data-municipality-id');
+                const isFavorite = this.innerHTML.trim() === '♥';
+                
+                try {
+                    const response = await fetch(`/toggle-favorite/${municipalityId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': csrftoken,
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        credentials: 'same-origin'
+                    });
+                    
+                    if (!response.ok) throw new Error('Error en la solicitud');
+                    
+                    const data = await response.json();
+                    
+                    // Actualizar apariencia del botón
+                    if (data.is_favorite) {
+                        this.innerHTML = '♥';
+                        this.style.color = 'red';
+                    } else {
+                        this.innerHTML = '♡';
+                        this.style.color = 'gray';
                     }
-                });
+                    
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Debes iniciar sesión para guardar favoritos');
+                }
             });
         });
+    
+        // Tu código existente de búsqueda
+        document.getElementById("search-bar").addEventListener("input", function() {
+            // ... (mantén tu código de búsqueda existente)
+        });
+    
+        // Resto de tus funciones existentes
+        function toggleFilters() { /* ... */ }
+        function toggleLocations() { /* ... */ }
+        function applyFilters() { /* ... */ }
+    });
     </script>
-
 </body>
 
 </html>
