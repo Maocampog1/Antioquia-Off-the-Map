@@ -1,7 +1,10 @@
 {% load static tailwind_tags %}
+{% csrf_token %}
 <!DOCTYPE html>
 <html lang="es" class="bg-customWhite">
 <head>
+    <meta name="csrf-token" content="{{ csrf_token }}">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -35,7 +38,7 @@
     
         <!-- Navigation -->
         <nav class="nav font-body font-semibold text-lg text-white ml-auto">
-            <ul class="flex gap-6 items-center">
+            <ul class="flex items-center gap-4 whitespace-nowrap">
                 <li class="p-2 border-b-2 border-customDarkGreen border-opacity-0 hover:border-opacity-100 hover:text-customDarkGreen duration-200 cursor-pointer active">
                     <a href="{% url 'home' %}">Inicio</a>
                 </li>
@@ -45,12 +48,17 @@
                 <li class="p-2 border-b-2 border-customDarkGreen border-opacity-0 hover:border-opacity-100 hover:text-customDarkGreen duration-200 cursor-pointer">
                     <a href="{% url 'experience_search_page' %}">Buscar Experiencias</a>
                 </li>
-                  <!-- Nuevo enlace "De Viajero a Viajero" -->
-                <li>
-                    <a href="{% url 'traveler_post_list' %}" class="text-white hover:text-gray-200">De viajero a viajero</a>
+                <li class="p-2 hover:text-gray-200 duration-200 cursor-pointer">
+                    <a href="{% url 'traveler_post_list' %}">De viajero a viajero</a>
+                </li>
+                <li class="p-2">
+                    <a href="{% url 'favorites_list' %}" title="Mis Favoritos">
+                        <i class="fa-solid fa-heart text-white hover:text-red-500"></i>
+                    </a>
                 </li>
             </ul>
         </nav>
+        
     
         <!-- Search bar with filters -->
         <div class="w-80 ml-8">
@@ -227,6 +235,62 @@
 </script>
 <script src="https://unpkg.com/flowbite@latest/dist/flowbite.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
-
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    
+        // Manejar clicks en botones de favoritos
+        document.querySelectorAll('.favorite-btn').forEach(button => {
+            button.addEventListener('click', async function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const municipalityId = this.getAttribute('data-municipality-id');
+                const isFavorite = this.innerHTML.trim() === '♥';
+                
+                try {
+                    const response = await fetch(`/toggle-favorite/${municipalityId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': csrftoken,
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        credentials: 'same-origin'
+                    });
+                    
+                    if (!response.ok) throw new Error('Error en la solicitud');
+                    
+                    const data = await response.json();
+                    
+                    // Actualizar apariencia del botón
+                    if (data.is_favorite) {
+                        this.innerHTML = '♥';
+                        this.style.color = 'red';
+                    } else {
+                        this.innerHTML = '♡';
+                        this.style.color = 'gray';
+                    }
+                    
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Debes iniciar sesión para guardar favoritos');
+                }
+            });
+        });
+    
+        // Tu código existente de búsqueda
+        document.getElementById("search-bar").addEventListener("input", function() {
+            // ... (mantén tu código de búsqueda existente)
+        });
+    
+        // Resto de tus funciones existentes
+        function toggleFilters() { /* ... */ }
+        function toggleLocations() { /* ... */ }
+        function applyFilters() { /* ... */ }
+    });
+    </script>
 </body>
+
 </html>

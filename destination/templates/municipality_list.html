@@ -1,39 +1,48 @@
-{% extends 'base.html' %}
+{% extends 'base.html'%}
 
 {% block content %}
-  <h2 class="mb-8 text-center text-2xl font-bold">Municipios encontrados</h2>
-  {% if municipalities %}
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-      {% for municipality in municipalities %}
-        <div class="relative flex flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
-          <div class="relative overflow-hidden rounded-t-xl bg-white bg-clip-border text-gray-700">
-            <img src="{{ municipality.image.url }}" alt="{{ municipality.name }}" class="h-64 w-full object-cover" />
-          </div>
-          <div class="p-6 flex flex-col justify-between">
-            <div>
-              <h6 class="mb-2 block font-sans text-sm font-semibold uppercase tracking-wide text-pink-500 antialiased">
-                Municipio
-              </h6>
-              <h4 class="mb-2 block font-sans text-2xl font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased">
-                <a href="{% url 'track_and_redirect' municipality.id %}" class="hover:text-pink-500 transition-colors">{{ municipality.name }}</a>
-              </h4>
-              <p class="mb-4 block font-sans text-base font-normal leading-relaxed text-gray-700 antialiased">
-                Información adicional sobre el municipio...
-              </p>
+
+<title>Municipios</title>
+
+<div class="max-w-7xl mx-auto px-6 py-10">
+    <!-- Page Title -->
+    <h1 class="text-4xl font-title text-center text-customDarkGreen mb-8">Explora los municipios</h1>
+
+    <!-- Municipality Cards Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for municipality in municipalities %}
+        <div class="relative rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105 group">
+            <!-- Favorite Button - A la derecha arriba -->
+            {% if user.is_authenticated %}
+            <button class="absolute top-2 right-2 z-10 text-2xl bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:shadow-lg transition-all favorite-btn"
+                    data-municipality-id="{{ municipality.id }}"
+                    style="{% if municipality.id in user_favorites %}color: red;{% else %}color: gray;{% endif %}">
+                {% if municipality.id in user_favorites %}♥{% else %}♡{% endif %}
+            </button>
+            {% endif %}
+            
+            <!-- Image -->
+            <img src="{{ municipality.image.url }}" alt="{{ municipality.name }}" 
+                 class="w-full h-56 object-cover group-hover:brightness-90 transition duration-300">
+            
+            <!-- Content -->
+            <div class="p-4">
+                <h2 class="text-xl text-customDarkGreen text-center font-title">{{ municipality.name }}</h2>
             </div>
-            <a class="inline-block" href="{% url 'track_and_redirect' municipality.id %}">
-              <button class="flex items-center gap-2 rounded-lg py-1 px-100 text-center text-sm font-bold uppercase text-pink-500 border border-pink-500 transition-all hover:bg-pink-500 hover:text-white active:bg-pink-700" type="button">
-                Ver más
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true" class="h-4 w-4">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"></path>
-                </svg>
-              </button>
-            </a>
-          </div>
+
+            <!-- View More Button -->
+            <div class="p-4 pt-0">
+                <a href="{% url 'municipality_detail' municipality.id %}" 
+                class="block text-center bg-customLightGreen hover:bg-customDarkGreen hover:text-white text-customDarkGreen font-semibold font-body py-2 rounded transition duration-200">
+                    Ver más
+                </a>
+            </div>
         </div>
-      {% endfor %}
+        
+        {% empty %}
+        <p class="text-center text-gray-600">No se encontraron municipios</p>
+        {% endfor %}
     </div>
-  {% else %}
-    <p class="text-center text-gray-500">No municipalities found with these filters.</p>
-  {% endif %}
+</div>
+
 {% endblock %}
