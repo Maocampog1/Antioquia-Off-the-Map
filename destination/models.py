@@ -62,7 +62,8 @@ class Restaurant(models.Model):
     cuisine_type = models.CharField(max_length=255)
     contact_info = models.CharField(max_length=255)
     municipality = models.ForeignKey(Municipality, on_delete=models.CASCADE, related_name='restaurants')
-
+    image = models.ImageField(upload_to='restaurants/', null=True, blank=True) 
+    
 class Activity(models.Model):
     municipality = models.ForeignKey(Municipality, on_delete=models.CASCADE, related_name='activities')
     name = models.CharField(max_length=255)
