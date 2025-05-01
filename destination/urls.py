@@ -1,6 +1,6 @@
 from . import views
 from django.urls import path
-from .views import municipality_detail, search_municipalities, filtered_search_municipalities, experience_search_page, search_experiences, track_and_redirect 
+from .views import municipality_detail, search_municipalities, filtered_search_municipalities, experience_search_page, search_experiences, track_and_redirect,toggle_favorite, favorite_list 
 
 urlpatterns = [
     path('municipalities/names', views.municipality_name_list, name='municipality_name_list'),
@@ -15,4 +15,6 @@ urlpatterns = [
     path('traveler-posts/', views.traveler_post_list_and_create, name='traveler_post_list'),
     path('traveler-posts/delete/<int:post_id>/', views.delete_post, name='delete_post'),
     path('track/<int:municipality_id>/', views.track_and_redirect, name='track_and_redirect'),
+    path('favorites/', favorite_list, name='favorites_list'),
+    path('toggle-favorite/<int:municipality_id>/', toggle_favorite, name='toggle_favorite'),
 ]

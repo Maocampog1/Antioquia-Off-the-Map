@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from .models import Municipality, Event, Activity, Restaurant, Accommodation, Category, Toll, TravelerPost
+from .models import Municipality, Event, Activity, Restaurant, Accommodation, Category, Toll, TravelerPost,Favorite
 from .forms import TravelerPostForm, ReviewForm
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import JsonResponse
@@ -8,12 +8,20 @@ from django.contrib import messages
 import json
 import os
 
+
 SEARCH_COUNT_PATH = os.path.join('destination/data', 'search_counts.json')
 
-# List of municipality names
 def municipality_name_list(request):
     municipalities = Municipality.objects.all()
-    return render(request, 'municipalities_name_list.html', {'municipalities': municipalities})
+    favorites = []
+
+    if request.user.is_authenticated:
+        favorites = request.user.favorites.all()  # ← ¡Aquí el cambio!
+
+    return render(request, 'municipality_list.html', {
+        'municipalities': municipalities,
+        'favorites': favorites,
+    })
 
 # Municipality detail by ID
 def municipality_detail(request, municipality_id):
@@ -282,3 +290,44 @@ def delete_post(request, post_id):
     if post.user == request.user:
         post.delete()
     return redirect('traveler_post_list')
+
+####(FR19) Favorites system
+@login_required
+def toggle_favorite(request, municipality_id):
+    if not request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+
+        return JsonResponse({'error': 'Invalid request'}, status=400)
+        
+    try:
+        municipality = Municipality.objects.get(id=municipality_id)
+        favorite, created = Favorite.objects.get_or_create(
+            user=request.user,
+            municipality=municipality
+        )
+        
+        if not created:
+            favorite.delete()
+            return JsonResponse({'status': 'removed', 'is_favorite': False})
+        
+        return JsonResponse({'status': 'added', 'is_favorite': True})
+        
+    except Municipality.DoesNotExist:
+        return JsonResponse({'error': 'Municipality not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+
+@login_required
+def favorite_list(request):
+    favorites = Favorite.objects.filter(user=request.user).select_related('municipality')
+    return render(request, 'favorites.html', {'favorites': favorites})
+
+def home(request):
+    municipalities = Municipality.objects.all()
+    user_favorites = []
+    if request.user.is_authenticated:
+        user_favorites = request.user.favorites.values_list('municipality_id', flat=True)
+    return render(request, 'home.html', {
+        'municipalities': municipalities,
+        'user_favorites': set(user_favorites)
+    })

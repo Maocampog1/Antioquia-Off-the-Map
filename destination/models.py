@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.conf import settings  
 
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -127,3 +128,22 @@ class Review(models.Model):
     
     def __str__(self):
         return f"{self.user.username} - {self.get_rating_display()} - {self.municipality.name}"
+
+####(FR19) Favorites system
+
+class Favorite(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE,
+        related_name='favorites'  # <--- esto es lo que faltaba
+    )
+    municipality = models.ForeignKey('Municipality', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'municipality')
+        verbose_name = 'Favorite'
+        verbose_name_plural = 'Favorites'
+
+    def __str__(self):
+        return f"{self.user.username} likes {self.municipality.name}"

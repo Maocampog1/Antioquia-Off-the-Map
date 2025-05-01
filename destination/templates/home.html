@@ -28,20 +28,30 @@
 <!-- Images and links container -->
 <div class="grid grid-cols-2 md:grid-cols-3 gap-4 px-4 mb-8">
     {% for municipality in municipalities %}
-    <a href="{% url 'municipality_detail' municipality.id %}" class="block">
-        <div class="relative rounded-lg overflow-hidden shadow-lg">
+    <div class="relative rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+        <a href="{% url 'municipality_detail' municipality.id %}" class="block">
             <!-- Image -->
-            <img src="{{municipality.image.url}}" alt="{{ municipality.name }}" class="w-full h-48 object-cover">
+            <img src="{{municipality.image.url}}" alt="{{ municipality.name }}" 
+                 class="w-full h-48 object-cover hover:scale-105 transition-transform duration-300">
     
             <!-- Dark layer -->
-            <div class="absolute inset-0 bg-black/50"></div>
+            <div class="absolute inset-0 bg-black/50 hover:bg-black/40 transition-all"></div>
     
             <!-- Center text -->
             <div class="absolute inset-0 flex items-center justify-center">
-                <span class="text-white font-bold">{{ municipality.name|upper }}</span>
+                <span class="text-white font-bold text-lg drop-shadow-lg">{{ municipality.name|upper }}</span>
             </div>
-        </div>
-    </a>
+        </a>
+        
+        <!-- Favorite button -->
+        {% if user.is_authenticated %}
+        <button class="absolute top-2 right-2 text-2xl favorite-btn hover:scale-110 transition-transform"
+                data-municipality-id="{{ municipality.id }}"
+                {% if municipality.id in user_favorites %}style="color: red;"{% endif %}>
+            ♥
+        </button>
+        {% endif %}
+    </div>
     {% endfor %}
-</div> 
+</div>
 {% endblock %}
