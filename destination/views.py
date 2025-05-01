@@ -16,14 +16,14 @@ def municipality_name_list(request):
     user_favorites = set()
     
     if request.user.is_authenticated:
-        # Obtenemos solo los IDs de los municipios favoritos para mayor eficiencia
+        
         user_favorites = set(
             request.user.favorites.values_list('municipality_id', flat=True)
         )
     
     return render(request, 'municipality_list.html', {
         'municipalities': municipalities,
-        'user_favorites': user_favorites  # Pasamos un set con los IDs
+        'user_favorites': user_favorites  
     })
 
 # Municipality detail by ID
@@ -184,21 +184,18 @@ def home(request):
     categories = Category.objects.all()
     locations = Municipality.objects.values_list('location', flat=True).distinct()
 
-    # Ruta al archivo JSON
     json_path = SEARCH_COUNT_PATH
 
-    # Cargar los conteos
+   
     if os.path.exists(json_path):
         with open(json_path, 'r') as f:
             counts = json.load(f)
     else:
         counts = {}
 
-    # Añadir el contador a cada municipio (si no hay, valor 0)
+   
     for m in municipalities:
         m.search_count = counts.get(m.name, 0)
-
-    # Ordenar municipios de menor a mayor
     municipalities.sort(key=lambda x: x.search_count)
 
     return render(request, 'home.html', {
@@ -281,7 +278,7 @@ def traveler_post_list_and_create(request):
     else:
         form = TravelerPostForm()
 
-    # Ruta corregida de la plantilla
+    
     return render(request, 'from-traveler-to-traveler.html', {
         'posts': posts,
         'form': form

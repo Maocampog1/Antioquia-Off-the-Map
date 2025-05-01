@@ -135,7 +135,7 @@ class Favorite(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
         on_delete=models.CASCADE,
-        related_name='favorites'  # <--- esto es lo que faltaba
+        related_name='favorites'  
     )
     municipality = models.ForeignKey('Municipality', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
