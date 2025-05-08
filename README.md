@@ -7,6 +7,7 @@ Follow these steps to set up and run the project locally.
 ### Requirements
 
 - Python
+- NodeJs
 - A Google Maps API Key
 
 **1. Clone the repository**
