@@ -1,182 +1,238 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="max-w-6xl mx-auto px-4 py-8">
+<div class="min-h-screen bg-[#f3f4f6] py-10">
+  <div class="max-w-7xl mx-auto px-2">
     <!-- Title card with description and categories -->
     <div class="bg-white rounded-xl shadow-md p-6 mb-8">
-        <h2 class="text-2xl font-bold mb-4 text-center text-[#2E8B57]">Publicaciones de Viajeros</h2>
-        <p class="text-gray-700 text-center">
-            Este espacio es para que cuentes a la comunidad de Antioquia off the map: tips de viaje, experiencias, 
-            anécdotas que pueden ser muy útiles a otros viajeros. Recuerda categorizar bien tus publicaciones 
-            y sé muy respetuoso con lo que publicas.
-        </p>
-        
-            <!-- Category tags with icons -->
-        <div class="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 text-center">
-          
-            <span class="bg-[#b0da9c] rounded-full px-3 py-1 text-xs flex items-center justify-center gap-1">
-                <i class="fas fa-car text-xs"></i>
-                Movilidad
-            </span>
-            
-           
-            <span class="bg-[#B0DA9C] rounded-full px-3 py-1 text-xs flex items-center justify-center gap-1">
-                <i class="fas fa-map-marked-alt text-xs"></i>
-                Experiencia
-            </span>
-            
-            
-            <span class="bg-[#B0DA9C] rounded-full px-3 py-1 text-xs flex items-center justify-center gap-1">
-                <i class="fas fa-wallet text-xs"></i>
-                Presupuesto
-            </span>
-            
-          
-            <span class="bg-[#B0DA9C] rounded-full px-3 py-1 text-xs flex items-center justify-center gap-1">
-                <i class="fas fa-thumbs-up text-xs"></i>
-                Recomendados
-            </span>
-            
-         
-            <span class="bg-[#B0DA9C] rounded-full px-3 py-1 text-xs flex items-center justify-center gap-1">
-                <i class="fas fa-comment-dots text-xs"></i>
-                Anécdota
-            </span>
-            
-            
-            <span class="bg-[#B0DA9C] rounded-full px-3 py-1 text-xs flex items-center justify-center gap-1">
-                <i class="fas fa-lightbulb text-xs"></i>
-                Consejo
-            </span>
-        </div>
+      <h2 class="text-2xl font-bold mb-4 text-center text-[#2E8B57]">Publicaciones de Viajeros</h2>
+      <p class="text-gray-700 text-center">
+        Este espacio es para que cuentes a la comunidad de Antioquia off the map: tips de viaje, experiencias, 
+        anécdotas que pueden ser muy útiles a otros viajeros. Recuerda categorizar bien tus publicaciones 
+        y sé muy respetuoso con lo que publicas.
+      </p>
+      <div class="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 text-center">
+        <span class="bg-[#b0da9c] rounded-full px-3 py-1 text-xs flex items-center justify-center gap-1">
+          <i class="fas fa-car text-xs"></i>
+          Movilidad
+        </span>
+        <span class="bg-[#B0DA9C] rounded-full px-3 py-1 text-xs flex items-center justify-center gap-1">
+          <i class="fas fa-map-marked-alt text-xs"></i>
+          Experiencia
+        </span>
+        <span class="bg-[#B0DA9C] rounded-full px-3 py-1 text-xs flex items-center justify-center gap-1">
+          <i class="fas fa-wallet text-xs"></i>
+          Presupuesto
+        </span>
+        <span class="bg-[#B0DA9C] rounded-full px-3 py-1 text-xs flex items-center justify-center gap-1">
+          <i class="fas fa-thumbs-up text-xs"></i>
+          Recomendados
+        </span>
+        <span class="bg-[#B0DA9C] rounded-full px-3 py-1 text-xs flex items-center justify-center gap-1">
+          <i class="fas fa-comment-dots text-xs"></i>
+          Anécdota
+        </span>
+        <span class="bg-[#B0DA9C] rounded-full px-3 py-1 text-xs flex items-center justify-center gap-1">
+          <i class="fas fa-lightbulb text-xs"></i>
+          Consejo
+        </span>
+      </div>
     </div>
 
-    <!-- Posts grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {% for post in posts %}
-        <div class="bg-white rounded-2xl shadow-md p-4 flex flex-col h-full">
-            <!-- Image container (shows all available images) -->
-            {% if post.image or post.image2 or post.image3 %}
-            <div class="mb-4 space-y-2">
-                {% if post.image %}
-                <img src="{{ post.image.url }}" class="w-full h-auto rounded-lg object-cover max-h-64" alt="Imagen del post">
-                {% endif %}
-                
-                {% if post.image2 %}
-                <img src="{{ post.image2.url }}" class="w-full h-auto rounded-lg object-cover max-h-64" alt="Imagen 2 del post">
-                {% endif %}
-                
-                {% if post.image3 %}
-                <img src="{{ post.image3.url }}" class="w-full h-auto rounded-lg object-cover max-h-64" alt="Imagen 3 del post">
-                {% endif %}
+    <!-- Posts feed -->
+    <div class="flex flex-col gap-8">
+      {% for post in posts %}
+      <div class="group bg-white rounded-2xl shadow-md hover:shadow-2xl transition-shadow duration-300 flex flex-col md:flex-row border border-gray-100 overflow-hidden relative">
+        <!-- Imagen/Carrusel a la izquierda (65%) -->
+        <div class="md:w-[65%] w-full bg-gray-100 flex items-center justify-center min-h-[220px] md:min-h-[320px] p-2">
+          <div class="relative w-full">
+            <div class="carousel w-full h-56 md:h-80 flex items-center justify-center" id="carousel-{{ forloop.counter }}">
+              {% if post.image %}
+                <img src="{{ post.image.url }}" class="carousel-img w-full h-56 md:h-80 object-contain rounded-xl transition-all duration-500 bg-gray-100" style="display:block;" alt="Imagen principal de la publicación {{ post.title }}">
+              {% endif %}
+              {% if post.image2 %}
+                <img src="{{ post.image2.url }}" class="carousel-img w-full h-56 md:h-80 object-contain rounded-xl transition-all duration-500 bg-gray-100" style="display:none;" alt="Imagen secundaria de la publicación {{ post.title }}">
+              {% endif %}
+              {% if post.image3 %}
+                <img src="{{ post.image3.url }}" class="carousel-img w-full h-56 md:h-80 object-contain rounded-xl transition-all duration-500 bg-gray-100" style="display:none;" alt="Tercera imagen de la publicación {{ post.title }}">
+              {% endif %}
             </div>
+            {% if post.image2 or post.image3 %}
+            <!-- Flechas solo si hay más de una imagen -->
+            <button type="button" class="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow hover:bg-white" onclick="prevImage('carousel-{{ forloop.counter }}')" title="Imagen anterior">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <button type="button" class="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow hover:bg-white" onclick="nextImage('carousel-{{ forloop.counter }}')" title="Imagen siguiente">
+              <i class="fas fa-chevron-right"></i>
+            </button>
             {% endif %}
-            
-                            <!-- Post content -->
-                <div class="flex-grow">
-                    <h3 class="text-xl font-semibold text-[#2E8B57] mb-2">{{ post.title }}</h3>
-
-                    <!-- Category tags as ovals -->
-                    <div class="mt-auto">
-                        <div class="flex flex-wrap gap-2">
-                        {% for cat in post.categories.all %}
-                            <span class="bg-green-600 text-white px-4 py-1 rounded-full text-xs font-medium">
-                            {{ cat }}
-                            </span>
-                        {% empty %}
-                            <span class="text-red-500 text-xs italic">No hay categorías</span>
-                        {% endfor %}
-                        </div>
-                    </div>
-
-                    <p class="text-sm text-gray-600 mb-1">
-                    Publicado por {{ post.user.username }}
-                    </p>
-
-                    <p class="text-sm text-gray-600 mb-1">
-                    Lugar: {{ post.municipality.name }}
-                    </p>
-
-                    <!-- Fecha de publicación añadida -->
-                    <p class="text-sm text-gray-600 mb-1">
-                    Fecha: {{ post.created_at|date:"d/m/Y" }}
-                    </p>
-
-                    <!-- Description with text overflow control -->
-                    <div class="mb-4">
-                        <p class="text-gray-700 overflow-hidden text-ellipsis line-clamp-3 break-words max-h-[4.5rem]">
-                        {{ post.content }}
-                        </p>
-                    </div>
-                </div>
-
-            <!-- Delete button (only shown to post owner) -->
-            {% if user == post.user %}
-            <form method="post" action="{% url 'delete_post' post.id %}" class="mt-4">
-                {% csrf_token %}
-                <button type="submit" style="background-color: #dc2626; color: white; padding: 0.25rem 0.75rem; border-radius: 0.375rem;">
-                    Eliminar
-                </button>
-            </form>
-            {% endif %}
+            <!-- Indicadores de posición -->
+            <div class="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-2 z-10" id="carousel-indicators-{{ forloop.counter }}"></div>
+          </div>
         </div>
-        {% endfor %}
+        <!-- Contenido a la derecha (35%) -->
+        <div class="flex-1 flex flex-col justify-between p-4 md:p-6 gap-2 md:w-[35%] w-full">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <div class="w-8 h-8 rounded-full bg-[#2E8B57] flex items-center justify-center text-white font-bold text-base">
+                {{ post.user.username|slice:':1'|upper }}
+              </div>
+              <span class="font-semibold text-gray-800 text-sm">{{ post.user.username }}</span>
+              <span class="text-xs text-gray-500 flex items-center gap-1"><i class="fas fa-map-marker-alt"></i> {{ post.municipality.name }}</span>
+              <span class="text-xs text-gray-400 flex items-center gap-1 ml-auto"><i class="fas fa-calendar-alt"></i> {{ post.created_at|date:"d/m/Y" }}</span>
+            </div>
+            <h3 class="text-lg md:text-xl font-bold text-[#2E8B57] mb-1">{{ post.title }}</h3>
+            <div class="flex flex-wrap gap-2 mb-1">
+              {% for cat in post.categories.all %}
+                <span class="bg-green-600 text-white px-2 py-0.5 rounded-full text-xs font-semibold">{{ cat }}</span>
+              {% endfor %}
+            </div>
+            <div class="relative">
+              <p class="text-gray-700 text-sm post-content line-clamp-3" id="post-content-{{ forloop.counter }}">{{ post.content }}</p>
+              {% if post.content|length > 180 %}
+              <button type="button" class="text-green-700 font-semibold text-xs mt-1 hover:underline" onclick="toggleReadMore({{ forloop.counter }})" id="readmore-btn-{{ forloop.counter }}">Ver más</button>
+              {% endif %}
+            </div>
+          </div>
+          {% if user == post.user %}
+          <form method="post" action="{% url 'delete_post' post.id %}" class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            {% csrf_token %}
+            <button type="submit" class="bg-red-600 text-white px-3 py-1 rounded-lg hover:bg-red-700 transition text-xs shadow">Eliminar</button>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
     </div>
 
-    <!-- New post form -->
-    <div class="mt-12 flex justify-center">
-        {% if user.is_authenticated %}
-        <div class="w-full max-w-2xl">
-            <h2 class="text-3xl font-bold mb-8 text-center text-[#2E8B57]">Crear nueva publicación</h2>
-            <form method="post" enctype="multipart/form-data" class="space-y-6 bg-[#F7F7F7] p-10 rounded-xl shadow-md">
-                {% csrf_token %}
-                
-                <!-- Form fields -->
-                {% for field in form %}
-                <div class="space-y-2">
-                    <label for="{{ field.id_for_label }}" class="block font-semibold text-gray-700 text-lg">
-                        {{ field.label }}
-                        {% if field.field.required %}<span class="text-red-500">*</span>{% endif %}
-                    </label>
-                    {{ field.as_widget|safe }}
-                    <script>
-                        document.addEventListener('DOMContentLoaded', () => {
-                            const input = document.getElementById('{{ field.id_for_label }}');
-                            if (input) {
-                                input.className = 'w-full p-3 text-lg border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500';
-                            }
-                        });
-                    </script>
-                    {% if field.help_text %}
-                    <p class="text-sm text-gray-500">{{ field.help_text }}</p>
-                    {% endif %}
-                    {% for error in field.errors %}
-                    <p class="text-sm text-red-500">{{ error }}</p>
-                    {% endfor %}
-                </div>
-                {% endfor %}
-        
-                <!-- Submit button -->
-                <div class="text-center py-8 mt-8">
-                    <button type="submit" 
-                        style="background-color: #16a34a; color: white; padding: 1rem 2rem; font-size: 1.125rem; font-weight: 600; border-radius: 0.375rem; transition: background-color 0.3s;">
-                    Publicar
-                    </button>
-                </div>
-            </form>
-        </div>
-        
-        {% else %}
-        <!-- Login prompt for unauthenticated users -->
-        <div class="text-center py-8 mt-8">
-            <h3 class="text-2xl font-bold mb-4 text-[#2E8B57]">¿Quieres compartir tu experiencia?</h3>
-            <p class="text-gray-700 mb-6 text-lg">Debes iniciar sesión para poder publicar.</p>
-            <a href="{% url 'login' %}" 
-               class="inline-block bg-green-600 text-white text-lg font-semibold py-3 px-8 rounded-lg hover:bg-green-700 transition-all shadow-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
-              Iniciar sesión
-            </a>
-        </div>
-        {% endif %}
+    <!-- FAB para crear publicación -->
+    {% if user.is_authenticated %}
+    <button id="fab-open-modal" class="fixed z-50 bottom-8 right-8 bg-green-600 hover:bg-green-700 text-white rounded-full w-16 h-16 flex items-center justify-center text-4xl shadow-lg focus:outline-none focus:ring-4 focus:ring-green-300 transition-all" title="Crear nueva publicación">
+      <span class="sr-only">Crear nueva publicación</span>
+      <i class="fas fa-plus"></i>
+    </button>
+    <!-- Modal para crear publicación -->
+    <div id="modal-create-post" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 hidden">
+      <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative animate-fade-in p-2 sm:p-8 flex flex-col">
+        <button id="fab-close-modal" class="absolute top-4 right-4 text-gray-400 hover:text-red-500 text-2xl focus:outline-none z-10" title="Cerrar">
+          <i class="fas fa-times"></i>
+        </button>
+        <h2 class="text-2xl font-bold mb-6 text-center text-[#2E8B57] mt-8">Crear nueva publicación</h2>
+        <form method="post" enctype="multipart/form-data" class="space-y-6 flex-1">
+          {% csrf_token %}
+          <div class="grid gap-6">
+            {% for field in form %}
+            <div>
+              <label for="{{ field.id_for_label }}" class="block font-semibold text-gray-700 text-base mb-2">
+                {{ field.label }}
+                {% if field.field.required %}<span class="text-red-500">*</span>{% endif %}
+              </label>
+              {{ field.as_widget|safe }}
+              <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                  const input = document.getElementById('{{ field.id_for_label }}');
+                  if (input) {
+                    input.className = 'w-full p-3 text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 bg-[#f7fafc] shadow-sm';
+                  }
+                });
+              </script>
+              {% if field.help_text %}
+              <p class="text-sm text-gray-500 mt-1">{{ field.help_text }}</p>
+              {% endif %}
+              {% for error in field.errors %}
+              <p class="text-sm text-red-500 mt-1">{{ error }}</p>
+              {% endfor %}
+            </div>
+            {% endfor %}
+          </div>
+          <div class="text-center py-8 mt-8">
+            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 text-lg font-bold rounded-xl shadow-lg transition-all focus:outline-none focus:ring-4 focus:ring-green-300">
+              <i class="fas fa-paper-plane mr-2"></i> Publicar
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
+    {% endif %}
+  </div>
 </div>
+
+<!-- Carrusel y Read More JS -->
+<script>
+function showImage(carouselId, index) {
+  const carousel = document.getElementById(carouselId);
+  const images = carousel.querySelectorAll('.carousel-img');
+  images.forEach((img, i) => {
+    img.style.display = (i === index) ? 'block' : 'none';
+  });
+  carousel.dataset.current = index;
+  // Actualizar indicadores
+  const indicators = document.getElementById('carousel-indicators-' + carouselId.split('-')[1]);
+  if (indicators) {
+    indicators.innerHTML = '';
+    images.forEach((img, i) => {
+      const dot = document.createElement('span');
+      dot.className = 'inline-block w-2 h-2 rounded-full mx-1 ' + (i === index ? 'bg-green-600' : 'bg-gray-300');
+      dot.style.cursor = 'pointer';
+      dot.onclick = () => showImage(carouselId, i);
+      indicators.appendChild(dot);
+    });
+  }
+}
+
+function nextImage(carouselId) {
+  const carousel = document.getElementById(carouselId);
+  const images = carousel.querySelectorAll('.carousel-img');
+  let current = parseInt(carousel.dataset.current || 0);
+  current = (current + 1) % images.length;
+  showImage(carouselId, current);
+}
+
+function prevImage(carouselId) {
+  const carousel = document.getElementById(carouselId);
+  const images = carousel.querySelectorAll('.carousel-img');
+  let current = parseInt(carousel.dataset.current || 0);
+  current = (current - 1 + images.length) % images.length;
+  showImage(carouselId, current);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.carousel').forEach((carousel, idx) => {
+    carousel.dataset.current = 0;
+    showImage(carousel.id, 0);
+  });
+});
+
+// Read more/less para descripciones largas
+function toggleReadMore(idx) {
+  const content = document.getElementById('post-content-' + idx);
+  const btn = document.getElementById('readmore-btn-' + idx);
+  if (content.classList.contains('line-clamp-3')) {
+    content.classList.remove('line-clamp-3');
+    btn.textContent = 'Ver menos';
+  } else {
+    content.classList.add('line-clamp-3');
+    btn.textContent = 'Ver más';
+  }
+}
+
+// FAB y modal
+const fabOpen = document.getElementById('fab-open-modal');
+const fabClose = document.getElementById('fab-close-modal');
+const modal = document.getElementById('modal-create-post');
+if (fabOpen && fabClose && modal) {
+  fabOpen.addEventListener('click', () => {
+    modal.classList.remove('hidden');
+  });
+  fabClose.addEventListener('click', () => {
+    modal.classList.add('hidden');
+  });
+  // Cerrar modal al hacer click fuera del contenido
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.classList.add('hidden');
+    }
+  });
+}
+</script>
 {% endblock %}
