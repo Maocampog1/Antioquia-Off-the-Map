@@ -308,10 +308,23 @@
                 {% for review in reviews %}
                     <div class="border-b pb-4">
                         <div class="flex justify-between items-start">
-                            <h4 class="font-semibold text-lg">{{ review.user.username }}</h4>
+                            <div class="flex items-center">
+                                {% if review.user.profile.image %}
+                                    <img src="{{ review.user.profile.image.url }}" alt="{{ review.user.profile.display_name }}" class="w-10 h-10 rounded-full mr-2">
+                                {% else %}
+                                    <div class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center mr-2">
+                                        <span class="text-gray-600 font-semibold">{{ review.user.profile.display_name|default:review.user.username|first }}</span>
+                                    </div>
+                                {% endif %}
+                                <h4 class="font-semibold text-lg">
+                                    <a href="{% url 'profile' review.user.username %}" class="text-customDarkGreen hover:text-customGreen transition">
+                                        {{ review.user.profile.display_name|default:review.user.username }}
+                                    </a>
+                                </h4>
+                            </div>
                             <span class="text-yellow-500">{{ review.get_rating_display }}</span>
                         </div>
-                        <p class="text-gray-500 text-sm">{{ review.created_at|date:"F j, Y" }}</p>
+                        <p class="text-gray-500 text-sm mt-3">{{ review.created_at|date:"F j, Y" }}</p>
                         <p class="mt-2 text-gray-700">{{ review.comment }}</p>
                     </div>
                 {% empty %}
