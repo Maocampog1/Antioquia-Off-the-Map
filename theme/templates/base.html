@@ -97,15 +97,16 @@
         </div>
     
         <!-- Login / Register -->
-        <div class="flex gap-4 ml-8">
+        <div class="flex gap-4 ml-8 items-center">
             {% if user.is_authenticated %}
-            <a href="{% url 'profile' user.username %}" class="bg-customDarkGreen text-white font-semibold px-4 py-2 rounded-lg shadow-md font-body">
-                <i class="fas fa-user mr-2"></i>Mi Perfil
-            </a>
-            <form method="POST" action="{% url 'logout' %}">
-                {% csrf_token %}
-                <button type="submit" class="bg-customDarkGreen text-white font-semibold px-4 py-2 rounded-lg shadow-md font-body">Cerrar sesión</button>
-            </form>
+                <a href="{% url 'profile' user.username %}" class="bg-customDarkGreen text-white font-semibold px-4 py-2 rounded-lg shadow-md font-body flex items-center gap-2 min-w-[150px] justify-center">
+                    <i class="fas fa-user text-lg"></i>
+                    <span>Mi Perfil</span>
+                </a>
+                <form method="POST" action="{% url 'logout' %}" class="flex items-center h-full">
+                    {% csrf_token %}
+                    <button type="submit" class="bg-customDarkGreen text-white font-semibold px-4 py-2 rounded-lg shadow-md font-body min-w-[150px]">Cerrar sesión</button>
+                </form>
             {% else %}
                 <a href="{% url 'login' %}" class="bg-customDarkGreen text-white font-semibold px-4 py-2 rounded-lg shadow-md font-body">Iniciar sesión</a>
                 <a href="{% url 'register' %}" class="bg-customDarkGreen text-white font-semibold px-4 py-2 rounded-lg shadow-md font-body">Registrarse</a>
