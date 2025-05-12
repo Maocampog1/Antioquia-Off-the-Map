@@ -5,7 +5,7 @@
 <div class="bg-gray-100 min-h-screen h-screen py-10">
   <div class="max-w-7xl mx-auto bg-white rounded-lg shadow-lg p-8 flex md:flex-row flex-col gap-8">
     <!-- Columna Izquierda: Información de perfil -->
-    <div class="flex flex-col justify-center items-center md:w-1/5 w-full">
+    <div class="flex flex-col justify-center items-center md:w-2/5 w-full">
       <img src="{{ profile.profile_picture.url }}" alt="{{ profile_user.username }}" class="w-40 h-40 object-cover rounded-full border-4 border-customDarkGreen mb-4">
       <p class="text-2xl font-bold font-title text-gray-800 mt-2 text-center">{{ profile.display_name|default:profile_user.username }}</p>
       <p class="text-gray-600 font-body text-left mt-2 py-3">{{ profile.bio }}</p>
@@ -21,15 +21,15 @@
       <!-- Estadísticas -->
       <div class="flex justify-center gap-6 my-6 w-full">
         <div class="text-center">
-          <div class="text-2xl font-bold text-customLightGreen font-title">{{ favorites.count }}</div>
+          <div class="text-2xl font-bold text-customDarkGreen font-title">{{ favorites.count }}</div>
           <div class="text-gray-600 text-sm font-body">Favoritos</div>
         </div>
         <div class="text-center">
-          <div class="text-2xl font-bold text-customLightGreen font-title">{{ posts.count }}</div>
+          <div class="text-2xl font-bold text-customDarkGreen font-title">{{ posts.count }}</div>
           <div class="text-gray-600 text-sm font-body">Publicaciones</div>
         </div>
         <div class="text-center">
-          <div class="text-2xl font-bold text-customLightGreen font-title">{{ reviews.count }}</div>
+          <div class="text-2xl font-bold text-customDarkGreen font-title">{{ reviews.count }}</div>
           <div class="text-gray-600 text-sm font-body">Reseñas</div>
         </div>
       </div>
@@ -41,18 +41,22 @@
     </div>
 
     <!-- Columna Derecha: Favoritos, Publicaciones, Reseñas -->
-    <div class="flex flex-col gap-10 md:w-4/5 w-full">
+    <div class="flex flex-col gap-5 md:w-3/5 w-full">
       <!-- Municipios Favoritos -->
       <div class="py-2">
         <h3 class="text-xl font-bold mb-4 text-customDarkGreen font-title text-left">Municipios favoritos</h3>
-        <div class="flex flex-wrap gap-6">
+        <div class="flex flex-row flex-wrap gap-6 items-center justify-center">
           {% for favorite in favorites %}
-            <div class="bg-white border border-green-200 rounded-xl shadow-sm p-3 flex flex-col items-center justify-center transition hover:shadow-lg hover:border-green-400 w-48">
-              {% if favorite.municipality.image %}
-                <img src="{{ favorite.municipality.image.url }}" alt="{{ favorite.municipality.name }}" class="w-full h-24 object-cover rounded-t-lg mb-2">
-              {% endif %}
-              <span class="font-semibold mt-2 font-body text-customDarkGreen">{{ favorite.municipality.name }}</span>
-            </div>
+            <a href="{% url 'municipality_detail' favorite.municipality.id %}" class="relative rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow w-48 h-44 block group">
+              <!-- Imagen -->
+              <img src="{{ favorite.municipality.image.url }}" alt="{{ favorite.municipality.name }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+              <!-- Capa oscura solo en hover -->
+              <div class="absolute inset-0 bg-black/40 hover:bg-black/30 transition-all"></div>
+              <!-- Nombre centrado -->
+              <div class="absolute inset-0 flex items-center justify-center">
+                <span class="text-white font-bold text-lg drop-shadow-lg">{{ favorite.municipality.name }}</span>
+              </div>
+            </a>
           {% empty %}
             <div class="text-center text-gray-400 py-8 font-body">No hay municipios favoritos aún.</div>
           {% endfor %}
@@ -63,7 +67,7 @@
         <h3 class="text-xl font-bold mb-4 text-customDarkGreen font-title text-left">Publicaciones</h3>
         <div class="flex flex-col gap-6">
           {% for post in posts %}
-            <div class="bg-white border border-green-200 rounded-xl shadow-sm p-3 flex items-center gap-4 transition hover:shadow-lg hover:border-green-400">
+            <div class="bg-white border rounded-xl shadow-sm p-3 flex items-center gap-4 transition hover:shadow-lg hover:border-customDarkGreen">
               {% if post.image %}
                 <img src="{{ post.image.url }}" alt="{{ post.title }}" class="w-32 h-20 object-cover rounded-lg">
               {% endif %}
@@ -82,7 +86,7 @@
         <h3 class="text-xl font-bold mb-4 text-customDarkGreen font-title text-left">Reseñas</h3>
         <div class="flex flex-col gap-6">
           {% for review in reviews %}
-            <div class="bg-white border border-green-200 rounded-xl shadow-sm p-4 flex flex-col transition hover:shadow-lg hover:border-green-400">
+            <div class="bg-white border rounded-xl shadow-sm p-4 flex flex-col transition hover:shadow-lg hover:border-customDarkGreen">
               <span class="font-semibold font-body text-customDarkGreen text-lg">{{ review.municipality.name }}</span>
               <span class="text-yellow-500 text-lg font-title">
                 {% for i in "12345" %}
