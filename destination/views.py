@@ -316,12 +316,6 @@ def toggle_favorite(request, municipality_id):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
-
-@login_required
-def favorite_list(request):
-    favorites = Favorite.objects.filter(user=request.user).select_related('municipality')
-    return render(request, 'favorites.html', {'favorites': favorites})
-
 def home(request):
     municipalities = Municipality.objects.all()
     user_favorites = []
