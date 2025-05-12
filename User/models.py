@@ -17,7 +17,8 @@ class Profile(models.Model):
         return f'{self.user.username} Profile'
 
 @receiver(post_save, sender=User)
-def create_profile(sender, instance, created, **kwargs):
+def create_user_profile(sender, instance, created, **kwargs):
+    from .models import Profile
     if created:
         Profile.objects.create(user=instance)
 
