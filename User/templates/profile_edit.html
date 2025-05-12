@@ -23,7 +23,7 @@
           <label class="font-title text-lg text-gray-700 w-40 text-left">Foto de Perfil:</label>
           <div class="flex items-center gap-4 flex-1">
             <input id="id_profile_picture" name="profile_picture" type="file" class="hidden">
-            <label for="id_profile_picture" class="inline-block bg-customLightGreen text-customDarkGreen px-4 py-2 rounded hover:bg-customGreen cursor-pointer font-semibold">CAMBIAR FOTO</label>
+            <label for="id_profile_picture" class="inline-block bg-customLightGreen text-customDarkGreen px-4 py-2 rounded hover:bg-customGreen cursor-pointer font-semibold font-body">CAMBIAR FOTO</label>
           </div>
         </div>
         <div class="flex items-center mb-4">
@@ -43,8 +43,8 @@
           <div class="flex-1 font-body text-xl">{{ form.location }}</div>
         </div>
         <div class="flex justify-end gap-4 mt-8">
-          <a href="{% url 'profile' request.user.username %}" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">Cancelar</a>
-          <button type="submit" class="px-6 py-2 bg-customLightGreen text-customDarkGreen rounded-lg hover:bg-customGreen">Guardar Cambios</button>
+          <a href="{% url 'profile' request.user.username %}" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 font-semibold font-body">Cancelar</a>
+          <button type="submit" class="px-6 py-2 bg-customLightGreen text-customDarkGreen rounded-lg hover:bg-customGreen font-semibold font-body">Guardar Cambios</button>
         </div>
       </form>
     </div>

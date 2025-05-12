@@ -2,97 +2,97 @@
 {% load static %}
 
 {% block content %}
-<div class="bg-gray-100 min-h-screen py-10">
-  <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-
+<div class="bg-gray-100 min-h-screen h-screen py-10">
+  <div class="max-w-7xl mx-auto bg-white rounded-lg shadow-lg p-8 flex md:flex-row flex-col gap-8">
     <!-- Columna Izquierda: Información de perfil -->
-    <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center text-center">
-      <img src="{{ profile.profile_picture.url }}" alt="{{ profile_user.username }}" class="w-32 h-32 object-cover rounded-full border-4 border-blue-500 mb-4">
-      <h2 class="text-2xl font-bold text-gray-800 mb-2">{{ profile.display_name|default:profile_user.username }}</h2>
-      <p class="text-gray-600 mb-2 text-center">{{ profile.bio }}</p>
+    <div class="flex flex-col justify-center items-center md:w-1/5 w-full">
+      <img src="{{ profile.profile_picture.url }}" alt="{{ profile_user.username }}" class="w-40 h-40 object-cover rounded-full border-4 border-customDarkGreen mb-4">
+      <p class="text-2xl font-bold font-title text-gray-800 mt-2 text-center">{{ profile.display_name|default:profile_user.username }}</p>
+      <p class="text-gray-600 font-body text-left mt-2 py-3">{{ profile.bio }}</p>
       {% if profile.location %}
-        <p class="text-gray-500 mb-1"><i class="fas fa-map-marker-alt mr-1"></i>{{ profile.location }}</p>
+        <p class="text-gray-500 font-body mt-1"><i class="fas fa-map-marker-alt mr-1"></i>{{ profile.location }}</p>
       {% endif %}
       {% if profile.birth_date %}
-        <p class="text-gray-500 mb-1"><i class="fas fa-birthday-cake mr-1"></i>{{ profile.birth_date }}</p>
+        <p class="text-gray-500 font-body mt-1"><i class="fas fa-birthday-cake mr-1"></i>{{ profile.birth_date }}</p>
       {% endif %}
-      
+      {% if profile.website %}
+        <a href="{{ profile.website }}" target="_blank" class="text-customDarkGreen hover:underline font-body mt-1"><i class="fas fa-link mr-1"></i>{{ profile.website }}</a>
+      {% endif %}
       <!-- Estadísticas -->
       <div class="flex justify-center gap-6 my-6 w-full">
         <div class="text-center">
-          <div class="text-2xl font-bold text-blue-600">{{ favorites.count }}</div>
-          <div class="text-gray-600 text-sm">Favoritos</div>
+          <div class="text-2xl font-bold text-customLightGreen font-title">{{ favorites.count }}</div>
+          <div class="text-gray-600 text-sm font-body">Favoritos</div>
         </div>
         <div class="text-center">
-          <div class="text-2xl font-bold text-blue-600">{{ posts.count }}</div>
-          <div class="text-gray-600 text-sm">Publicaciones</div>
+          <div class="text-2xl font-bold text-customLightGreen font-title">{{ posts.count }}</div>
+          <div class="text-gray-600 text-sm font-body">Publicaciones</div>
         </div>
         <div class="text-center">
-          <div class="text-2xl font-bold text-blue-600">{{ reviews.count }}</div>
-          <div class="text-gray-600 text-sm">Reseñas</div>
+          <div class="text-2xl font-bold text-customLightGreen font-title">{{ reviews.count }}</div>
+          <div class="text-gray-600 text-sm font-body">Reseñas</div>
         </div>
       </div>
-      
       {% if is_own_profile %}
-        <a href="{% url 'profile_edit' %}" class="mt-2 inline-block bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition font-semibold w-full text-center">
+        <a href="{% url 'profile_edit' %}" class="mt-2 inline-block bg-customLightGreen text-customDarkGreen px-6 py-2 rounded-lg hover:bg-customGreen transition font-semibold font-body w-full text-center">
           Editar Perfil
         </a>
       {% endif %}
     </div>
 
     <!-- Columna Derecha: Favoritos, Publicaciones, Reseñas -->
-    <div class="md:col-span-2 flex flex-col gap-8">
-
+    <div class="flex flex-col gap-10 md:w-4/5 w-full">
       <!-- Municipios Favoritos -->
-      <div>
-        <h3 class="text-xl font-bold mb-4 text-center md:text-left">Municipios favoritos</h3>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="py-2">
+        <h3 class="text-xl font-bold mb-4 text-customDarkGreen font-title text-left">Municipios favoritos</h3>
+        <div class="flex flex-wrap gap-6">
           {% for favorite in favorites %}
-            <div class="bg-gray-200 rounded-lg h-32 flex flex-col items-center justify-center shadow">
+            <div class="bg-white border border-green-200 rounded-xl shadow-sm p-3 flex flex-col items-center justify-center transition hover:shadow-lg hover:border-green-400 w-48">
               {% if favorite.municipality.image %}
-                <img src="{{ favorite.municipality.image.url }}" alt="{{ favorite.municipality.name }}" class="w-full h-20 object-cover rounded-t-lg">
+                <img src="{{ favorite.municipality.image.url }}" alt="{{ favorite.municipality.name }}" class="w-full h-24 object-cover rounded-t-lg mb-2">
               {% endif %}
-              <span class="font-semibold mt-2">{{ favorite.municipality.name }}</span>
+              <span class="font-semibold mt-2 font-body text-customDarkGreen">{{ favorite.municipality.name }}</span>
             </div>
           {% empty %}
-            <div class="col-span-full text-center text-gray-400 py-8">No hay municipios favoritos aún.</div>
+            <div class="text-center text-gray-400 py-8 font-body">No hay municipios favoritos aún.</div>
           {% endfor %}
         </div>
       </div>
-
       <!-- Publicaciones -->
-      <div>
-        <h3 class="text-xl font-bold mb-4 text-center md:text-left">Publicaciones</h3>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="py-2">
+        <h3 class="text-xl font-bold mb-4 text-customDarkGreen font-title text-left">Publicaciones</h3>
+        <div class="flex flex-col gap-6">
           {% for post in posts %}
-            <div class="bg-gray-200 rounded-lg h-32 flex flex-col items-center justify-center shadow p-2">
+            <div class="bg-white border border-green-200 rounded-xl shadow-sm p-3 flex items-center gap-4 transition hover:shadow-lg hover:border-green-400">
               {% if post.image %}
-                <img src="{{ post.image.url }}" alt="{{ post.title }}" class="w-full h-16 object-cover rounded-t-lg">
+                <img src="{{ post.image.url }}" alt="{{ post.title }}" class="w-32 h-20 object-cover rounded-lg">
               {% endif %}
-              <span class="font-semibold mt-2">{{ post.title }}</span>
+              <div class="flex flex-col">
+                <span class="font-semibold font-body text-customDarkGreen text-lg">{{ post.title }}</span>
+                <span class="text-gray-600 text-sm mt-1 font-body">{{ post.content|truncatewords:20 }}</span>
+              </div>
             </div>
           {% empty %}
-            <div class="col-span-full text-center text-gray-400 py-8">No hay publicaciones aún.</div>
+            <div class="text-center text-gray-400 py-8 font-body">No hay publicaciones aún.</div>
           {% endfor %}
         </div>
       </div>
-      
       <!-- Reseñas -->
-      <div>
-        <h3 class="text-xl font-bold mb-4 text-center md:text-left">Reseñas</h3>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="py-2">
+        <h3 class="text-xl font-bold mb-4 text-customDarkGreen font-title text-left">Reseñas</h3>
+        <div class="flex flex-col gap-6">
           {% for review in reviews %}
-            <div class="bg-gray-200 rounded-lg p-4 flex flex-col shadow">
-              <span class="font-semibold">{{ review.municipality.name }}</span>
-              <span class="text-yellow-500 text-lg">
+            <div class="bg-white border border-green-200 rounded-xl shadow-sm p-4 flex flex-col transition hover:shadow-lg hover:border-green-400">
+              <span class="font-semibold font-body text-customDarkGreen text-lg">{{ review.municipality.name }}</span>
+              <span class="text-yellow-500 text-lg font-title">
                 {% for i in "12345" %}
                   {% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}
                 {% endfor %}
               </span>
-              <span class="text-gray-600 text-sm mt-1">{{ review.comment|truncatewords:10 }}</span>
+              <span class="text-gray-600 text-sm mt-1 font-body">{{ review.comment|truncatewords:10 }}</span>
             </div>
           {% empty %}
-            <div class="col-span-full text-center text-gray-400 py-8">No hay reseñas aún.</div>
+            <div class="text-center text-gray-400 py-8 font-body">No hay reseñas aún.</div>
           {% endfor %}
         </div>
       </div>
