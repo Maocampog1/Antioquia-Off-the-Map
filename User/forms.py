@@ -20,10 +20,10 @@ class CustomUserCreationForm(UserCreationForm):
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['bio', 'profile_picture', 'birth_date', 'location', 'website']
+        fields = ['display_name', 'bio', 'profile_picture', 'birth_date', 'location']
         widgets = {
-            'bio': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
-            'birth_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
-            'location': forms.TextInput(attrs={'class': 'form-control'}),
-            'website': forms.URLInput(attrs={'class': 'form-control'}),
+            'display_name': forms.TextInput(attrs={'class': 'form-control w-full text-left'}),
+            'bio': forms.Textarea(attrs={'class': 'form-control w-full text-left', 'rows': 3}),
+            'birth_date': forms.DateInput(attrs={'class': 'form-control w-full text-left', 'type': 'date'}),
+            'location': forms.TextInput(attrs={'class': 'form-control w-full text-left'}),
         }
