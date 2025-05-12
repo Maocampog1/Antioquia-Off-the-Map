@@ -4472,11 +4472,6 @@ details.collapse summary::-webkit-details-marker {
   background-color: rgb(0 0 0 / 0.4);
 }
 
-.hover\:bg-customDarkGreen:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(38 72 22 / var(--tw-bg-opacity, 1));
-}
-
 .hover\:bg-customGreen:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(100 174 65 / var(--tw-bg-opacity, 1));

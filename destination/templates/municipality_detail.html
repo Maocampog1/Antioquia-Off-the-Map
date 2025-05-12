@@ -22,9 +22,8 @@
 
 <div class="mt-4 flex justify-end">
     {% if user.is_authenticated %}
-        <button class="text-2xl bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:shadow-lg transition-all favorite-btn"
-                data-municipality-id="{{ municipality.id }}"
-                style="{% if municipality.id in user_favorites %}color: red;{% else %}color: gray;{% endif %}">
+        <button class="text-2xl bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:shadow-lg transition-all favorite-btn {% if municipality.id in user_favorites %}text-red-500{% else %}text-gray-500{% endif %}"
+                data-municipality-id="{{ municipality.id }}">
             {% if municipality.id in user_favorites %}♥{% else %}♡{% endif %}
         </button>
     {% endif %}
@@ -80,7 +79,7 @@
                 <!-- Toll cost info from other origin -->
                 <div class="mt-6 text-center">
                     <p class="text-lg text-gray-800 font-body">Para buscar peajes desde otros puntos de origen:</p>
-                    <a href="https://tollguru.com/toll-calculator-colombia" target="_blank" 
+                    <a href="https://tollguru.com/toll-calculator-colombia" target="_blank" rel="noopener"
                     class="mt-3 inline-block bg-customLightGreen hover:bg-customGreen text-customDarkGreen font-semibold font-body py-2 px-4 rounded-lg shadow-md transition duration-300">
                         Calcular Peajes
                     </a>
@@ -162,7 +161,7 @@
 
 
        <!-- Activities Section -->
-        <div class="card bg-customLightGreen shadow-lg rounded-lg mt-8 p-6">
+        <div class="card bg-white shadow-lg rounded-lg mt-8 p-6">
             <div class="card-body">
                 <h2 class="card-title text-3xl font-bold font-title text-customDarkGreen">Actividades Imperdibles en {{ municipality.name }}</h2>
 
@@ -195,7 +194,7 @@
 
 
         <!-- Accommodations Section -->
-        <div class="card bg-customLightGreen shadow-lg rounded-lg mt-8 p-6">
+        <div class="card bg-white shadow-lg rounded-lg mt-8 p-6">
             <div class="card-body">
                 <h2 class="card-title text-3xl font-title text-green-800">Alojamientos en {{ municipality.name }}</h2>
 
@@ -256,8 +255,7 @@
                         <div class="flex items-center mb-2">
                             <span class="w-10 font-body">{{ rating }} ★</span>
                             <div class="w-full bg-gray-200 rounded-full h-2.5 mx-2">
-                                <div class="bg-yellow-400 h-2.5 rounded-full" 
-                                    style="width: {{ rating_distribution|get_item:rating }}%"></div>
+                                <div class="bg-yellow-400 h-2.5 rounded-full" style="width: {{ rating_distribution|get_item:rating }}%;"></div>
                             </div>
                             <span class="w-10 text-right font-body">{{ rating_distribution|get_item:rating }}%</span>
                         </div>
