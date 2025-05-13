@@ -1,9 +1,12 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.contrib.auth import login, authenticate
 from django.contrib.auth import logout as django_logout
-from django.contrib import messages
-from .forms import CustomUserCreationForm
+from django.contrib.auth.models import User
+from .models import Profile
+from .forms import ProfileUpdateForm, CustomUserCreationForm
+from destination.models import Favorite, TravelerPost, Review
 import re
 from django.conf import settings
 
@@ -84,3 +87,36 @@ def register(request):
         form = CustomUserCreationForm()
 
     return render(request, 'register.html', {'form': form})
+
+@login_required
+def profile_view(request, username):
+    user = get_object_or_404(User, username=username)
+    profile = user.profile
+    
+    # Obtener datos del usuario
+    favorites = Favorite.objects.filter(user=user).select_related('municipality')
+    posts = TravelerPost.objects.filter(user=user).select_related('municipality')
+    reviews = Review.objects.filter(user=user).select_related('municipality')
+    
+    context = {
+        'profile_user': user,
+        'profile': profile,
+        'favorites': favorites,
+        'posts': posts,
+        'reviews': reviews,
+        'is_own_profile': request.user == user,
+    }
+    return render(request, 'profile.html', context)
+
+@login_required
+def profile_edit(request):
+    if request.method == 'POST':
+        form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Tu perfil ha sido actualizado exitosamente!')
+            return redirect('profile', username=request.user.username)
+    else:
+        form = ProfileUpdateForm(instance=request.user.profile)
+    
+    return render(request, 'profile_edit.html', {'form': form}) 

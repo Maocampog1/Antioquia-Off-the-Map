@@ -1,11 +1,9 @@
-<!-- Include home component -->
 {% extends 'base.html' %}
 
 {% block content %}
 <title>Home</title>
 
 <div class="relative rounded-lg overflow-hidden shadow-lg m-4">
-
     {% load static %}
     <!-- Main image of landing -->
     <img src="{% static 'landing_main_image.svg' %}" alt="main_photo" class="h-600 w-full">
@@ -17,31 +15,37 @@
     </div>
 </div>
 
-<!-- Recommendated destinations div -->
+<!-- Recommended destinations -->
 <div class="text-center my-8">
     <h2 class="text-2xl font-bold underline text-customDarkGreen">Destinos Recomendados</h2>
 </div>
 
-
-
-
-<!-- Images and links container -->
+<!-- Cards container -->
 <div class="grid grid-cols-2 md:grid-cols-3 gap-4 px-4 mb-8">
-    {% for municipality in municipalities %}
-    <a href="{% url 'municipality_detail' municipality.id %}" class="block">
-        <div class="relative rounded-lg overflow-hidden shadow-lg">
+    {% for municipality in municipalities|slice:":6" %}
+    <div class="relative rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow group">
+        <a href="{% url 'municipality_detail' municipality.id %}" class="block">
             <!-- Image -->
-            <img src="{{municipality.image.url}}" alt="{{ municipality.name }}" class="w-full h-48 object-cover">
+            <img src="{{ municipality.image.url }}" alt="{{ municipality.name }}" 
+                 class="w-full h-48 object-cover hover:scale-105 transition-transform duration-300">
     
             <!-- Dark layer -->
-            <div class="absolute inset-0 bg-black/50"></div>
+            <div class="absolute inset-0 bg-black/50 hover:bg-black/40 transition-all"></div>
     
             <!-- Center text -->
             <div class="absolute inset-0 flex items-center justify-center">
-                <span class="text-white font-bold">{{ municipality.name|upper }}</span>
+                <span class="text-white font-bold text-lg drop-shadow-lg">{{ municipality.name|upper }}</span>
             </div>
-        </div>
-    </a>
+        </a>
+        
+        <!-- Favorite button  -->
+        {% if user.is_authenticated %}
+        <button class="absolute top-2 right-2 z-10 text-2xl bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:shadow-lg transition-all favorite-btn opacity-0 group-hover:opacity-100 transition-opacity duration-200 {% if municipality.id in user_favorites %}text-customGreen{% else %}text-gray-400{% endif %}"
+                data-municipality-id="{{ municipality.id }}">
+            {% if municipality.id in user_favorites %}♥{% else %}♡{% endif %}
+        </button>
+        {% endif %}
+    </div>
     {% endfor %}
-</div> 
+</div>
 {% endblock %}
