@@ -16,6 +16,8 @@ class TravelerPostForm(forms.ModelForm):
         }
         widgets = {
             'categories': forms.CheckboxSelectMultiple(), 
+            'title': forms.TextInput(attrs={'class': 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-customGreen'}),
+            'content': forms.Textarea(attrs={'class': 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-customGreen', 'rows': 4}),
         }
 
 class ReviewForm(forms.ModelForm):
@@ -23,6 +25,10 @@ class ReviewForm(forms.ModelForm):
         model = Review
         fields = ['rating', 'comment']
         widgets = {
-            'comment': forms.Textarea(attrs={'rows': 4, 'class': 'form-control'}),
-            'rating': forms.Select(attrs={'class': 'form-control'})
+            'rating': forms.HiddenInput(),
+            'comment': forms.Textarea(attrs={
+                'class': 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-customGreen',
+                'rows': 4,
+                'placeholder': 'Comparte tu experiencia...'
+            }),
         }
