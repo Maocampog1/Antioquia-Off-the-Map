@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from .models import Municipality, Event, Activity, Restaurant, Accommodation, Category, Toll, TravelerPost,Favorite
+from .models import Municipality, Event, Activity, Restaurant, Accommodation, Category, Toll, TravelerPost,Favorite, Review
 from .forms import TravelerPostForm, ReviewForm
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import JsonResponse
@@ -246,19 +246,36 @@ def search_experiences(request):
     }
 
     if "accommodations" in categories:
-        results["accommodations"] = list(
-            Accommodation.objects.filter(municipality__name=municipality).values("name", "accommodation_type", "website")
-        )
+        results["accommodations"] = [
+            {
+                "name": a.name,
+                "accommodation_type": a.accommodation_type,
+                "website": a.website,
+                "image": a.image.url if a.image else ""
+            }
+            for a in Accommodation.objects.filter(municipality__name=municipality)
+        ]
 
     if "activities" in categories:
-        results["activities"] = list(
-            Activity.objects.filter(municipality__name=municipality).values("name", "description")
-        )
+        results["activities"] = [
+            {
+                "name": act.name,
+                "description": act.description,
+                "image": act.image.url if act.image else ""
+            }
+            for act in Activity.objects.filter(municipality__name=municipality)
+        ]
 
     if "restaurants" in categories:
-        results["restaurants"] = list(
-            Restaurant.objects.filter(municipality__name=municipality).values("name", "location", "cuisine_type")
-        )
+        results["restaurants"] = [
+            {
+                "name": r.name,
+                "location": r.location,
+                "cuisine_type": r.cuisine_type,
+                "image": r.image.url if r.image else ""
+            }
+            for r in Restaurant.objects.filter(municipality__name=municipality)
+        ]
 
     return JsonResponse(results) 
 
@@ -294,10 +311,6 @@ def delete_post(request, post_id):
 ####(FR19) Favorites system
 @login_required
 def toggle_favorite(request, municipality_id):
-    if not request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-
-        return JsonResponse({'error': 'Invalid request'}, status=400)
-        
     try:
         municipality = Municipality.objects.get(id=municipality_id)
         favorite, created = Favorite.objects.get_or_create(
@@ -307,20 +320,34 @@ def toggle_favorite(request, municipality_id):
         
         if not created:
             favorite.delete()
-            return JsonResponse({'status': 'removed', 'is_favorite': False})
+            is_favorite = False
+            message = 'Municipio eliminado de favoritos'
+        else:
+            is_favorite = True
+            message = 'Municipio agregado a favoritos'
         
-        return JsonResponse({'status': 'added', 'is_favorite': True})
+        # Si es una petición AJAX, devolver JSON
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({
+                'status': 'success',
+                'is_favorite': is_favorite,
+                'message': message
+            })
+        
+        # Si es una petición normal, redirigir
+        messages.success(request, message)
+        return redirect('municipality_detail', municipality_id=municipality.id)
         
     except Municipality.DoesNotExist:
-        return JsonResponse({'error': 'Municipality not found'}, status=404)
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'error': 'Municipio no encontrado'}, status=404)
+        messages.error(request, 'Municipio no encontrado')
+        return redirect('home')
     except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
-
-
-@login_required
-def favorite_list(request):
-    favorites = Favorite.objects.filter(user=request.user).select_related('municipality')
-    return render(request, 'favorites.html', {'favorites': favorites})
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'error': str(e)}, status=500)
+        messages.error(request, 'Ocurrió un error al procesar tu solicitud')
+        return redirect('home')
 
 def home(request):
     municipalities = Municipality.objects.all()
@@ -330,4 +357,39 @@ def home(request):
     return render(request, 'home.html', {
         'municipalities': municipalities,
         'user_favorites': set(user_favorites)
+    })
+
+@login_required
+def delete_review(request, review_id):
+    try:
+        review = Review.objects.get(id=review_id, user=request.user)
+        municipality_id = review.municipality.id
+        review.delete()
+        messages.success(request, 'Reseña eliminada exitosamente.')
+    except Review.DoesNotExist:
+        messages.error(request, 'No se pudo encontrar la reseña.')
+    except Exception as e:
+        messages.error(request, 'Ocurrió un error al eliminar la reseña.')
+    
+    return redirect('municipality_detail', municipality_id=municipality_id)
+
+@login_required
+def add_review(request, municipality_id):
+    municipality = get_object_or_404(Municipality, id=municipality_id)
+    
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.municipality = municipality
+            review.user = request.user
+            review.save()
+            messages.success(request, 'Tu reseña ha sido publicada exitosamente.')
+            return redirect('municipality_detail', municipality_id=municipality.id)
+    else:
+        form = ReviewForm()
+    
+    return render(request, 'municipality_detail.html', {
+        'municipality': municipality,
+        'form': form
     })

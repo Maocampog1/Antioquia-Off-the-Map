@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="bg-gray-100 min-h-screen h-screen py-10">
+  <div class="max-w-7xl mx-auto bg-white rounded-lg shadow-lg p-8 flex md:flex-row flex-col gap-8">
+    <!-- Columna Izquierda: Información de perfil -->
+    <div class="flex flex-col justify-center items-center md:w-2/5 w-full">
+      <img src="{{ profile.profile_picture.url }}" alt="{{ profile_user.username }}" class="w-40 h-40 object-cover rounded-full border-4 border-customDarkGreen mb-4">
+      <p class="text-2xl font-bold font-title text-gray-800 mt-2 text-center">{{ profile.display_name|default:profile_user.username }}</p>
+      <p class="text-gray-600 font-body text-left mt-2 py-3">{{ profile.bio }}</p>
+      {% if profile.location %}
+        <p class="text-gray-500 font-body mt-1"><i class="fas fa-map-marker-alt mr-1"></i>{{ profile.location }}</p>
+      {% endif %}
+      {% if profile.birth_date %}
+        <p class="text-gray-500 font-body mt-1"><i class="fas fa-birthday-cake mr-1"></i>{{ profile.birth_date }}</p>
+      {% endif %}
+      {% if profile.website %}
+        <a href="{{ profile.website }}" target="_blank" class="text-customDarkGreen hover:underline font-body mt-1"><i class="fas fa-link mr-1"></i>{{ profile.website }}</a>
+      {% endif %}
+      <!-- Estadísticas -->
+      <div class="flex justify-center gap-6 my-6 w-full">
+        <div class="text-center">
+          <div class="text-2xl font-bold text-customDarkGreen font-title">{{ favorites.count }}</div>
+          <div class="text-gray-600 text-sm font-body">Favoritos</div>
+        </div>
+        <div class="text-center">
+          <div class="text-2xl font-bold text-customDarkGreen font-title">{{ posts.count }}</div>
+          <div class="text-gray-600 text-sm font-body">Publicaciones</div>
+        </div>
+        <div class="text-center">
+          <div class="text-2xl font-bold text-customDarkGreen font-title">{{ reviews.count }}</div>
+          <div class="text-gray-600 text-sm font-body">Reseñas</div>
+        </div>
+      </div>
+      {% if is_own_profile %}
+        <a href="{% url 'profile_edit' %}" class="mt-2 inline-block bg-customLightGreen text-customDarkGreen px-6 py-2 rounded-lg hover:bg-customGreen transition font-semibold font-body w-full text-center">
+          Editar Perfil
+        </a>
+      {% endif %}
+    </div>
+
+    <!-- Columna Derecha: Favoritos, Publicaciones, Reseñas -->
+    <div class="flex flex-col gap-5 md:w-3/5 w-full">
+      <!-- Municipios Favoritos -->
+      <div class="py-2">
+        <h3 class="text-xl font-bold mb-4 text-customDarkGreen font-title text-left">Municipios favoritos</h3>
+        <div class="flex flex-row flex-wrap gap-6 items-center justify-center">
+          {% for favorite in favorites %}
+            <a href="{% url 'municipality_detail' favorite.municipality.id %}" class="relative rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow w-48 h-44 block group">
+              <!-- Imagen -->
+              <img src="{{ favorite.municipality.image.url }}" alt="{{ favorite.municipality.name }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+              <!-- Capa oscura solo en hover -->
+              <div class="absolute inset-0 bg-black/40 hover:bg-black/30 transition-all"></div>
+              <!-- Nombre centrado -->
+              <div class="absolute inset-0 flex items-center justify-center">
+                <span class="text-white font-bold text-lg drop-shadow-lg">{{ favorite.municipality.name }}</span>
+              </div>
+              {% if is_own_profile %}
+              <form method="POST" action="{% url 'toggle_favorite' favorite.municipality.id %}" class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                {% csrf_token %}
+                <button type="submit" class="bg-red-600 text-white p-1.5 rounded-full hover:bg-red-700 transition-colors" title="Eliminar de favoritos">
+                  <i class="fas fa-times"></i>
+                </button>
+              </form>
+              {% endif %}
+            </a>
+          {% empty %}
+            <div class="text-center text-gray-400 py-8 font-body">No hay municipios favoritos aún.</div>
+          {% endfor %}
+        </div>
+      </div>
+      <!-- Publicaciones -->
+      <div class="py-2">
+        <h3 class="text-xl font-bold mb-4 text-customDarkGreen font-title text-left">Publicaciones</h3>
+        <div class="flex flex-col gap-6">
+          {% for post in posts %}
+            <div class="bg-white border rounded-xl shadow-sm p-3 flex items-center gap-4 transition hover:shadow-lg hover:border-customDarkGreen relative group">
+              {% if post.image %}
+                <img src="{{ post.image.url }}" alt="{{ post.title }}" class="w-32 h-20 object-cover rounded-lg">
+              {% endif %}
+              <div class="flex flex-col flex-1">
+                <span class="font-semibold font-body text-customDarkGreen text-lg">{{ post.title }}</span>
+                <span class="text-gray-600 text-sm mt-1 font-body">{{ post.content|truncatewords:20 }}</span>
+              </div>
+              {% if is_own_profile %}
+              <form method="POST" action="{% url 'delete_post' post.id %}" class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                {% csrf_token %}
+                <button type="submit" class="bg-red-600 text-white p-1.5 rounded-full hover:bg-red-700 transition-colors" title="Eliminar publicación" onclick="return confirm('¿Estás seguro de que quieres eliminar esta publicación?')">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </form>
+              {% endif %}
+            </div>
+          {% empty %}
+            <div class="text-center text-gray-400 py-8 font-body">No hay publicaciones aún.</div>
+          {% endfor %}
+        </div>
+      </div>
+      <!-- Reseñas -->
+      <div class="py-2">
+        <h3 class="text-xl font-bold mb-4 text-customDarkGreen font-title text-left">Reseñas</h3>
+        <div class="flex flex-col gap-6">
+          {% for review in reviews %}
+            <div class="bg-white border rounded-xl shadow-sm p-4 flex flex-col transition hover:shadow-lg hover:border-customDarkGreen relative group">
+              <a href="{% url 'municipality_detail' review.municipality.id %}" class="flex flex-col flex-1">
+                <span class="font-semibold font-body text-customDarkGreen text-lg">{{ review.municipality.name }}</span>
+                <span class="text-yellow-500 text-lg font-title">
+                  {% for i in "12345" %}
+                    {% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}
+                  {% endfor %}
+                </span>
+                <span class="text-gray-600 text-sm mt-1 font-body">{{ review.comment|truncatewords:10 }}</span>
+              </a>
+              {% if is_own_profile %}
+              <form method="POST" action="{% url 'delete_review' review.id %}" class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                {% csrf_token %}
+                <button type="submit" class="bg-red-600 text-white p-1.5 rounded-full hover:bg-red-700 transition-colors" title="Eliminar reseña" onclick="return confirm('¿Estás seguro de que quieres eliminar esta reseña?')">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </form>
+              {% endif %}
+            </div>
+          {% empty %}
+            <div class="text-center text-gray-400 py-8 font-body">No hay reseñas aún.</div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

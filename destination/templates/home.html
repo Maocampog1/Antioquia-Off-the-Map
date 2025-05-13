@@ -22,8 +22,8 @@
 
 <!-- Cards container -->
 <div class="grid grid-cols-2 md:grid-cols-3 gap-4 px-4 mb-8">
-    {% for municipality in municipalities %}
-    <div class="relative rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+    {% for municipality in municipalities|slice:":6" %}
+    <div class="relative rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow group">
         <a href="{% url 'municipality_detail' municipality.id %}" class="block">
             <!-- Image -->
             <img src="{{ municipality.image.url }}" alt="{{ municipality.name }}" 
@@ -40,9 +40,8 @@
         
         <!-- Favorite button  -->
         {% if user.is_authenticated %}
-        <button class="absolute top-2 right-2 z-10 text-2xl bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:shadow-lg transition-all favorite-btn"
-                data-municipality-id="{{ municipality.id }}"
-                style="{% if municipality.id in user_favorites %}color: red;{% else %}color: gray;{% endif %}">
+        <button class="absolute top-2 right-2 z-10 text-2xl bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:shadow-lg transition-all favorite-btn opacity-0 group-hover:opacity-100 transition-opacity duration-200 {% if municipality.id in user_favorites %}text-customGreen{% else %}text-gray-400{% endif %}"
+                data-municipality-id="{{ municipality.id }}">
             {% if municipality.id in user_favorites %}♥{% else %}♡{% endif %}
         </button>
         {% endif %}

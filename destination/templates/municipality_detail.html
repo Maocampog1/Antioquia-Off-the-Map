@@ -6,25 +6,21 @@
 <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&libraries=places"></script>
 
 <title>{{ municipality.name }}</title>
-<div class="max-w-5xl mx-auto px-6 py-5">
+<div class="max-w-5xl mx-auto px-4 sm:px-6 py-5 space-y-8">
     
 
 <!-- Hero Section -->
-<div class="hero h-96 rounded-lg shadow-lg overflow-hidden" style="background-image: url('{{ municipality.image.url }}');">
-    <div class="hero-overlay bg-opacity-60"></div>
-    <div class="hero-content text-center text-white">
+<div class="hero h-[500px] rounded-xl shadow-2xl overflow-hidden relative group" style="background-image: url('{{ municipality.image.url }}'); background-size: cover; background-position: center;">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
+    <div class="hero-content text-center text-white relative z-10">
         <div>
-            <h1 class="text-4xl font-title">{{ municipality.name }}</h1>
-            <p class="mt-2 text-lg font-title">{{ municipality.location }}</p>
+            <h1 class="text-5xl md:text-6xl font-title font-bold drop-shadow-lg">{{ municipality.name }}</h1>
+            <p class="mt-4 text-xl md:text-2xl font-title drop-shadow">{{ municipality.location }}</p>
         </div>
     </div>
-</div>
-
-<div class="mt-4 flex justify-end">
     {% if user.is_authenticated %}
-        <button class="text-2xl bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:shadow-lg transition-all favorite-btn"
-                data-municipality-id="{{ municipality.id }}"
-                style="{% if municipality.id in user_favorites %}color: red;{% else %}color: gray;{% endif %}">
+        <button class="absolute top-4 right-4 text-2xl rounded-full w-12 h-12 flex items-center justify-center shadow-lg hover:shadow-xl transition-all favorite-btn z-20 border border-white/20 hover:bg-white/90 bg-white/80 {% if municipality.id in user_favorites %}text-customGreen{% else %}text-gray-400{% endif %} opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+            data-municipality-id="{{ municipality.id }}">
             {% if municipality.id in user_favorites %}♥{% else %}♡{% endif %}
         </button>
     {% endif %}
@@ -33,16 +29,16 @@
 
 
        <!-- Municipality Details -->
-        <div class="card bg-white shadow-lg rounded-lg mt-8 p-6">
+        <div class="card bg-white shadow-xl rounded-xl p-6 border border-gray-100">
             <div class="card-body">
-                <h2 class="card-title text-3xl font-title">{{ municipality.name }}</h2>
+                <h2 class="card-title text-3xl font-title text-customDarkGreen">{{ municipality.name }}</h2>
 
                 <!-- Categories --> 
-                <h2 class="text-customDarkGreen font-title">Categorías:</h2>
+                <h2 class="text-customDarkGreen font-title mt-6">Categorías:</h2>
                 <div class="flex flex-wrap gap-3 mt-2">
                     {% if municipality.categories.all %}
                         {% for cat in municipality.categories.all %}
-                            <span class="inline-block rounded-full bg-customLightGreen text-customDarkGreen px-4 py-2 text-sm font-title border border-customLightGreen shadow-md">
+                            <span class="inline-block rounded-full bg-customLightGreen text-customDarkGreen px-4 py-2 text-sm font-title border border-customLightGreen shadow-md hover:shadow-lg transition-all duration-200">
                                 {{ cat.name }}
                             </span>
                         {% endfor %}
@@ -52,37 +48,45 @@
                 </div>
 
                 <!-- Description -->  
-                <p class="text-gray-700 mt-4 font-body">{{ municipality.description }}</p>
+                <p class="text-gray-700 mt-6 font-body leading-relaxed">{{ municipality.description }}</p>
 
                <!-- Buttons --> 
-                <div class="mt-6 flex space-x-4 justify-center">
-                    <a href="{% url 'municipality_events' municipality.id %}" class="bg-customLightGreen text-customDarkGreen px-4 py-2 rounded-lg shadow-md hover:bg-customGreen font-title">Ver Eventos</a>
-                    <button onclick="toggleMap()" class="bg-customLightGreen text-customDarkGreen px-4 py-2 rounded-lg shadow-md hover:bg-customGreen font-title">¿Cómo llegar?</button>
-                    <a href="{% url 'municipality_name_list' %}" class="bg-customLightGreen text-customDarkGreen px-4 py-2 rounded-lg shadow-md hover:bg-customGreen font-title">Volver a la Lista</a>
+                <div class="mt-8 flex flex-wrap gap-4 justify-center">
+                    <a href="{% url 'municipality_events' municipality.id %}" class="flex items-center gap-2 bg-customLightGreen text-customDarkGreen px-6 py-3 rounded-lg shadow-md hover:bg-customGreen font-title transition-all duration-200">
+                        <i class="fas fa-calendar-alt"></i> Ver Eventos
+                    </a>
+                    <button onclick="toggleMap()" class="flex items-center gap-2 bg-customLightGreen text-customDarkGreen px-6 py-3 rounded-lg shadow-md hover:bg-customGreen font-title transition-all duration-200">
+                        <i class="fas fa-map-marker-alt"></i> ¿Cómo llegar?
+                    </button>
+                    <a href="{% url 'municipality_name_list' %}" class="flex items-center gap-2 bg-customLightGreen text-customDarkGreen px-6 py-3 rounded-lg shadow-md hover:bg-customGreen font-title transition-all duration-200">
+                        <i class="fas fa-arrow-left"></i> Volver a la Lista
+                    </a>
                 </div>
             </div>
         </div>
             
         <!-- Tolls Section -->
-        <div class="card bg-white-100 shadow-lg rounded-lg mt-8 p-6">
+        <div class="card bg-white shadow-xl rounded-xl p-6 border border-gray-100">
             <div class="card-body">
-                <h2 class="card-title text-3xl text-gray-800 font-title">Peajes desde Medellín</h2>
+                <h2 class="card-title text-3xl text-gray-800 font-title flex items-center gap-2">
+                    <i class="fas fa-road"></i> Peajes desde Medellín
+                </h2>
 
                 {% if municipality.tolls.all %}
-                    <ul class="list-disc pl-6 mt-4 text-gray-700">
+                    <ul class="list-none pl-0 mt-6 space-y-3">
                         {% for toll in municipality.tolls.all %}
-                            <li class="border-l-4 border-gray-500 pl-2 py-1 font-body">{{ toll.description }}</li>
+                            <li class="border-l-4 border-customGreen pl-4 py-2 font-body bg-gray-50 rounded-r-lg">{{ toll.description }}</li>
                         {% endfor %}
                     </ul>
                 {% else %}
                     <p class="text-center text-lg text-gray-700 mt-4">No hay peajes registrados en este municipio.</p>
                 {% endif %}
                 <!-- Toll cost info from other origin -->
-                <div class="mt-6 text-center">
+                <div class="mt-8 text-center">
                     <p class="text-lg text-gray-800 font-body">Para buscar peajes desde otros puntos de origen:</p>
-                    <a href="https://tollguru.com/toll-calculator-colombia" target="_blank" 
-                    class="mt-3 inline-block bg-customLightGreen hover:bg-customGreen text-customDarkGreen font-semibold font-body py-2 px-4 rounded-lg shadow-md transition duration-300">
-                        Calcular Peajes
+                    <a href="https://tollguru.com/toll-calculator-colombia" target="_blank" rel="noopener"
+                    class="mt-4 inline-flex items-center gap-2 bg-customLightGreen hover:bg-customGreen text-customDarkGreen font-semibold font-body py-3 px-6 rounded-lg shadow-md transition duration-300">
+                        <i class="fas fa-calculator"></i> Calcular Peajes
                     </a>
                 </div>
             </div>
@@ -90,15 +94,15 @@
 
         <!-- Map section -->
         <div id="map-container" class="hidden">
-            <div class="flex flex-col items-center gap-4 p-4 mt-5 mb-5 bg-customWhite rounded-lg shadow-md w-full mx-auto">
+            <div class="flex flex-col items-center gap-4 p-6 mt-5 mb-5 bg-white rounded-xl shadow-xl border border-gray-100 w-full mx-auto">
                 <input id="origin" type="text" placeholder="Ingresar Origen" 
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-customGreen shadow-sm">
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-customGreen shadow-sm">
             
                 <input id="destination" type="text" placeholder="Ingresar destino" 
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-customGreen shadow-sm">
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-customGreen shadow-sm">
             
                 <select id="mode" title="TravelMode" 
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-customGreen shadow-sm bg-white">
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-customGreen shadow-sm bg-white">
                     <option value="DRIVING">Conduciendo</option>
                     <option value="WALKING">Caminando</option>
                     <option value="BICYCLING">Bicicleta</option>
@@ -106,79 +110,79 @@
                 </select>
             
                 <button id="route-btn" 
-                    class="w-full bg-green-600 text-white font-title px-4 py-2 rounded-lg shadow-md hover:bg-green-700 transition duration-300">
-                    Obtener ruta
+                    class="w-full bg-customGreen text-white font-title px-6 py-3 rounded-lg shadow-md hover:bg-green-700 transition duration-300 flex items-center justify-center gap-2">
+                    <i class="fas fa-directions"></i> Obtener ruta
                 </button>
             </div>
             
-            <div id="map" style="height: 500px; width: 100%;"></div>
+            <div id="map" style="height: 500px; width: 100%;" class="rounded-xl shadow-xl"></div>
 
-            <div class="flex justify-center p-2">
+            <div class="flex justify-center p-4">
                 <a href="https://www.google.com/maps/dir/Medell%C3%ADn,+Medellin,+Antioquia/{{ municipality.name }}" 
                    target="_blank" 
                    rel="noopener" 
-                   class="bg-green-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-700">
-                   Google Maps
+                   class="bg-customGreen text-white px-6 py-3 rounded-lg shadow-md hover:bg-green-700 transition-all duration-300 flex items-center gap-2">
+                    <i class="fab fa-google"></i> Google Maps
                 </a>
               </div>
         </div>
         
-
-                    <!-- Restaurants Section -->
-            <div class="card bg-white shadow-lg rounded-lg mt-8 p-6">
-                <div class="card-body">
-                    <h2 class="card-title text-3xl font-bold text-customDarkGreen font-title">¿Dónde Comer en {{ municipality.name }}?</h2>
-
-                    {% if restaurants %}
-                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
-                            {% for restaurant in restaurants %}
-                                <div class="card bg-white shadow-md rounded-lg p-4 border border-customGreen">
-                                    <div class="card-body">
-                                        
-                                        {% if restaurant.image %}
-                                            <img src="{{ restaurant.image.url }}" alt="{{ restaurant.name }}" class="w-full h-48 object-cover rounded-lg mb-4">
-                                        {% endif %}
-                                        <h3 class="text-xl font-title text-customDarkGreen">{{ restaurant.name }}</h3>
-                                        <p class="mt-1 text-gray-700">
-                                            <span class="font-semibold font-body">Tipo de comida:</span> {{ restaurant.cuisine_type }}
-                                        </p>
-                                        <p class="mt-1 text-gray-600">
-                                            <span class="font-semibold font-body">Precio:</span> {{ restaurant.price_range }}
-                                        </p>
-                                        <p class="mt-1 text-gray-600">
-                                            <span class="font-semibold font-body">Contacto:</span> {{ restaurant.contact_info|default:"No disponible" }}
-                                        </p>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        <p class="text-center text-lg text-yellow-700 mt-4">No hay restaurantes registrados en este municipio.</p>
-                    {% endif %}
-                </div>
-            </div>
-
-        
-
-
-       <!-- Activities Section -->
-        <div class="card bg-customLightGreen shadow-lg rounded-lg mt-8 p-6">
+        <!-- Restaurants Section -->
+        <div class="card bg-white shadow-xl rounded-xl p-6 border border-gray-100">
             <div class="card-body">
-                <h2 class="card-title text-3xl font-bold font-title text-customDarkGreen">Actividades Imperdibles en {{ municipality.name }}</h2>
+                <h2 class="card-title text-3xl font-bold text-customDarkGreen font-title flex items-center gap-2">
+                    <i class="fas fa-utensils"></i> ¿Dónde Comer en {{ municipality.name }}?
+                </h2>
+
+                {% if restaurants %}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
+                        {% for restaurant in restaurants %}
+                            <div class="card bg-white shadow-lg rounded-xl p-4 border border-customGreen transition-all duration-200 hover:shadow-xl hover:scale-[1.02]">
+                                <div class="card-body">
+                                    
+                                    {% if restaurant.image %}
+                                        <img src="{{ restaurant.image.url }}" alt="{{ restaurant.name }}" class="w-full h-48 object-cover rounded-lg mb-4 shadow-md">
+                                    {% endif %}
+                                    <h3 class="text-xl font-title text-customDarkGreen">{{ restaurant.name }}</h3>
+                                    <p class="mt-2 text-gray-700">
+                                        <span class="font-semibold font-body">Tipo de comida:</span> {{ restaurant.cuisine_type }}
+                                    </p>
+                                    <p class="mt-1 text-gray-600">
+                                        <span class="font-semibold font-body">Precio:</span> {{ restaurant.price_range }}
+                                    </p>
+                                    <p class="mt-1 text-gray-600">
+                                        <span class="font-semibold font-body">Contacto:</span> {{ restaurant.contact_info|default:"No disponible" }}
+                                    </p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-center text-lg text-yellow-700 mt-4">No hay restaurantes registrados en este municipio.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Activities Section -->
+        <div class="card bg-white shadow-xl rounded-xl p-6 border border-gray-100">
+            <div class="card-body">
+                <h2 class="card-title text-3xl font-bold font-title text-customDarkGreen flex items-center gap-2">
+                    <i class="fas fa-hiking"></i> Actividades Imperdibles en {{ municipality.name }}
+                </h2>
 
                 {% if activities %}
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
                         {% for activity in activities %}
-                            <div class="card bg-white shadow-md rounded-lg p-4 border border-customGreen">
+                            <div class="card bg-white shadow-lg rounded-xl p-4 border border-customGreen transition-all duration-200 hover:shadow-xl hover:scale-[1.02]">
                                 {% if activity.image %}
-                                    <img src="{{ activity.image.url }}" alt="{{ activity.name }}" class="w-full h-48 object-cover rounded-md">
+                                    <img src="{{ activity.image.url }}" alt="{{ activity.name }}" class="w-full h-48 object-cover rounded-lg shadow-md">
                                 {% endif %}
                                 <div class="card-body mt-4">
                                     <h3 class="text-xl font-title text-customDarkGreen">{{ activity.name }}</h3>
                                     
                                     <!-- Hidden description inside a <details> -->  
                                     <details class="mt-2">
-                                        <summary class="text-customDarkGreen cursor-pointer font-medium">Más info</summary>
+                                        <summary class="text-customDarkGreen cursor-pointer font-medium hover:text-customGreen transition-colors">Más info</summary>
                                         <p class="mt-2 text-gray-600 font-body">{{ activity.description }}</p>
                                     </details>
                                 </div>
@@ -191,33 +195,35 @@
             </div>
         </div>
 
-
-
-
         <!-- Accommodations Section -->
-        <div class="card bg-customLightGreen shadow-lg rounded-lg mt-8 p-6">
+        <div class="card bg-white shadow-xl rounded-xl p-6 border border-gray-100">
             <div class="card-body">
-                <h2 class="card-title text-3xl font-title text-green-800">Alojamientos en {{ municipality.name }}</h2>
+                <h2 class="card-title text-3xl font-title text-customDarkGreen flex items-center gap-2">
+                    <i class="fas fa-bed"></i> Alojamientos en {{ municipality.name }}
+                </h2>
 
                 {% if accommodations %}
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
                         {% for accommodation in accommodations %}
-                            <div class="card bg-white shadow-md rounded-lg p-4 border border-green-300">
+                            <div class="card bg-white shadow-lg rounded-xl p-4 border border-customGreen transition-all duration-200 hover:shadow-xl hover:scale-[1.02]">
                                 <div class="card-body">
+                                    {% if accommodation.image %}
+                                        <img src="{{ accommodation.image.url }}" alt="{{ accommodation.name }}" class="w-full h-48 object-cover rounded-lg mb-4 shadow-md">
+                                    {% endif %}
                                     <h3 class="text-xl font-title text-customDarkGreen">{{ accommodation.name }}</h3>
-                                    <span class="badge badge-success text-sm bg-customLightGreen">
+                                    <span class="inline-block rounded-full bg-customGreen text-white border border-customGreen px-3 py-1 text-xs font-semibold">
                                         {{ accommodation.get_accommodation_type_display }}
                                     </span>
 
-                                    <p class="mt-2 text-customDarkGreen">
+                                    <p class="mt-3 text-customDarkGreen">
                                         <span class="font-semibold font-body">Dirección:</span> 
                                         {{ accommodation.address|default:"No disponible" }}
                                     </p>
 
                                     {% if accommodation.website %}
                                         <a href="{{ accommodation.website }}" target="_blank"
-                                            class="mt-2 inline-block text-customDarkGreen font-medium font-body underline hover:no-underline hover:text-customGreen transition">
-                                            Visitar sitio web
+                                            class="mt-3 inline-flex items-center gap-2 text-customDarkGreen font-medium font-body hover:text-customGreen transition-colors">
+                                            <i class="fas fa-external-link-alt"></i> Visitar sitio web
                                         </a>
                                     {% endif %}
                                 </div>
@@ -231,13 +237,15 @@
         </div>
     
     <!-- Customer Reviews Section -->
-    <div class="card bg-white shadow-lg rounded-lg mt-8 p-6">
+    <div class="card bg-white shadow-xl rounded-xl p-6 border border-gray-100">
         <div class="card-body">
-            <h2 class="card-title text-3xl font-title">Reseñas de viajeros</h2>
+            <h2 class="card-title text-3xl font-title flex items-center gap-2">
+                <i class="fas fa-star"></i> Reseñas de viajeros
+            </h2>
             
             <!-- Rating Summary -->
-            <div class="flex items-center mb-6">
-                <div class="text-4xl font-bold mr-4">
+            <div class="flex items-center mb-6 mt-4">
+                <div class="text-4xl font-bold mr-4 text-customDarkGreen">
                     {% if municipality.reviews.all %}
                         {{ municipality.reviews.all.0.get_rating_display }}
                     {% else %}
@@ -250,14 +258,13 @@
             </div>
 
             <!-- Rating Distribution -->
-            <div class="mb-8">
+            <div class="mb-8 bg-gray-50 p-6 rounded-xl">
                 {% for rating in "54321" %}
                     {% with rating=rating|add:"0" %} 
                         <div class="flex items-center mb-2">
                             <span class="w-10 font-body">{{ rating }} ★</span>
                             <div class="w-full bg-gray-200 rounded-full h-2.5 mx-2">
-                                <div class="bg-yellow-400 h-2.5 rounded-full" 
-                                    style="width: {{ rating_distribution|get_item:rating }}%"></div>
+                                <div class="bg-yellow-400 h-2.5 rounded-full" style="width: {{ rating_distribution|get_item:rating }}%;"></div>
                             </div>
                             <span class="w-10 text-right font-body">{{ rating_distribution|get_item:rating }}%</span>
                         </div>
@@ -268,38 +275,65 @@
             <hr class="my-6">
 
             <!-- Share Your Thoughts -->
-            <div class="mb-8">
-                <h3 class="text-xl mb-4 font-title">Comparte tus pensamientos</h3>
-                <p class="mb-4 font-body">Si visitaste {{ municipality.name }}, comparte tu experiencia con otros viajeros</p>
+            <div class="mb-8 bg-gray-50 rounded-xl p-6 border border-gray-200">
+                <h3 class="text-2xl mb-4 font-title text-customDarkGreen flex items-center gap-2">
+                    <i class="fas fa-pen-to-square"></i> Comparte tu experiencia
+                </h3>
+                <p class="mb-6 text-gray-600 font-body">Ayuda a otros viajeros compartiendo tu experiencia en {{ municipality.name }}</p>
                 
                 {% if user.is_authenticated %}
                     <button onclick="document.getElementById('review-form').classList.toggle('hidden')" 
-                            class="bg-customLightGreen text-customDarkGreen px-4 py-2 rounded-lg shadow-md hover:bg-customGreen font-title">
+                            class="bg-customLightGreen text-customDarkGreen px-6 py-3 rounded-lg shadow-md hover:bg-customGreen font-title transition-all duration-300 flex items-center gap-2">
+                        <i class="fas fa-pen-to-square"></i>
                         Escribe una reseña
                     </button>
                     
-                    <div id="review-form" class="hidden mt-4">
-                        <form method="post">
+                    <div id="review-form" class="hidden mt-6 bg-white rounded-xl p-6 shadow-md border border-gray-200">
+                        <form method="post" class="space-y-6">
                             {% csrf_token %}
-                            <div class="mb-4">
-                                <label class="block text-gray-700 mb-2">Tu Calificación</label>
+                            <div class="space-y-4">
+                                <label class="block text-gray-700 font-semibold font-body">Tu Calificación</label>
+                                <div class="flex gap-2">
+                                    <div class="flex items-center gap-1" id="star-rating">
+                                        {% for i in "12345" %}
+                                            <button type="button" 
+                                                    class="text-2xl text-gray-300 hover:text-yellow-400 transition-colors star-btn" 
+                                                    data-rating="{{ i }}"
+                                                    title="Calificar con {{ i }} estrellas">
+                                                <i class="fas fa-star"></i>
+                                            </button>
+                                        {% endfor %}
+                                    </div>
+                                    <span class="text-gray-500 font-body ml-2" id="rating-text">Selecciona una calificación</span>
+                                </div>
                                 {{ form.rating }}
                             </div>
-                            <div class="mb-4">
-                                <label class="block text-gray-700 mb-2">Tu reseña</label>
+                            <div class="space-y-4">
+                                <label class="block text-gray-700 font-semibold font-body">Tu reseña</label>
                                 {{ form.comment }}
                             </div>
-                            <button type="submit" 
-                                    class="bg-customGreen text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-700 font-title">
-                                Enviar reseña
-                            </button>
+                            <div class="flex justify-end gap-4">
+                                <button type="button" 
+                                        onclick="document.getElementById('review-form').classList.add('hidden')"
+                                        class="px-6 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 transition-all duration-300 font-body">
+                                    Cancelar
+                                </button>
+                                <button type="submit" 
+                                        class="bg-customGreen text-white px-6 py-2 rounded-lg shadow-md hover:bg-green-700 transition-all duration-300 font-body">
+                                    Publicar reseña
+                                </button>
+                            </div>
                         </form>
                     </div>
                 {% else %}
-                    <a href="{% url 'login' %}?next={{ request.path }}" 
-                    class="bg-customLightGreen text-customDarkGreen px-4 py-2 rounded-lg shadow-md hover:bg-customGreen font-title">
-                        Iniciar sesión para dejar una reseña
-                    </a>
+                    <div class="bg-white rounded-xl p-6 shadow-md border border-gray-200">
+                        <p class="text-gray-600 mb-4 font-body">Para dejar una reseña, necesitas iniciar sesión</p>
+                        <a href="{% url 'login' %}?next={{ request.path }}" 
+                           class="bg-customLightGreen text-customDarkGreen px-6 py-3 rounded-lg shadow-md hover:bg-customGreen font-title transition-all duration-300 inline-flex items-center gap-2">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Iniciar sesión
+                        </a>
+                    </div>
                 {% endif %}
             </div>
 
@@ -308,16 +342,38 @@
             <!-- Reviews List -->
             <div class="space-y-6">
                 {% for review in reviews %}
-                    <div class="border-b pb-4">
+                    <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300">
                         <div class="flex justify-between items-start">
-                            <h4 class="font-semibold text-lg">{{ review.user.username }}</h4>
-                            <span class="text-yellow-500">{{ review.get_rating_display }}</span>
+                            <div class="flex items-center gap-3">
+                                {% if review.user.profile.image %}
+                                    <img src="{{ review.user.profile.image.url }}" alt="{{ review.user.profile.display_name }}" class="w-14 h-14 rounded-full object-cover border-2 border-customLightGreen shadow-md">
+                                {% else %}
+                                    <div class="w-14 h-14 rounded-full bg-customLightGreen flex items-center justify-center border-2 border-customLightGreen shadow-md">
+                                        <span class="text-customDarkGreen font-semibold text-xl">{{ review.user.profile.display_name|default:review.user.username|first }}</span>
+                                    </div>
+                                {% endif %}
+                                <div>
+                                    <h4 class="font-semibold text-lg">
+                                        <a href="{% url 'profile' review.user.username %}" class="text-customDarkGreen hover:text-customGreen transition">
+                                            {{ review.user.profile.display_name|default:review.user.username }}
+                                        </a>
+                                    </h4>
+                                    <p class="text-gray-500 text-sm">{{ review.created_at|date:"F j, Y" }}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                {% for i in "12345" %}
+                                    <i class="fas fa-star {% if review.rating|add:'0' >= i %}text-yellow-400{% else %}text-gray-300{% endif %}"></i>
+                                {% endfor %}
+                            </div>
                         </div>
-                        <p class="text-gray-500 text-sm">{{ review.created_at|date:"F j, Y" }}</p>
-                        <p class="mt-2 text-gray-700">{{ review.comment }}</p>
+                        <p class="mt-4 text-gray-700 font-body leading-relaxed">{{ review.comment }}</p>
                     </div>
                 {% empty %}
-                    <p class="text-gray-500">Aún no hay reseñas. ¡Sé el primero en dejar una reseña!</p>
+                    <div class="text-center py-8 bg-gray-50 rounded-xl">
+                        <i class="fas fa-comments text-4xl text-gray-400 mb-4"></i>
+                        <p class="text-gray-500 font-body">Aún no hay reseñas. ¡Sé el primero en compartir tu experiencia!</p>
+                    </div>
                 {% endfor %}
             </div>
         </div>
@@ -380,6 +436,68 @@
 
         mapContainer.classList.toggle("hidden");
     }
+
+    // Sistema de estrellas
+    document.addEventListener('DOMContentLoaded', function() {
+        const starButtons = document.querySelectorAll('.star-btn');
+        const ratingInput = document.querySelector('#id_rating');
+        const ratingText = document.querySelector('#rating-text');
+        const ratingTexts = {
+            1: 'Muy malo',
+            2: 'Malo',
+            3: 'Regular',
+            4: 'Bueno',
+            5: 'Excelente'
+        };
+
+        starButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const rating = this.dataset.rating;
+                ratingInput.value = rating;
+                
+                // Actualizar estrellas
+                starButtons.forEach(btn => {
+                    const btnRating = btn.dataset.rating;
+                    if (btnRating <= rating) {
+                        btn.classList.remove('text-gray-300');
+                        btn.classList.add('text-yellow-400');
+                    } else {
+                        btn.classList.remove('text-yellow-400');
+                        btn.classList.add('text-gray-300');
+                    }
+                });
+
+                // Actualizar texto
+                ratingText.textContent = ratingTexts[rating];
+            });
+
+            // Efecto hover
+            button.addEventListener('mouseenter', function() {
+                const rating = this.dataset.rating;
+                starButtons.forEach(btn => {
+                    const btnRating = btn.dataset.rating;
+                    if (btnRating <= rating) {
+                        btn.classList.remove('text-gray-300');
+                        btn.classList.add('text-yellow-400');
+                    }
+                });
+            });
+
+            button.addEventListener('mouseleave', function() {
+                const currentRating = ratingInput.value;
+                starButtons.forEach(btn => {
+                    const btnRating = btn.dataset.rating;
+                    if (btnRating <= currentRating) {
+                        btn.classList.remove('text-gray-300');
+                        btn.classList.add('text-yellow-400');
+                    } else {
+                        btn.classList.remove('text-yellow-400');
+                        btn.classList.add('text-gray-300');
+                    }
+                });
+            });
+        });
+    });
 
 </script>
 
