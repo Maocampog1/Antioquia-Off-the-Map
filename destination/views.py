@@ -16,9 +16,9 @@ def municipality_name_list(request):
     municipalities = Municipality.objects.all()
     return render(request, 'municipalities_name_list.html', {'municipalities': municipalities})
 
-# Municipality detail by ID
+# Municipality detail by ID #(FR16) Moderation system  
 def municipality_detail(request, municipality_id):
-    # 1. Obtener datos base
+    #
     municipality = get_object_or_404(Municipality, id=municipality_id)
     accommodations = municipality.accommodations.all()
     restaurants = municipality.restaurants.all()
@@ -26,13 +26,13 @@ def municipality_detail(request, municipality_id):
     toll = municipality.tolls.all()
     reviews = municipality.reviews.all().order_by('-created_at')
     
-    # 2. Lista de palabras prohibidas 
+    
     OFFENSIVE_WORDS = settings.OFFENSIVE_WORDS
     
-    # Patrones regex para evasiones como "p@l@br@"
+    
     OFFENSIVE_PATTERNS = settings.OFFENSIVE_PATTERNS
 
-    # 3. Manejo del POST (envío de reseña)
+    
     if request.method == 'POST':
         if not request.user.is_authenticated:
             messages.error(request, 'Debes iniciar sesión para enviar una reseña.')
@@ -42,14 +42,14 @@ def municipality_detail(request, municipality_id):
         if form.is_valid():
             comment = form.cleaned_data.get('comment', '').lower()
             
-            # Verificación de contenido ofensivo
+            
             offensive_found = False
             
-            # Buscar palabras exactas
+            
             if any(bad_word in comment for bad_word in OFFENSIVE_WORDS):
                 offensive_found = True
             
-            # Buscar patrones de evasión con regex
+            #w regex
             if not offensive_found:
                 for pattern in OFFENSIVE_PATTERNS:
                     if re.search(pattern, comment, re.IGNORECASE):
@@ -60,7 +60,7 @@ def municipality_detail(request, municipality_id):
                 messages.error(request, 'Tu reseña contiene lenguaje inapropiado y no será publicada.')
                 return redirect('municipality_detail', municipality_id=municipality.id)
             
-            # Si pasa la validación, guardar
+            
             review = form.save(commit=False)
             review.municipality = municipality
             review.user = request.user
@@ -205,7 +205,7 @@ def home(request):
     categories = Category.objects.all()
     locations = Municipality.objects.values_list('location', flat=True).distinct()
 
-    # Ruta al archivo JSON
+    # Rute al archivo JSON
     json_path = SEARCH_COUNT_PATH
 
     # Cargar los conteos
@@ -287,27 +287,28 @@ def search_experiences(request):
     return JsonResponse(results) 
 
 ##########
-# User-generated content system (FR08) ##########
+# User-generated content system (FR08) with the censored requeriment 
+#(FR16) Moderation system  ##########
 def traveler_post_list_and_create(request):
     posts = TravelerPost.objects.all().order_by('-created_at')
     
     if request.method == 'POST':
         form = TravelerPostForm(request.POST, request.FILES)
         if form.is_valid():
-            # Validación de contenido ofensivo
+            
             title = form.cleaned_data.get('title', '').lower()
             content = form.cleaned_data.get('content', '').lower()
             
-            # Combinar campos a verificar (ajusta según tu modelo)
+            
             text_to_check = f"{title} {content}"
             
-            # Verificar palabras prohibidas
+            
             offensive_word_found = any(
                 bad_word in text_to_check 
                 for bad_word in settings.OFFENSIVE_WORDS
             )
             
-            # Verificar patrones de evasión
+           
             offensive_pattern_found = any(
                 re.search(pattern, text_to_check, re.IGNORECASE)
                 for pattern in settings.OFFENSIVE_PATTERNS
@@ -317,7 +318,7 @@ def traveler_post_list_and_create(request):
                 messages.error(request, 'Tu publicación contiene lenguaje inapropiado y no puede ser publicada.')
                 return redirect('traveler_post_list')
             
-            # Si pasa la validación, guardar
+            
             post = form.save(commit=False)
             post.user = request.user
             post.save()

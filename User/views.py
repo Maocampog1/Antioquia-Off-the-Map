@@ -42,7 +42,7 @@ def logout_user(request):
     messages.success(request, "¡Cerraste sesión correctamente!")
     return redirect('home')
 
-# FR12 Register system
+# FR12 Register system #(FR16) Moderation system  #
 def register(request):
     """
     Handles user registration.

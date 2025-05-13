@@ -36,16 +36,18 @@ ALLOWED_HOSTS = []
 OFFENSIVE_WORDS = [
     # Insultos directos
     'hijueputa', 'malparido', 'gonorrea', 'careverga', 'hpta', 'mka',
-    'marica', 'pirobo', 'güevón', 'ñero', 'sapo', 'lambón', 'come mierda',
+    'marica', 'pirobo', 'güevón', 'ñero', 'sapo', 'lambón', 'come mierda', 'mierda',
+    'verga'
     
     # Términos despectivos
     'paraco', 'narcotraficante', 'sapo', 'chismoso', 'apestoso', 'basura',
     
     # Referencias sexuales ofensivas
-    'prostituta', 'puta', 'perra', 'zorra', 'culicagado', 'catre', 'chichipato',
+    'prostituta', 'puta', 'puto', 'perra', 'zorra', 'culicagado', 'catre', 'chichipato',
     
     # Variantes comunes
-    'hp', 'mka', 'carechimba', 'caremondá', 'malparida', 'hijueputas',
+    'hp', 'mka', 'carechimba', 'caremondá', 'malparida', 'hijueputas', 'monda', 'gonorrhea',
+    'maricón', 'maricon', 'maricona', 'mariconada', 'mariconada', 'maricón', 'maricona',
     
     # Palabras censuradas (ej: "mierda" en contextos ofensivos)
     'mierda', 'verga', 'picha', 'pendejo', 'pendeja',

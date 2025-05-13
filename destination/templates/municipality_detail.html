@@ -175,29 +175,34 @@
 
 
         <!-- Accommodations Section -->
-        <div class="card bg-customLightGreen shadow-lg rounded-lg mt-8 p-6">
+        <div class="card bg-white shadow-xl rounded-xl p-6 border border-gray-100">
             <div class="card-body">
-                <h2 class="card-title text-3xl font-title text-green-800">Alojamientos en {{ municipality.name }}</h2>
+                <h2 class="card-title text-3xl font-title text-customDarkGreen flex items-center gap-2">
+                    <i class="fas fa-bed"></i> Alojamientos en {{ municipality.name }}
+                </h2>
 
                 {% if accommodations %}
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
                         {% for accommodation in accommodations %}
-                            <div class="card bg-white shadow-md rounded-lg p-4 border border-green-300">
+                            <div class="card bg-white shadow-lg rounded-xl p-4 border border-customGreen transition-all duration-200 hover:shadow-xl hover:scale-[1.02]">
                                 <div class="card-body">
+                                    {% if accommodation.image %}
+                                        <img src="{{ accommodation.image.url }}" alt="{{ accommodation.name }}" class="w-full h-48 object-cover rounded-lg mb-4 shadow-md">
+                                    {% endif %}
                                     <h3 class="text-xl font-title text-customDarkGreen">{{ accommodation.name }}</h3>
-                                    <span class="badge badge-success text-sm bg-customLightGreen">
+                                    <span class="inline-block rounded-full bg-customGreen text-white border border-customGreen px-3 py-1 text-xs font-semibold">
                                         {{ accommodation.get_accommodation_type_display }}
                                     </span>
 
-                                    <p class="mt-2 text-customDarkGreen">
+                                    <p class="mt-3 text-customDarkGreen">
                                         <span class="font-semibold font-body">Dirección:</span> 
                                         {{ accommodation.address|default:"No disponible" }}
                                     </p>
 
                                     {% if accommodation.website %}
                                         <a href="{{ accommodation.website }}" target="_blank"
-                                            class="mt-2 inline-block text-customDarkGreen font-medium font-body underline hover:no-underline hover:text-customGreen transition">
-                                            Visitar sitio web
+                                            class="mt-3 inline-flex items-center gap-2 text-customDarkGreen font-medium font-body hover:text-customGreen transition-colors">
+                                            <i class="fas fa-external-link-alt"></i> Visitar sitio web
                                         </a>
                                     {% endif %}
                                 </div>
