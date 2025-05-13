@@ -3357,12 +3357,12 @@ details.collapse summary::-webkit-details-marker {
   z-index: 10;
 }
 
-.z-50 {
-  z-index: 50;
-}
-
 .z-20 {
   z-index: 20;
+}
+
+.z-50 {
+  z-index: 50;
 }
 
 .order-last {
@@ -3920,6 +3920,10 @@ details.collapse summary::-webkit-details-marker {
   --tw-border-opacity: 0;
 }
 
+.border-opacity-100 {
+  --tw-border-opacity: 1;
+}
+
 .bg-\[\#2E8B57\] {
   --tw-bg-opacity: 1;
   background-color: rgb(46 139 87 / var(--tw-bg-opacity, 1));
@@ -4308,9 +4312,19 @@ details.collapse summary::-webkit-details-marker {
   color: rgb(38 72 22 / var(--tw-text-opacity, 1));
 }
 
+.text-customGreen {
+  --tw-text-opacity: 1;
+  color: rgb(100 174 65 / var(--tw-text-opacity, 1));
+}
+
 .text-error {
   --tw-text-opacity: 1;
   color: var(--fallback-er,oklch(var(--er)/var(--tw-text-opacity, 1)));
+}
+
+.text-gray-300 {
+  --tw-text-opacity: 1;
+  color: rgb(209 213 219 / var(--tw-text-opacity, 1));
 }
 
 .text-gray-400 {
@@ -4368,6 +4382,11 @@ details.collapse summary::-webkit-details-marker {
   color: rgb(255 255 255 / var(--tw-text-opacity, 1));
 }
 
+.text-yellow-400 {
+  --tw-text-opacity: 1;
+  color: rgb(250 204 21 / var(--tw-text-opacity, 1));
+}
+
 .text-yellow-500 {
   --tw-text-opacity: 1;
   color: rgb(234 179 8 / var(--tw-text-opacity, 1));
@@ -4381,21 +4400,6 @@ details.collapse summary::-webkit-details-marker {
 .text-yellow-800 {
   --tw-text-opacity: 1;
   color: rgb(133 77 14 / var(--tw-text-opacity, 1));
-}
-
-.text-gray-300 {
-  --tw-text-opacity: 1;
-  color: rgb(209 213 219 / var(--tw-text-opacity, 1));
-}
-
-.text-yellow-400 {
-  --tw-text-opacity: 1;
-  color: rgb(250 204 21 / var(--tw-text-opacity, 1));
-}
-
-.text-customGreen {
-  --tw-text-opacity: 1;
-  color: rgb(100 174 65 / var(--tw-text-opacity, 1));
 }
 
 .underline {
@@ -4574,11 +4578,6 @@ details.collapse summary::-webkit-details-marker {
 .hover\:text-customGreen:hover {
   --tw-text-opacity: 1;
   color: rgb(100 174 65 / var(--tw-text-opacity, 1));
-}
-
-.hover\:text-gray-200:hover {
-  --tw-text-opacity: 1;
-  color: rgb(229 231 235 / var(--tw-text-opacity, 1));
 }
 
 .hover\:text-red-500:hover {
