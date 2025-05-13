@@ -351,14 +351,23 @@
     let mapInitialized = false;
 
     function toggleMap() {
-        var mapContainer = document.getElementById("map-container");
+        const mapContainer = document.getElementById("map-container");
 
         if (!mapInitialized) {
             initMap();
             mapInitialized = true;
         }
 
+        const wasHidden = mapContainer.classList.contains("hidden");
+
         mapContainer.classList.toggle("hidden");
+
+        if (wasHidden) {
+            // Espera un instante para asegurar que el contenedor esté visible antes de hacer scroll
+            setTimeout(() => {
+                mapContainer.scrollIntoView({ behavior: "smooth" });
+            }, 100);
+        }
     }
 
 </script>

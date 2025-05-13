@@ -53,6 +53,7 @@ class Accommodation(models.Model):
     municipality = models.ForeignKey(Municipality, on_delete=models.CASCADE, related_name='accommodations')
     address = models.CharField(max_length=255, blank=True, null=True)
     website = models.URLField(blank=True, null=True)
+    image = models.ImageField(upload_to='accommodations/', blank=True, null=True)
 
 class Restaurant(models.Model):
     name = models.CharField(max_length=255)

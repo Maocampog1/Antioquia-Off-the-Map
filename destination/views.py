@@ -7,6 +7,7 @@ from django.conf import settings
 from django.contrib import messages
 import json
 import os
+import re  # for regex validation of word characters
 
 SEARCH_COUNT_PATH = os.path.join('destination/data', 'search_counts.json')
 
@@ -17,6 +18,7 @@ def municipality_name_list(request):
 
 # Municipality detail by ID
 def municipality_detail(request, municipality_id):
+    # 1. Obtener datos base
     municipality = get_object_or_404(Municipality, id=municipality_id)
     accommodations = municipality.accommodations.all()
     restaurants = municipality.restaurants.all()
@@ -24,23 +26,52 @@ def municipality_detail(request, municipality_id):
     toll = municipality.tolls.all()
     reviews = municipality.reviews.all().order_by('-created_at')
     
+    # 2. Lista de palabras prohibidas 
+    OFFENSIVE_WORDS = settings.OFFENSIVE_WORDS
+    
+    # Patrones regex para evasiones como "p@l@br@"
+    OFFENSIVE_PATTERNS = settings.OFFENSIVE_PATTERNS
+
+    # 3. Manejo del POST (envío de reseña)
     if request.method == 'POST':
         if not request.user.is_authenticated:
-            messages.error(request, 'You need to be logged in to submit a review.')
+            messages.error(request, 'Debes iniciar sesión para enviar una reseña.')
             return redirect('login')
             
         form = ReviewForm(request.POST)
         if form.is_valid():
+            comment = form.cleaned_data.get('comment', '').lower()
+            
+            # Verificación de contenido ofensivo
+            offensive_found = False
+            
+            # Buscar palabras exactas
+            if any(bad_word in comment for bad_word in OFFENSIVE_WORDS):
+                offensive_found = True
+            
+            # Buscar patrones de evasión con regex
+            if not offensive_found:
+                for pattern in OFFENSIVE_PATTERNS:
+                    if re.search(pattern, comment, re.IGNORECASE):
+                        offensive_found = True
+                        break
+            
+            if offensive_found:
+                messages.error(request, 'Tu reseña contiene lenguaje inapropiado y no será publicada.')
+                return redirect('municipality_detail', municipality_id=municipality.id)
+            
+            # Si pasa la validación, guardar
             review = form.save(commit=False)
             review.municipality = municipality
             review.user = request.user
             review.save()
-            messages.success(request, 'Your review has been submitted!')
+            messages.success(request, '¡Tu reseña ha sido publicada!')
             return redirect('municipality_detail', municipality_id=municipality.id)
+    
     else:
         form = ReviewForm()
 
-    # Calculate rating percentages
+    # 4. Cálculo de ratings (existente)
     total_reviews = reviews.count()
     rating_distribution = {5: 0, 4: 0, 3: 0, 2: 0, 1: 0}
     
@@ -51,13 +82,14 @@ def municipality_detail(request, municipality_id):
         for rating in rating_distribution:
             rating_distribution[rating] = round((rating_distribution[rating] / total_reviews) * 100)
 
+    # 5. Renderizar template con todos los datos
     return render(request, 'municipality_detail.html', {
         'municipality': municipality,
         'accommodations': accommodations,
         'restaurants': restaurants,
         'activities': activities,
         'toll': toll,
-        "google_maps_api_key": settings.GOOGLE_MAPS_API_KEY,
+        'google_maps_api_key': settings.GOOGLE_MAPS_API_KEY,
         'reviews': reviews,
         'form': form,
         'total_reviews': total_reviews,
@@ -262,15 +294,39 @@ def traveler_post_list_and_create(request):
     if request.method == 'POST':
         form = TravelerPostForm(request.POST, request.FILES)
         if form.is_valid():
+            # Validación de contenido ofensivo
+            title = form.cleaned_data.get('title', '').lower()
+            content = form.cleaned_data.get('content', '').lower()
+            
+            # Combinar campos a verificar (ajusta según tu modelo)
+            text_to_check = f"{title} {content}"
+            
+            # Verificar palabras prohibidas
+            offensive_word_found = any(
+                bad_word in text_to_check 
+                for bad_word in settings.OFFENSIVE_WORDS
+            )
+            
+            # Verificar patrones de evasión
+            offensive_pattern_found = any(
+                re.search(pattern, text_to_check, re.IGNORECASE)
+                for pattern in settings.OFFENSIVE_PATTERNS
+            )
+            
+            if offensive_word_found or offensive_pattern_found:
+                messages.error(request, 'Tu publicación contiene lenguaje inapropiado y no puede ser publicada.')
+                return redirect('traveler_post_list')
+            
+            # Si pasa la validación, guardar
             post = form.save(commit=False)
             post.user = request.user
             post.save()
             form.save_m2m()
+            messages.success(request, '¡Publicación creada exitosamente!')
             return redirect('traveler_post_list')
     else:
         form = TravelerPostForm()
 
-    # Ruta corregida de la plantilla
     return render(request, 'from-traveler-to-traveler.html', {
         'posts': posts,
         'form': form
