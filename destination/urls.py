@@ -16,4 +16,6 @@ urlpatterns = [
     path('traveler-posts/delete/<int:post_id>/', views.delete_post, name='delete_post'),
     path('track/<int:municipality_id>/', views.track_and_redirect, name='track_and_redirect'),
     path('toggle-favorite/<int:municipality_id>/', toggle_favorite, name='toggle_favorite'),
+    path('municipality/<int:municipality_id>/review/', views.add_review, name='add_review'),
+    path('review/<int:review_id>/delete/', views.delete_review, name='delete_review'),
 ]
