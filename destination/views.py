@@ -246,19 +246,36 @@ def search_experiences(request):
     }
 
     if "accommodations" in categories:
-        results["accommodations"] = list(
-            Accommodation.objects.filter(municipality__name=municipality).values("name", "accommodation_type", "website")
-        )
+        results["accommodations"] = [
+            {
+                "name": a.name,
+                "accommodation_type": a.accommodation_type,
+                "website": a.website,
+                "image": a.image.url if a.image else ""
+            }
+            for a in Accommodation.objects.filter(municipality__name=municipality)
+        ]
 
     if "activities" in categories:
-        results["activities"] = list(
-            Activity.objects.filter(municipality__name=municipality).values("name", "description")
-        )
+        results["activities"] = [
+            {
+                "name": act.name,
+                "description": act.description,
+                "image": act.image.url if act.image else ""
+            }
+            for act in Activity.objects.filter(municipality__name=municipality)
+        ]
 
     if "restaurants" in categories:
-        results["restaurants"] = list(
-            Restaurant.objects.filter(municipality__name=municipality).values("name", "location", "cuisine_type")
-        )
+        results["restaurants"] = [
+            {
+                "name": r.name,
+                "location": r.location,
+                "cuisine_type": r.cuisine_type,
+                "image": r.image.url if r.image else ""
+            }
+            for r in Restaurant.objects.filter(municipality__name=municipality)
+        ]
 
     return JsonResponse(results) 
 

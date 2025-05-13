@@ -84,78 +84,54 @@ const fetchExperiences1 = async () => {
         }
 
 
-        function appendResults(title, items) {
-            if (title == "Alojamientos"){
-                if (items.length > 0) {
-                    let categoryHeader = document.createElement("h2");
-                    categoryHeader.className = "text-xl font-bold text-green-800 mt-4";
-                    categoryHeader.textContent = title;            
-                    resultsDiv.appendChild(categoryHeader);
+        function appendResults(title, items, type) {
+            if (items.length > 0) {
+                let categoryHeader = document.createElement("h2");
+                categoryHeader.className = "text-2xl font-bold text-green-800 mt-8 mb-4 flex items-center gap-2";
+                let iconHtml = '';
+                if (type === 'accommodations') iconHtml = '<i class="fas fa-hotel text-green-600"></i>';
+                if (type === 'activities') iconHtml = '<i class="fas fa-person-hiking text-green-600"></i>';
+                if (type === 'restaurants') iconHtml = '<i class="fas fa-utensils text-green-600"></i>';
+                categoryHeader.innerHTML = iconHtml + title;
+                resultsDiv.appendChild(categoryHeader);
 
-                    items.forEach(exp => {
-                        let card = document.createElement("div");
-                        card.className = "bg-white border border-gray-300 rounded-lg shadow-lg p-4 transition hover:shadow-xl mt-2";
-
-                        card.innerHTML = `
-                        <h3 class="text-lg font-bold text-green-800">${exp.name}</h3>
-                        <p class="text-sm text-gray-600">${exp.accommodation_type}</p>
-                        <a href="${exp.website}" target="_blank">
-                            <button class="mt-2 bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
-                                Ver más
-                            </button>
-                        </a>`;
-
-                        resultsDiv.appendChild(card);
-                    });
-                }
+                let grid = document.createElement("div");
+                grid.className = "grid grid-cols-1 sm:grid-cols-2 gap-6";
+                items.forEach(exp => {
+                    let card = document.createElement("div");
+                    card.className = "bg-white border border-gray-200 rounded-xl shadow-lg p-4 flex flex-col hover:shadow-2xl transition-all duration-300";
+                    let imgHtml = '';
+                    if (exp.image) {
+                        imgHtml = `<img src="${exp.image}" alt="${exp.name}" class="w-full h-40 object-cover rounded-lg mb-3">`;
+                    } else {
+                        if (type === 'accommodations') imgHtml = '<div class="w-full h-40 flex items-center justify-center bg-green-50 rounded-lg mb-3"><i class="fas fa-hotel text-5xl text-green-300"></i></div>';
+                        if (type === 'activities') imgHtml = '<div class="w-full h-40 flex items-center justify-center bg-green-50 rounded-lg mb-3"><i class="fas fa-person-hiking text-5xl text-green-300"></i></div>';
+                        if (type === 'restaurants') imgHtml = '<div class="w-full h-40 flex items-center justify-center bg-green-50 rounded-lg mb-3"><i class="fas fa-utensils text-5xl text-green-300"></i></div>';
+                    }
+                    let contentHtml = `<h3 class="text-lg font-bold text-green-800 mb-1">${exp.name}</h3>`;
+                    if (type === 'accommodations') {
+                        contentHtml += `<p class="text-sm text-gray-600 mb-1">${exp.accommodation_type || ''}</p>`;
+                        if (exp.website) {
+                            contentHtml += `<a href="${exp.website}" target="_blank"><button class="mt-2 bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">Ver más</button></a>`;
+                        }
+                    }
+                    if (type === 'activities') {
+                        contentHtml += `<p class="text-sm text-gray-600 mb-1">${exp.description || ''}</p>`;
+                    }
+                    if (type === 'restaurants') {
+                        contentHtml += `<p class="text-sm text-gray-600 mb-1">${exp.location || ''}</p>`;
+                        contentHtml += `<p class="text-sm text-gray-600 mb-1">${exp.cuisine_type || ''}</p>`;
+                    }
+                    card.innerHTML = imgHtml + contentHtml;
+                    grid.appendChild(card);
+                });
+                resultsDiv.appendChild(grid);
             }
-            if (title == "Actividades"){
-                if (items.length > 0) {
-                    let categoryHeader = document.createElement("h2");
-                    categoryHeader.className = "text-xl font-bold text-green-800 mt-4";
-                    categoryHeader.textContent = title;            
-                    resultsDiv.appendChild(categoryHeader);
-
-                    items.forEach(exp => {
-                        let card = document.createElement("div");
-                        card.className = "bg-white border border-gray-300 rounded-lg shadow-lg p-4 transition hover:shadow-xl mt-2";
-
-                        card.innerHTML = `
-                            <h3 class="text-lg font-bold text-green-800">${exp.name}</h3>
-                            <p class="text-sm text-gray-600">${exp.description}</p>                        
-                        `;
-
-                        resultsDiv.appendChild(card);
-                    });
-                }
-            } 
-            if (title == "Restaurantes"){
-                if (items.length > 0) {
-                    let categoryHeader = document.createElement("h2");
-                    categoryHeader.className = "text-xl font-bold text-green-800 mt-4";
-                    categoryHeader.textContent = title;            
-                    resultsDiv.appendChild(categoryHeader);
-
-                    items.forEach(exp => {
-                        let card = document.createElement("div");
-                        card.className = "bg-white border border-gray-300 rounded-lg shadow-lg p-4 transition hover:shadow-xl mt-2";
-
-                        card.innerHTML = `
-                            <h3 class="text-lg font-bold text-green-800">${exp.name}</h3>                        
-                            <p class="text-sm text-gray-600">${exp.location}</p>
-                            <p class="text-sm text-gray-600">${exp.cuisine_type}</p>
-                            
-                        `;
-
-                        resultsDiv.appendChild(card);
-                    });
-                }
-            }   
         }
 
-        appendResults("Alojamientos", data.accommodations);
-        appendResults("Actividades", data.activities);
-        appendResults("Restaurantes", data.restaurants);
+        appendResults("Alojamientos", data.accommodations, 'accommodations');
+        appendResults("Actividades", data.activities, 'activities');
+        appendResults("Restaurantes", data.restaurants, 'restaurants');
 
     } catch (error) {
         console.error("Error fetching experiences:", error);
