@@ -3353,6 +3353,14 @@ details.collapse summary::-webkit-details-marker {
   top: 1rem;
 }
 
+.right-0 {
+  right: 0px;
+}
+
+.top-20 {
+  top: 5rem;
+}
+
 .z-10 {
   z-index: 10;
 }
@@ -3484,6 +3492,10 @@ details.collapse summary::-webkit-details-marker {
 
 .mt-8 {
   margin-top: 2rem;
+}
+
+.mt-7 {
+  margin-top: 1.75rem;
 }
 
 .line-clamp-3 {
