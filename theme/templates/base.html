@@ -28,35 +28,39 @@
 </head>
 
 <body class="text-black">
-    <header class="header sticky top-0 bg-customGreen shadow-md flex items-center px-8 py-1 text-gray-85 z-50 gap-6 flex-wrap">
+    <header class="header sticky top-0 bg-customGreen shadow-md flex items-center px-4 md:px-8 py-1 text-gray-85 z-50 gap-4 md:gap-6 flex-wrap">
         <!-- Logo -->
         <h1>
             <a href="{% url 'home' %}">
-                <img src="{% static 'Abstract_blanco.png' %}" alt="logo" class="h-16 m-2">
+                <img src="{% static 'Abstract_blanco.png' %}" alt="logo" class="h-12 md:h-16 m-2">
             </a>
         </h1>
     
+        <!-- Hamburger Menu Button -->
+        <button id="menuButton" class="md:hidden text-white text-2xl ml-auto">
+            <i class="fas fa-bars"></i>
+        </button>
+
         <!-- Navigation -->
-        <nav class="nav font-body font-semibold text-base text-white ml-auto">
-            <ul class="flex items-center gap-4 whitespace-nowrap">
-                <li class="p-1 border-b-2 border-customDarkGreen border-opacity-0 hover:border-opacity-100 hover:text-customDarkGreen duration-200 cursor-pointer active">
-                    <a href="{% url 'home' %}">Inicio</a>
+        <nav id="mainNav" class="nav font-body font-semibold text-base text-white w-full md:w-auto md:ml-auto hidden md:block">
+            <ul class="flex flex-col md:flex-row items-center gap-2 md:gap-4 whitespace-nowrap">
+                <li class="w-full md:w-auto p-1 border-b-2 border-customDarkGreen border-opacity-0 hover:border-opacity-100 hover:text-customDarkGreen duration-200 cursor-pointer active">
+                    <a href="{% url 'home' %}" class="block w-full text-center md:text-left">Inicio</a>
                 </li>
-                <li class="p-1 border-b-2 border-customDarkGreen border-opacity-0 hover:border-opacity-100 hover:text-customDarkGreen duration-200 cursor-pointer">
-                    <a href="{% url 'municipality_name_list' %}">Municipios</a>
+                <li class="w-full md:w-auto p-1 border-b-2 border-customDarkGreen border-opacity-0 hover:border-opacity-100 hover:text-customDarkGreen duration-200 cursor-pointer">
+                    <a href="{% url 'municipality_name_list' %}" class="block w-full text-center md:text-left">Municipios</a>
                 </li>
-                <li class="p-1 border-b-2 border-customDarkGreen border-opacity-0 hover:border-opacity-100 hover:text-customDarkGreen duration-200 cursor-pointer">
-                    <a href="{% url 'experience_search_page' %}">Buscar Experiencias</a>
+                <li class="w-full md:w-auto p-1 border-b-2 border-customDarkGreen border-opacity-0 hover:border-opacity-100 hover:text-customDarkGreen duration-200 cursor-pointer">
+                    <a href="{% url 'experience_search_page' %}" class="block w-full text-center md:text-left">Buscar Experiencias</a>
                 </li>
-                <li class="p-1 hover:text-gray-200 duration-200 cursor-pointer">
-                    <a href="{% url 'traveler_post_list' %}">De viajero a viajero</a>
+                <li class="w-full md:w-auto p-1 hover:text-gray-200 duration-200 cursor-pointer">
+                    <a href="{% url 'traveler_post_list' %}" class="block w-full text-center md:text-left">De viajero a viajero</a>
                 </li>
             </ul>
         </nav>
-        
     
         <!-- Search bar with filters -->
-        <div class="w-80 ml-8">
+        <div class="w-full md:w-80 order-last md:order-none mt-4 md:mt-0">
             <div class="search-container relative font-body mb-2">
                 <input type="text" id="search-bar" placeholder="Buscar municipio..." autocomplete="off" class="border p-2 rounded-lg w-full">
                 <button onclick="toggleFilters()" class="absolute right-2 top-2">☰</button>
@@ -64,7 +68,7 @@
             </div>
     
             <!-- Dropdown filters -->
-            <div id="filtersContainer" class="absolute top-16 mt-8 w-80 bg-white shadow-lg rounded-lg p-4 hidden z-50 font-body"> 
+            <div id="filtersContainer" class="absolute top-16 mt-8 w-full md:w-80 bg-white shadow-lg rounded-lg p-4 hidden z-50 font-body"> 
                 <h3 class="text-gray-700 font-semibold">¿Qué buscas?</h3>
                 {% for category in categories %}
                     <label class="block text-sm">
@@ -97,19 +101,19 @@
         </div>
     
         <!-- Login / Register -->
-        <div class="flex gap-4 ml-8 items-center">
+        <div class="flex flex-col md:flex-row gap-2 md:gap-4 w-full md:w-auto md:ml-8 items-center mt-4 md:mt-0">
             {% if user.is_authenticated %}
-                <a href="{% url 'profile' user.username %}" class="bg-customDarkGreen text-white font-semibold px-3 py-1.5 rounded-lg shadow-md font-body flex items-center gap-2 min-w-[150px] justify-center">
+                <a href="{% url 'profile' user.username %}" class="bg-customDarkGreen text-white font-semibold px-3 py-1.5 rounded-lg shadow-md font-body flex items-center gap-2 w-full md:w-auto justify-center">
                     <i class="fas fa-user text-base"></i>
                     <span>Mi Perfil</span>
                 </a>
-                <form method="POST" action="{% url 'logout' %}" class="flex items-center h-full">
+                <form method="POST" action="{% url 'logout' %}" class="w-full md:w-auto">
                     {% csrf_token %}
-                    <button type="submit" class="bg-customDarkGreen text-white font-semibold px-3 py-1.5 rounded-lg shadow-md font-body min-w-[150px]">Cerrar sesión</button>
+                    <button type="submit" class="bg-customDarkGreen text-white font-semibold px-3 py-1.5 rounded-lg shadow-md font-body w-full">Cerrar sesión</button>
                 </form>
             {% else %}
-                <a href="{% url 'login' %}" class="bg-customDarkGreen text-white font-semibold px-3 py-1.5 rounded-lg shadow-md font-body">Iniciar sesión</a>
-                <a href="{% url 'register' %}" class="bg-customDarkGreen text-white font-semibold px-3 py-1.5 rounded-lg shadow-md font-body">Registrarse</a>
+                <a href="{% url 'login' %}" class="bg-customDarkGreen text-white font-semibold px-3 py-1.5 rounded-lg shadow-md font-body w-full md:w-auto text-center">Iniciar sesión</a>
+                <a href="{% url 'register' %}" class="bg-customDarkGreen text-white font-semibold px-3 py-1.5 rounded-lg shadow-md font-body w-full md:w-auto text-center">Registrarse</a>
             {% endif %}
         </div>
     </header>
@@ -231,6 +235,29 @@
    
     window.location.href = url;
 }
+
+    // Toggle mobile menu
+    document.getElementById('menuButton').addEventListener('click', function() {
+        const nav = document.getElementById('mainNav');
+        nav.classList.toggle('hidden');
+    });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(event) {
+        const nav = document.getElementById('mainNav');
+        const menuButton = document.getElementById('menuButton');
+        
+        if (!nav.contains(event.target) && !menuButton.contains(event.target)) {
+            nav.classList.add('hidden');
+        }
+    });
+
+    // Close mobile menu when window is resized to desktop view
+    window.addEventListener('resize', function() {
+        if (window.innerWidth >= 768) { // md breakpoint
+            document.getElementById('mainNav').classList.remove('hidden');
+        }
+    });
 </script>
 <script src="https://unpkg.com/flowbite@latest/dist/flowbite.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
