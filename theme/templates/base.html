@@ -321,4 +321,58 @@
     </script>
 </body>
 
+<!-- Footer -->
+
+<footer class="bg-customDarkGreen text-white py-10 mt-10 font-body">
+  <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+    
+    <!-- Logo and site description -->
+    <div>
+      <a href="{% url 'home' %}">
+        <img src="{% static 'Abstract_blanco.svg' %}" alt="Antioquia Off The Map" class="h-16 mb-4">
+      </a>
+      <p class="text-sm text-gray-300">
+        Descubre la magia de Antioquia a través de experiencias auténticas, contadas por viajeros como tú.
+      </p>
+    </div>
+
+    <!-- Useful links -->
+    <div>
+      <h3 class="text-lg font-semibold mb-4">Explora</h3>
+      <ul class="space-y-2 text-sm text-gray-300">
+        <li><a href="{% url 'home' %}" class="hover:text-white">Inicio</a></li>
+        <li><a href="{% url 'municipality_name_list' %}" class="hover:text-white">Municipios</a></li>
+        <li><a href="{% url 'experience_search_page' %}" class="hover:text-white">Buscar Experiencias</a></li>
+        <li><a href="{% url 'traveler_post_list' %}" class="hover:text-white">De viajero a viajero</a></li>
+        <li class="mb-4"></li>
+      </ul>
+      
+    </div>
+    
+    <!-- Social media links -->
+    <div>
+      <h3 class="text-lg font-semibold mb-4">Siguenos</h3>
+      <div class="flex gap-4">
+        <a href="#" class="text-gray-300 hover:text-white text-xl"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="text-gray-300 hover:text-white text-xl"><i class="fab fa-facebook"></i></a>
+        <a href="#" class="text-gray-300 hover:text-white text-xl"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="text-gray-300 hover:text-white text-xl"><i class="fab fa-tiktok"></i></a>
+      </div>
+    </div>
+
+    <!-- Contact information -->
+    <div>
+      <h3 class="text-lg font-semibold mb-4">Contactanos</h3>
+      <p class="text-sm text-gray-300">Correo: contacto@antioquiaoffthemap.com</p>
+      <p class="text-sm text-gray-300 mt-2">Telefono: +57 305 323 0459</p>
+    </div>
+  </div>
+
+  <div class="mt-10 border-t border-gray-600 pt-4 text-center text-xs text-gray-400">
+    2025 Antioquia Off The Map. Todos los derechos reservados.<br>
+ La mayoría de las imágenes utilizadas en este sitio se obtuvieron de Wikimedia Commons y son de dominio público o están liberadas bajo licencias libres de derechos de autor.
+  </div>
+</footer>
+
+
 </html>

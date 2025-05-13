@@ -33,6 +33,57 @@ DEBUG = True
 
 # ALLOWED_HOSTS = ['3.91.213.37']
 
+OFFENSIVE_WORDS = [
+    # Insultos directos
+    'hijueputa', 'malparido', 'gonorrea', 'careverga', 'hpta', 'mka',
+    'marica', 'pirobo', 'güevón', 'ñero', 'sapo', 'lambón', 'come mierda', 'mierda',
+    'verga'
+    
+    # Términos despectivos
+    'paraco', 'narcotraficante', 'sapo', 'chismoso', 'apestoso', 'basura',
+    
+    # Referencias sexuales ofensivas
+    'prostituta', 'puta', 'puto', 'perra', 'zorra', 'culicagado', 'catre', 'chichipato',
+    
+    # Variantes comunes
+    'hp', 'mka', 'carechimba', 'caremondá', 'malparida', 'hijueputas', 'monda', 'gonorrhea',
+    'maricón', 'maricon', 'maricona', 'mariconada', 'mariconada', 'maricón', 'maricona',
+    
+    # Palabras censuradas (ej: "mierda" en contextos ofensivos)
+    'mierda', 'verga', 'picha', 'pendejo', 'pendeja',
+    
+    # Añade aquí otras específicas que necesites
+    
+]
+
+OFFENSIVE_PATTERNS = [
+    # Evasiones de "hijueputa"
+    r"h[\W_]*i[\W_]*j[\W_]*u[\W_]*e[\W_]*p[\W_]*u[\W_]*t[\W_]*a",
+    r"h[\W_]*p[\W_]*t[\W_]*a",
+    r"h[i1j]ueputa",
+    
+    # Evasiones de "malparido"
+    r"m[\W_]*a[\W_]*l[\W_]*p[\W_]*a[\W_]*r[\W_]*i[\W_]*d[\W_]*o",
+    r"malp[4a]r[i1]do",
+    
+    # Evasiones de "gonorrea"
+    r"g[0o]no[rrea]+",
+    r"gon0rr3a",
+    
+    # Evasiones de "marica"
+    r"m[4a]r[i1!]c[a4]",
+    r"marik[a4]",
+    
+    # Combinaciones numéricas/simbólicas (ej: "m1erda")
+    r"m[1i!]e[r4]d[a4]",
+    r"v[e3]rg[a4]",
+    
+    # Palabras fragmentadas (ej: "p u t a")
+    r"p\s*u\s*t\s*a",
+    
+    # Añade patrones para otras palabras clave
+    # ...
+]
 
 # Application definition
 
@@ -40,7 +91,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sessions',
+    'django.contrib.sessions',  
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'destination',
