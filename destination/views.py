@@ -406,15 +406,7 @@ def toggle_favorite(request, municipality_id):
         messages.error(request, 'Ocurrió un error al procesar tu solicitud')
         return redirect('home')
 
-def home(request):
-    municipalities = Municipality.objects.all()
-    user_favorites = []
-    if request.user.is_authenticated:
-        user_favorites = request.user.favorites.values_list('municipality_id', flat=True)
-    return render(request, 'home.html', {
-        'municipalities': municipalities,
-        'user_favorites': set(user_favorites)
-    })
+
 
 @login_required
 def delete_review(request, review_id):
